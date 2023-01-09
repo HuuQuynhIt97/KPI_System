@@ -1,0 +1,419 @@
+
+<ngx-spinner [fullScreen]="true" type="square-jelly-box" size="medium">
+  <p class="loading">Loading data...</p>
+</ngx-spinner>
+<div class="card">
+  <div class="control-section e-tbar-section">
+    <div class="e-sample-resize-container">
+      <div class="col-md-12 d-flex justify-content-left align-items-center">
+        <h4>{{"PERFOMANCE_EVALUATION_SELF_APPRAISAL_LABEL" | translate}}</h4>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-12">
+      <div class="card">
+        <div class="card-body table-responsive p-0">
+          <ejs-grid #grid
+            id='grid'
+            [dataSource]="evaluationSelfData"
+            [allowPaging]='true'
+            [allowResizing]='true'
+            [showColumnMenu]='true'
+            gridLines='Both'
+            [locale]='locale'
+            [pageSettings]='pageSettings'
+          >
+            <e-columns>
+
+              <!-- <e-column field="ID" textAlign='Center' width="40" isPrimaryKey="true" headerText="ID">
+                <ng-template #template let-data>
+                  {{NO(data.index)}}
+                </ng-template>
+                <ng-template #editTemplate let-data>
+                  #
+                </ng-template>
+              </e-column> -->
+
+              <e-column field="name" textAlign='Center' width='50' headerText="Name">
+
+              </e-column>
+
+              <e-column field='center' headerText="Center" width='50' textAlign='Center'>
+                <ng-template #editTemplate let-data>
+                </ng-template>
+              </e-column>
+
+              <e-column field="dept" width="50" textAlign='Center' headerText="{{ 'Dept'}}">
+                <ng-template #editTemplate let-data>
+                </ng-template>
+              </e-column>
+
+              <e-column field="" width="50" textAlign='Center' headerText="{{ 'PERFOMANCE_EVALUATION_LABEL' | translate}}">
+                <ng-template #headerTemplate let-data>
+                  {{ 'PERFOMANCE_EVALUATION_LABEL' | translate}}
+                </ng-template>
+
+                <ng-template #template let-data>
+                  <ejs-tooltip  content='{{data.campaignName}}'>
+                    <button [disabled]="data.btnKPI" (click)="SelfScore(data)"  type="button" class="btn btn-xs btn-info">
+                      <i  class="fa fa-plus"></i> {{'EVALUATION_KPI_BUTTON_LABEL' | translate}}
+                    </button> |
+                  </ejs-tooltip>
+                  <ejs-tooltip  content='{{data.campaignName}}'>
+                    <!-- <button [disabled]="data.btnAttitude" (click)='openScoreAttitudeModalComponent(data)'  type="button" class="btn btn-xs btn-warning">
+                      <i  class="fa fa-plus"></i> {{'EVALUATION_ATTITUDE_BUTTON_LABEL' | translate}}
+                    </button> -->
+
+                    <button [disabled]="data.btnNewAttitude" (click)='AttitudeNewClick(data)'  type="button" class="btn btn-xs btn-warning">
+                      <i  class="fa fa-plus"></i> {{'EVALUATION_ATTITUDE_BUTTON_LABEL' | translate}}
+                    </button>
+                  </ejs-tooltip>
+                </ng-template>
+
+                <ng-template #editTemplate let-data>
+                </ng-template>
+              </e-column>
+
+            </e-columns>
+
+          </ejs-grid>
+        </div>
+        <!-- /.card-body -->
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- First level manager appraisal -->
+
+<div class="card">
+  <div class="control-section e-tbar-section">
+    <div class="e-sample-resize-container">
+      <div class="col-md-12 d-flex justify-content-left align-items-center">
+        <h4>{{"FIRST_LEVEL_MANAGER_APPRAISAL_LABEL" | translate}}</h4>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-12">
+      <div class="card">
+        <div class="card-body table-responsive p-0">
+          <ejs-grid #grid
+            id='grid'
+            [dataSource]="evaluationFirstLevelData"
+            [allowPaging]='true'
+            [allowResizing]='true'
+            [showColumnMenu]='true'
+            gridLines='Both'
+            [locale]='locale'
+            [pageSettings]='pageSettings'
+          >
+            <e-columns>
+
+              <!-- <e-column field="ID" textAlign='Center' width="40" isPrimaryKey="true" headerText="ID">
+                <ng-template #template let-data>
+                  {{NO(data.index)}}
+                </ng-template>
+                <ng-template #editTemplate let-data>
+                  #
+                </ng-template>
+              </e-column> -->
+
+              <e-column field="name" textAlign='Center' width='50' headerText="Name">
+
+              </e-column>
+
+              <e-column field='center' headerText="Center" width='50' textAlign='Center'>
+                <ng-template #editTemplate let-data>
+                </ng-template>
+              </e-column>
+
+              <e-column field="dept" width="50" textAlign='Center' headerText="{{ 'Dept'}}">
+                <ng-template #editTemplate let-data>
+                </ng-template>
+              </e-column>
+
+
+              <e-column field="" width="50" textAlign='Center' headerText="{{ 'PERFOMANCE_EVALUATION_LABEL' | translate}}">
+                <ng-template #headerTemplate let-data>
+                  {{ 'PERFOMANCE_EVALUATION_LABEL' | translate}}
+                </ng-template>
+                <ng-template #template let-data>
+                  <ejs-tooltip  content='{{data.campaignName}}'>
+                    <button [disabled]="data.btnKPI" (click)="SelfScore(data)" type="button" class="btn btn-xs btn-info">
+                      <i  class="fa fa-plus"></i> {{'EVALUATION_KPI_BUTTON_LABEL' | translate}}
+                    </button> |
+                  </ejs-tooltip>
+                  <ejs-tooltip  content='{{data.campaignName}}'>
+                    <!-- <button [disabled]="data.btnAttitude" (click)='openScoreAttitudeModalComponent(data)' type="button" class="btn btn-xs btn-warning">
+                      <i  class="fa fa-plus"></i> {{'EVALUATION_ATTITUDE_BUTTON_LABEL' | translate}}
+                    </button> -->
+
+                    <button [disabled]="data.btnNewAttitude" (click)='AttitudeNewClick(data)' type="button" class="btn btn-xs btn-warning">
+                      <i  class="fa fa-plus"></i> {{'EVALUATION_ATTITUDE_BUTTON_LABEL' | translate}}
+                    </button>
+                  </ejs-tooltip>
+                </ng-template>
+                <ng-template #editTemplate let-data>
+                </ng-template>
+              </e-column>
+
+            </e-columns>
+
+          </ejs-grid>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- end First level manager appraisal -->
+
+
+<!-- Second level manager appraisal -->
+
+<div class="card">
+  <div class="control-section e-tbar-section">
+    <div class="e-sample-resize-container">
+      <div class="col-md-12 d-flex justify-content-left align-items-center">
+        <h4>{{"SECOND_LEVEL_MANAGER_APPRAISAL_LABEL" | translate}}</h4>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-12">
+      <div class="card">
+        <div class="card-body table-responsive p-0">
+          <ejs-grid #grid
+            id='grid'
+            [dataSource]="evaluationSecondLevelData"
+            [allowPaging]='true'
+            [allowResizing]='true'
+            [showColumnMenu]='true'
+            gridLines='Both'
+            [locale]='locale'
+            [pageSettings]='pageSettings'
+          >
+            <e-columns>
+
+              <!-- <e-column field="ID" textAlign='Center' width="40" isPrimaryKey="true" headerText="ID">
+                <ng-template #template let-data>
+                  {{NO(data.index)}}
+                </ng-template>
+                <ng-template #editTemplate let-data>
+                  #
+                </ng-template>
+              </e-column> -->
+
+              <e-column field="name" textAlign='Center' width='50' headerText="Name">
+
+              </e-column>
+
+              <e-column field='center' headerText="Center" width='50' textAlign='Center'>
+                <ng-template #editTemplate let-data>
+                </ng-template>
+              </e-column>
+
+              <e-column field="dept" width="50" textAlign='Center' headerText="{{ 'Dept'}}">
+                <ng-template #editTemplate let-data>
+                </ng-template>
+              </e-column>
+
+
+              <e-column field="" width="50" textAlign='Center' headerText="{{ 'PERFOMANCE_EVALUATION_LABEL' | translate}}">
+                <ng-template #headerTemplate let-data>
+                  {{ 'PERFOMANCE_EVALUATION_LABEL' | translate}}
+                </ng-template>
+                <ng-template #template let-data>
+                  <ejs-tooltip  content='{{data.campaignName}}'>
+                    <button [disabled]="data.btnKPI" (click)="SelfScore(data)" type="button" class="btn btn-xs btn-info">
+                      <i  class="fa fa-plus"></i> {{'EVALUATION_KPI_BUTTON_LABEL' | translate}}
+                    </button> |
+                  </ejs-tooltip>
+                  <ejs-tooltip  content='{{data.campaignName}}'>
+                    <!-- <button [disabled]="data.btnAttitude" (click)='openScoreAttitudeModalComponent(data)' type="button" class="btn btn-xs btn-warning">
+                      <i  class="fa fa-plus"></i> {{'EVALUATION_ATTITUDE_BUTTON_LABEL' | translate}}
+                    </button> -->
+
+                    <button [disabled]="data.btnNewAttitude" (click)='AttitudeNewClick(data)' type="button" class="btn btn-xs btn-warning">
+                      <i  class="fa fa-plus"></i> {{'EVALUATION_ATTITUDE_BUTTON_LABEL' | translate}}
+                    </button>
+                  </ejs-tooltip>
+                </ng-template>
+                <ng-template #editTemplate let-data>
+                </ng-template>
+              </e-column>
+
+
+            </e-columns>
+
+          </ejs-grid>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- end Second level manager appraisal -->
+
+
+<!-- Functional Leaders Feedback -->
+
+<div class="card">
+  <div class="control-section e-tbar-section">
+    <div class="e-sample-resize-container">
+      <div class="col-md-12 d-flex justify-content-left align-items-center">
+        <h4>{{"FUNCTIONAL_LEADERS_FEEDBACK_LABEL" | translate}}</h4>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-12">
+      <div class="card">
+        <div class="card-body table-responsive p-0">
+          <ejs-grid #grid
+            id='grid'
+            [dataSource]="flFeedbackData"
+            [allowPaging]='true'
+            [allowResizing]='true'
+            [showColumnMenu]='true'
+            gridLines='Both'
+            [locale]='locale'
+            [pageSettings]='pageSettings'
+
+          >
+            <e-columns>
+
+              <!-- <e-column field="ID" textAlign='Center' width="40" isPrimaryKey="true" headerText="ID">
+                <ng-template #template let-data>
+                  {{NO(data.index)}}
+                </ng-template>
+                <ng-template #editTemplate let-data>
+                  #
+                </ng-template>
+              </e-column> -->
+
+              <e-column field="name" textAlign='Center' width='50'  headerText="Name">
+
+              </e-column>
+
+              <e-column field='center' headerText="Center" width='50' textAlign='Center'>
+                <ng-template #editTemplate let-data>
+                </ng-template>
+              </e-column>
+
+              <e-column field="dept" width="50" textAlign='Center' headerText="{{ 'Dept'}}">
+                <ng-template #editTemplate let-data>
+                </ng-template>
+              </e-column>
+
+
+              <e-column field="" width="50" textAlign='Center' headerText="{{ 'PERFOMANCE_EVALUATION_LABEL' | translate}}">
+                <ng-template #headerTemplate let-data>
+                  {{ 'PERFOMANCE_EVALUATION_LABEL' | translate}}
+                </ng-template>
+                <ng-template #template let-data>
+                  <!-- <button  type="button" class="btn btn-xs btn-info">
+                    <i  class="fa fa-plus"></i> {{'EVALUATION_KPI_BUTTON_LABEL' | translate}}
+                  </button> | -->
+
+                  <ejs-tooltip content='{{data.campaignName}}'>
+                    <!-- <button [disabled]="data.btnAttitude" (click)='openScoreAttitudeModalComponent(data)'  type="button" class="btn btn-xs btn-warning">
+                      <i  class="fa fa-plus"></i> {{'EVALUATION_ATTITUDE_BUTTON_LABEL' | translate}}
+                    </button> -->
+
+                    <button [disabled]="data.btnNewAttitude" (click)='AttitudeNewClick(data)'  type="button" class="btn btn-xs btn-warning">
+                      <i  class="fa fa-plus"></i> {{'EVALUATION_ATTITUDE_BUTTON_LABEL' | translate}}
+                    </button>
+                  </ejs-tooltip>
+                </ng-template>
+                <ng-template #editTemplate let-data>
+                </ng-template>
+              </e-column>
+
+
+            </e-columns>
+
+          </ejs-grid>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- end Functional Leaders Feedback -->
+
+
+<!-- GM -->
+
+<!-- <div class="card">
+  <div class="control-section e-tbar-section">
+    <div class="e-sample-resize-container">
+      <div class="col-md-12 d-flex justify-content-left align-items-center">
+        <h4>{{"GM_LABEL" | translate}}</h4>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-12">
+      <div class="card">
+        <div class="card-body table-responsive p-0">
+          <ejs-grid #grid
+            id='grid'
+            [dataSource]="gmData"
+            [allowPaging]='true'
+            [allowResizing]='true'
+            [showColumnMenu]='true'
+            gridLines='Both'
+            [locale]='locale'
+            [pageSettings]='pageSettings'
+
+          >
+            <e-columns>
+
+
+              <e-column field="name" textAlign='Center' width='50'  headerText="Name">
+
+              </e-column>
+
+              <e-column field='center' headerText="Center" width='50' textAlign='Center'>
+                <ng-template #editTemplate let-data>
+                </ng-template>
+              </e-column>
+
+              <e-column field="dept" width="50" textAlign='Center' headerText="{{ 'Dept'}}">
+                <ng-template #editTemplate let-data>
+                </ng-template>
+              </e-column>
+
+
+              <e-column field="" width="50" textAlign='Center' headerText="{{ 'PERFOMANCE_EVALUATION_LABEL' | translate}}">
+                <ng-template #headerTemplate let-data>
+                  {{ 'PERFOMANCE_EVALUATION_LABEL' | translate}}
+                </ng-template>
+                <ng-template #template let-data>
+                  <button  (click)="SelfScore(data)" type="button" class="btn btn-xs btn-info">
+                    <i  class="fa fa-plus"></i> {{'EVALUATION_KPI_BUTTON_LABEL' | translate}}
+                  </button> |
+                  <button (click)='openScoreAttitudeModalComponent(data)'  type="button" class="btn btn-xs btn-warning">
+                    <i  class="fa fa-plus"></i> {{'EVALUATION_ATTITUDE_BUTTON_LABEL' | translate}}
+                  </button>
+                </ng-template>
+                <ng-template #editTemplate let-data>
+                </ng-template>
+              </e-column>
+
+            </e-columns>
+          </ejs-grid>
+        </div>
+      </div>
+    </div>
+  </div>
+</div> -->
+
+<!-- GM -->
+
+
+
+

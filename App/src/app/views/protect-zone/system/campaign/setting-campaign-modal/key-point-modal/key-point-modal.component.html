@@ -1,0 +1,90 @@
+<div class="modal-header">
+  <h4 class="modal-title">
+    <i class="fas fa-plus mr-1"></i>{{title}}
+  </h4>
+  <button type="button" class="close" aria-label="Close" (click)="activeModal.dismiss('Cross click')">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+<div class="modal-body">
+  <div class="row">
+    <div class="col-md-12">
+      <div class="card">
+
+
+        <div class="card-body table-responsive p-0 table-striped">
+
+          <ejs-grid #grid
+            [dataSource]="data"
+            allowPaging='true'
+            gridLines='Both'
+            allowResizing='true'
+            showColumnMenu='true'
+            (actionBegin)="actionBegin($event)"
+            (actionComplete)="actionComplete($event)"
+            [toolbar]='toolbarOptions'
+            [pageSettings]='pageSettings'
+            allowExcelExport='true'
+            (toolbarClick)='toolbarClick($event)'
+            [editSettings]='editSettings'
+          >
+            <e-columns>
+              <e-column field="" width="50px" isPrimaryKey="true" headerText="#" textAlign="center">
+                <ng-template #headerTemplate let-data>
+                  #
+                </ng-template>
+                <ng-template #template let-data>
+                  {{NO(data.index)}}
+                </ng-template>
+                <ng-template #editTemplate let-data>
+                  {{NO(data.index)}}
+                </ng-template>
+              </e-column>
+
+              <e-column field='attitudeCategoryName' headerText="Attitude Category Name" textAlign='Center'>
+              <ng-template #template let-data>
+                {{data.attitudeCategoryName}}
+              </ng-template>
+              <ng-template #editTemplate let-data>
+                <ng-container *ngIf="editing === true; else elseEditTemplate">
+                  {{data.attitudeCategoryName}}
+                </ng-container>
+                <ng-template #elseEditTemplate>
+                  <ejs-dropdownlist #sample [dataSource]='attitudeTest' (select)='onChangeAttitudeCategories($event)' [value]='"We expect team members to"'  placeholder='Select a Attitude Category'></ejs-dropdownlist>
+                </ng-template>
+              </ng-template>
+              </e-column>
+              <e-column field='name' headerText="Key Point Name" textAlign='Center'>
+                <ng-template #template let-data>
+                  {{data.name}}
+                </ng-template>
+              </e-column>
+              <e-column field='level' width="50px" headerText="Level" textAlign='Center'>
+                <ng-template #template let-data>
+                  {{data.level}}
+                </ng-template>
+              </e-column>
+
+              <e-column field="" isPrimaryKey="true" headerText="Option" textAlign="center">
+                <ng-template #template let-data>
+                  <ng-container>
+                    <button type="button"
+                      class="btn btn-info rounded-pill">
+                      <i class="fas fa-plus mr-1"></i>Option
+                    </button>
+                  </ng-container>
+                </ng-template>
+                <ng-template #editTemplate let-data>
+                  N/A
+                </ng-template>
+              </e-column>
+            </e-columns>
+          </ejs-grid>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="modal-footer">
+  <button type="button" class="btn btn-danger" (click)="activeModal.close('Close click')">Close</button>
+</div>

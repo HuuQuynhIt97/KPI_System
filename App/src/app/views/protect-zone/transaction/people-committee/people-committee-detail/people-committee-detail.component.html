@@ -1,0 +1,917 @@
+<ngx-spinner [fullScreen]="true" type="square-jelly-box" size="medium">
+  <p class="loading">Loading data...</p>
+</ngx-spinner>
+<div class="row justify-content-lg-center justify-content-md-center">
+  <div class="col-lg-12 col-md-12 col-sm-12">
+    <div class="card">
+      <div class="card-body">
+        <div class="row">
+
+          <div class="col-4 text-center mb-3">
+            <span class="h5 cmtee-title">
+              {{"COMMITTEE_DETAIL_CENTER" | translate}}: {{center}}
+            </span>
+          </div>
+          <div class="col-4 text-center mb-3">
+            <span class="h5">
+              {{"COMMITTEE_DETAIL_DEPT" | translate}}: {{dept}}
+            </span>
+          </div>
+          <div class="col-4 text-center mb-3">
+            <span class="h5">
+              {{"COMMITTEE_DETAIL_NAME" | translate}}: {{appraisee}}
+            </span>
+          </div>
+        </div>
+
+        <div class="card-body table-responsive p-0 mb-3">
+          <span class="h5">
+            <button (click)="detailKPI()" type="button"  class="btn btn-xs btn-success">
+              <i  class="fa fa-info"></i> {{"KPI_CMTEE_DETAIL" | translate}}
+            </button>
+
+          </span>
+          <h4 class="font-weight-bold ml-2 committee-title">
+            {{"KPI_COMMITTEE_DETAIL_PERSONAL" | translate}}
+          </h4>
+          <ejs-grid #grid
+            id='grid'
+            [dataSource]="dataPersonal"
+            [allowPaging]='true'
+            [allowResizing]='true'
+            [showColumnMenu]='true'
+            gridLines='Both'
+            [locale]='locale'
+
+            [pageSettings]='pageSettings'
+            allowTextWrap='true'
+          >
+            <e-columns>
+              <e-column field="id" textAlign='Center' width="30" isPrimaryKey="true" headerText="#">
+                <ng-template #template let-data>
+                  <span class="headercell">
+                    {{NO(data.index)}}
+                  </span>
+                </ng-template>
+              </e-column>
+
+              <e-column field="nameKpiNew" textAlign='left' headerTextAlign="Center" headerText="{{ 'KPI_COMMITTEE_DETAIL_LABLE' | translate}}" >
+                <ng-template #headerTemplate let-data>
+                  <span class="headercell">
+                    {{"KPI_COMMITTEE_DETAIL_LABLE" | translate}}
+                  </span>
+                </ng-template>
+              </e-column>
+            </e-columns>
+          </ejs-grid>
+        </div>
+        <div class="card-body table-responsive p-0 mb-3">
+          <h4 class="font-weight-bold ml-2 committee-title">
+            {{"KPI_COMMITTEE_DETAIL_MULTI" | translate}}
+          </h4>
+          <ejs-grid #grid
+            id='grid'
+            [dataSource]="dataMulti"
+            [allowPaging]='true'
+            [allowResizing]='true'
+            [showColumnMenu]='true'
+            gridLines='Both'
+            [locale]='locale'
+
+            [pageSettings]='pageSettings'
+            allowTextWrap='true'
+          >
+            <e-columns>
+              <e-column field="id" textAlign='Center' width="30" isPrimaryKey="true" headerText="#">
+                <ng-template #template let-data>
+                  <span class="headercell">
+                    {{NO(data.index)}}
+                  </span>
+                </ng-template>
+              </e-column>
+
+              <e-column field="nameKpiNew" textAlign='left' headerTextAlign="Center" headerText="{{ 'KPI_COMMITTEE_DETAIL_LABLE' | translate}}">
+                <ng-template #headerTemplate let-data>
+                  <span class="headercell">
+                    {{"KPI_COMMITTEE_DETAIL_LABLE" | translate}}
+                  </span>
+                </ng-template>
+              </e-column>
+            </e-columns>
+          </ejs-grid>
+        </div>
+
+
+        <div class="card-body table-responsive p-0 mb-3">
+          <h4 class="font-weight-bold ml-2 committee-title">
+            {{"KPI_SCORE_COMMITTEE_DETAIL" | translate}}
+          </h4>
+          <ejs-grid #gridKPIScore
+            id='gridKPIScore'
+            [dataSource]="dataKpiScore"
+            [allowResizing]='true'
+            [showColumnMenu]='true'
+            gridLines='Both'
+            [locale]='locale'
+
+            allowEditing='true'
+            [editSettings]="editSettingsKpiScore"
+            (rowDeselected)="rowDeselected($event)"
+            (queryCellInfo)='queryCellInfoEvent($event)'
+            (cellEdit)="cellEdit($event)"
+            (cellSave)="cellSave($event)"
+            (keyPressed)="keyPressed($event)"
+            allowTextWrap='true'
+          >
+            <e-columns>
+
+              <e-column field="scoreType" textAlign='Center' width="100" headerText="{{ 'KPI_TPYE_COMMITTEE_DETAIL_LABLE' | translate}}">
+                <ng-template #headerTemplate let-data>
+                  <span class="headercell">
+                    {{"KPI_TPYE_COMMITTEE_DETAIL_LABLE" | translate}}
+                  </span>
+                </ng-template>
+                <ng-template #template let-data>
+                  {{data.scoreType + "_CODE_TYPE" | translate}} {{data.scoreFromName}}
+                </ng-template>
+
+                <ng-template #editTemplate let-data>
+                  {{data.scoreType + "_CODE_TYPE" | translate}} {{data.scoreFromName}}
+                </ng-template>
+              </e-column>
+
+              <e-column field="point" textAlign='Center' width="80" headerText="{{ 'KPI_POINT_COMMITTEE_DETAIL_LABLE' | translate}}">
+                <ng-template #headerTemplate let-data>
+                  <span class="headercell">
+                    {{"KPI_POINT_COMMITTEE_DETAIL_LABLE" | translate}}
+                  </span>
+                </ng-template>
+
+                <ng-template #editTemplate let-data>
+
+                  <span class="e-input-group e-control-wrapper e-valid-input">
+                    <ng-container>
+                      <input (keypress)="numberOnly($event)" class="e-field e-input e-defaultcell" type="text" [value]="data.point" name="point" style="text-align:Center">
+                    </ng-container>
+                  </span>
+                </ng-template>
+              </e-column>
+
+              <e-column field="comment" textAlign='Left' headerTextAlign="Center" headerText="{{ 'KPI_COMMENT_COMMITTEE_DETAIL_LABLE' | translate}}">
+                <ng-template #headerTemplate let-data>
+                  <span class="headercell">
+                    {{"KPI_COMMENT_POINT_COMMITTEE_DETAIL_LABLE" | translate}}
+                  </span>
+                </ng-template>
+                <ng-template #template let-data>
+                  <ejs-tooltip #tooltip position="BottomCenter" content="Comment by: {{data.scoreFromName}}" style="font-size: 14px;">
+                    <textarea disabled type="text" [value]="data.comment" class="e-field e-input e-defaultcell textarea-disabled" name="comment" cols="5" rows="3"></textarea>
+                  </ejs-tooltip>
+                </ng-template>
+                <ng-template #editTemplate let-data>
+                  <textarea type="text" [value]="data.comment" [(ngModel)]="textareaKpiComment" class="e-field e-input e-defaultcell" name="comment" cols="5" rows="3"></textarea>
+                </ng-template>
+
+                <!-- <ng-template #template let-data>
+                  <textarea autosize type="text" class="form-control" readonly [value]="data.comment" name="comment"  style="text-align:left;" ></textarea>
+                </ng-template>
+                <ng-template #editTemplate let-data>
+                  <textarea autosize type="text" [(ngModel)]="data.comment" class="form-control" [value]="data.comment" name="comment" style="text-align:left;min-height: 60px;"></textarea>
+                </ng-template> -->
+
+
+              </e-column>
+
+              <e-column field="hrComment" textAlign='Left' headerTextAlign="Center" headerText="{{ 'KPI_HRCOMMENT_COMMITTEE_DETAIL_LABLE' | translate}}">
+                <ng-template #headerTemplate let-data>
+                  <span class="headercell">
+                    {{"KPI_HRCOMMENT_POINT_COMMITTEE_DETAIL_LABLE" | translate}}
+                  </span>
+                </ng-template>
+                <ng-template #template let-data>
+                  <textarea disabled type="text" [value]="data.hrComment" class="e-field e-input e-defaultcell textarea-disabled" name="hrComment" cols="5" rows="6"></textarea>
+                </ng-template>
+                <!-- <ng-template #editTemplate let-data>
+                  <span class="e-input-group e-control-wrapper e-valid-input"  >
+                    <ng-container>
+                      <textarea autosize type="text" [value]="data.hrComment"  class="e-field e-input e-defaultcell" name="hrComment" style="text-align:left;"></textarea>
+                    </ng-container>
+                  </span>
+                </ng-template> -->
+
+                <!-- <ng-template #template let-data>
+                  <textarea autosize type="text" class="form-control" readonly [value]="data.hrComment" name="hrComment"  style="text-align:left;" ></textarea>
+                </ng-template>
+                <ng-template #editTemplate let-data>
+                  <textarea autosize type="text" [(ngModel)]="data.hrComment" class="form-control" [value]="data.hrComment" name="hrComment" style="text-align:left;min-height: 60px;"></textarea>
+                </ng-template> -->
+                <ng-template #editTemplate let-data>
+                  <textarea id="textarea1" type="text" [value]="data.hrComment" [(ngModel)]="textareaHr" class="e-field e-input e-defaultcell" name="hrComment" cols="5" rows="6"></textarea>
+                </ng-template>
+
+              </e-column>
+
+              <e-column field="files" textAlign='Center' headerText="{{ 'KPI_FILE_COMMITTEE_DETAIL_LABLE' | translate}}">
+                <ng-template #headerTemplate let-data>
+                  <span class="headercell">
+                    {{"KPI_FILE_COMMITTEE_DETAIL_LABLE" | translate}}
+                  </span>
+                </ng-template>
+
+                <ng-template #template let-data>
+                  <ul class="list-group mr-3" style="width: 100%;" *ngIf="data?.files.length > 0" >
+                    <li class="list-group-item" *ngFor="let item of data?.files">
+                      <a [id]='item.path' href="javascript:void(0)" style="cursor: pointer; color: #20a8d8; background-color: transparent;" (click)="downloadFile(item)">{{item.name}}</a>
+                    </li>
+                  </ul>
+                </ng-template>
+
+                <ng-template #editTemplate let-data>
+                  <ul class="list-group mr-3" style="width: 100%;" *ngIf="data?.files.length > 0" >
+                    <li class="list-group-item" *ngFor="let item of data?.files">
+                      <a [id]='item.path' href="javascript:void(0)" style="cursor: pointer; color: #20a8d8; background-color: transparent;" (click)="downloadFile(item)">{{item.name}}</a>
+                    </li>
+                  </ul>
+                </ng-template>
+              </e-column>
+
+            </e-columns>
+          </ejs-grid>
+        </div>
+
+
+        <!-- <div class="card-body table-responsive p-0 mb-3">
+          <h4 class="font-weight-bold ml-2">
+            {{"KPI_COMMENT_COMMITTEE_DETAIL" | translate}}
+          </h4>
+          <ejs-grid #grid
+            id='grid'
+            [dataSource]="dataKpiScore"
+            [allowResizing]='true'
+            [showColumnMenu]='true'
+            gridLines='Both'
+            [locale]='locale'
+
+            allowEditing='true'
+            [editSettings]="editSettings"
+            (actionBegin)="actionBeginEditKpiScore($event)"
+            allowTextWrap='true'
+          >
+            <e-columns>
+
+              <e-column field="scoreType" textAlign='Center' width="30px" headerText="{{ 'KPI_TPYE_COMMITTEE_DETAIL_LABLE' | translate}}">
+                <ng-template #headerTemplate let-data>
+                  {{"KPI_TPYE_COMMITTEE_DETAIL_LABLE" | translate}}
+                </ng-template>
+                <ng-template #editTemplate let-data>
+                  {{data.scoreType}}
+                </ng-template>
+              </e-column>
+
+              <e-column field="comment" textAlign='Left' headerTextAlign="Center" headerText="{{ 'KPI_COMMENT_COMMITTEE_DETAIL_LABLE' | translate}}">
+                <ng-template #headerTemplate let-data>
+                  {{"KPI_COMMENT_POINT_COMMITTEE_DETAIL_LABLE" | translate}}
+                </ng-template>
+                <ng-template #template let-data>
+                  <ejs-tooltip #tooltip content="Comment by: {{data.scoreFromName}}" style="font-size: 14px;">
+                    {{data.comment}}
+                  </ejs-tooltip>
+                </ng-template>
+              </e-column>
+
+            </e-columns>
+          </ejs-grid>
+        </div> -->
+
+
+
+        <div class="card-body table-responsive p-0 mb-3">
+          <h4 class="font-weight-bold ml-2 committee-title">
+            {{"ATTITUDE_SCORE_COMMITTEE_DETAIL" | translate}}
+            <button (click)="detailScore()" type="button"  class="btn btn-success mr-2">{{'Detail' | translate}}</button>
+          </h4>
+          <ejs-grid #grid
+            id='grid'
+            [dataSource]="dataSumAttitudeScore"
+            [allowResizing]='true'
+            [showColumnMenu]='true'
+            gridLines='Both'
+            [locale]='locale'
+
+
+
+            (actionBegin)="actionBeginEditAttitudeScore($event)"
+            allowTextWrap='true'
+          >
+            <e-columns>
+
+              <e-column field="type" textAlign='Center' headerText="{{ 'ATTITUDE_TPYE_COMMITTEE_DETAIL_LABLE' | translate}}">
+                <ng-template #headerTemplate let-data>
+                  <span class="headercell">
+                    {{"ATTITUDE_TPYE_COMMITTEE_DETAIL_LABLE" | translate}}
+                  </span>
+                </ng-template>
+                <!-- <ng-template #template let-data>
+                  <ng-container *ngIf="data.type !== 'FL'; else elseTemplate">
+                    {{data.type}}
+                  </ng-container>
+                  <ng-template #elseTemplate>
+                    {{'Functional Leader'}}
+                  </ng-template>
+                </ng-template>
+                <ng-template #editTemplate let-data>
+                  <ng-container *ngIf="data.type !== 'FL'; else elseEditTemplate">
+                    {{data.type}}
+                  </ng-container>
+                  <ng-template #elseEditTemplate>
+                    {{'Functional Leader'}}
+                  </ng-template>
+                </ng-template> -->
+                <ng-template #template let-data>
+                  {{data.type + '_CODE_TYPE' | translate}} {{data.scoreFromName}}
+                </ng-template>
+                <ng-template #editTemplate let-data>
+                  {{data.type + '_CODE_TYPE' | translate}} {{data.scoreFromName}}
+                </ng-template>
+              </e-column>
+
+              <e-column field="sumPoint" width="40%" textAlign='Center' headerText="{{ 'ATTITUDE_POINT_COMMITTEE_DETAIL_LABLE' | translate}}">
+                <ng-template #headerTemplate let-data>
+                  <span class="headercell">
+                    {{"ATTITUDE_POINT_COMMITTEE_DETAIL_LABLE" | translate}}
+                  </span>
+                </ng-template>
+
+                <ng-template #editTemplate let-data>
+                  <span class="e-input-group e-control-wrapper e-valid-input"  >
+                    <ng-container>
+                      <input (keypress)="numberOnly($event)" class="e-field e-input e-defaultcell" type="text" [value]="data.point" name="point" style="text-align:Center">
+                    </ng-container>
+                  </span>
+                </ng-template>
+              </e-column>
+
+              <!-- <e-column field="files" textAlign='Center' headerText="{{ 'ATTITUDE_FILE_COMMITTEE_DETAIL_LABLE' | translate}}">
+                <ng-template #headerTemplate let-data>
+                  <span class="headercell">
+                    {{"ATTITUDE_FILE_COMMITTEE_DETAIL_LABLE" | translate}}
+                  </span>
+                </ng-template>
+
+                <ng-template #template let-data>
+                  <ul class="list-group mr-3" style="width: 100%;" *ngIf="data?.files.length > 0" >
+                    <li class="list-group-item" *ngFor="let item of data?.files">
+                      <a [id]='item.path' href="javascript:void(0)" style="cursor: pointer; color: #20a8d8; background-color: transparent;" (click)="downloadFile(item)">{{item.name}}</a>
+                    </li>
+                  </ul>
+                </ng-template>
+
+                <ng-template #editTemplate let-data>
+                  <ul class="list-group mr-3" style="width: 100%;" *ngIf="data?.files.length > 0" >
+                    <li class="list-group-item" *ngFor="let item of data?.files">
+                      <a [id]='item.path' href="javascript:void(0)" style="cursor: pointer; color: #20a8d8; background-color: transparent;" (click)="downloadFile(item)">{{item.name}}</a>
+                    </li>
+                  </ul>
+                </ng-template>
+              </e-column> -->
+
+            </e-columns>
+          </ejs-grid>
+        </div>
+
+
+        <!-- <div class="card-body table-responsive p-0 mb-3">
+          <h4 class="font-weight-bold ml-2 committee-title">
+            {{"ATTITUDE_COMMENT_COMMITTEE_DETAIL" | translate}}
+
+          </h4>
+          <ejs-grid #gridAttitudeScore
+            id='gridAttitudeScore'
+            [dataSource]="dataAttitudeScore"
+            [allowResizing]='true'
+            [showColumnMenu]='true'
+            gridLines='Both'
+            [locale]='locale'
+            allowEditing='true'
+            [editSettings]="editSettings"
+            (actionBegin)="actionBeginEditAttitudeScore($event)"
+            allowTextWrap='true'
+            (keyPressed)="keyPressedKpi($event)"
+          >
+            <e-columns>
+
+              <e-column field="type" textAlign='Center' width="80px" headerText="{{ 'ATTITUDE_TPYE_COMMITTEE_DETAIL_LABLE' | translate}}">
+                <ng-template #headerTemplate let-data>
+                  <span class="headercell">
+                    {{"ATTITUDE_TPYE_COMMITTEE_DETAIL_LABLE" | translate}}
+                  </span>
+                </ng-template>
+
+                <ng-template #template let-data>
+                  {{data.type + '_CODE_TYPE' | translate}} {{data.scoreFromName}}
+                </ng-template>
+                <ng-template #editTemplate let-data>
+                  {{data.type + '_CODE_TYPE' | translate}} {{data.scoreFromName}}
+                </ng-template>
+              </e-column>
+
+              <e-column field="nameAttitudeHeading" textAlign='Left' headerTextAlign="Center" width="100px" headerTextAlign="Center" headerText="{{ 'ATTITUDE_HEADING_COMMITTEE_DETAIL_LABLE' | translate}}">
+                <ng-template #headerTemplate let-data>
+                  <span class="headercell">
+                    {{"ATTITUDE_HEADING_COMMITTEE_DETAIL_LABLE" | translate}}
+                  </span>
+                </ng-template>
+                <ng-template #template let-data>
+                  {{data.nameAttitudeHeading | translate}}
+                </ng-template>
+                <ng-template #editTemplate let-data>
+                  {{data.nameAttitudeHeading | translate}}
+                </ng-template>
+              </e-column>
+
+              <e-column field="comment" textAlign='Left' headerTextAlign="Center" headerText="{{ 'ATTITUDE_COMMENT_COMMITTEE_DETAIL_LABLE' | translate}}">
+                <ng-template #headerTemplate let-data>
+                  <span class="headercell">
+                    {{"ATTITUDE_COMMENT_POINT_COMMITTEE_DETAIL_LABLE" | translate}}
+                  </span>
+                </ng-template>
+                <ng-template #template let-data>
+                  <ejs-tooltip #tooltip position="BottomCenter" content="Comment by: {{data.scoreFromName}}" style="font-size: 14px;">
+                    <textarea disabled type="text" [value]="data.comment" class="e-field e-input e-defaultcell textarea-disabled" name="comment" cols="5" rows="3"></textarea>
+                  </ejs-tooltip>
+                </ng-template>
+                <ng-template #editTemplate let-data>
+                  <textarea type="text" [value]="data.comment" class="e-field e-input e-defaultcell" name="comment" cols="5" rows="3"></textarea>
+                </ng-template>
+              </e-column>
+
+
+
+            </e-columns>
+          </ejs-grid>
+        </div> -->
+
+
+        <!-- FL -->
+        <div class="control-section e-tbar-section mt-3">
+          <div class="e-sample-resize-container">
+            <div class="col-md-12 d-flex justify-content-left align-items-center">
+              <h5 style="font-size: 22pt;">{{"NEW_ATT_DETAIL_LABEL_QUES_FL" | translate}}</h5>
+            </div>
+          </div>
+        </div>
+        <div class="container">
+          <div class="row">
+            <div class="col-md-12">
+              <div class="row">
+                <div class="col-md-12 pl-4 mb-3">
+                  <textarea  row="4" type="text" [readonly]="frozen" [(ngModel)]="dataAttEvaluation.commentFL" placeholder="{{'NEW_ATT_DETAIL_LABEL_QUES_FL' | translate}}..." class="form-control" name="comment2" style="border-color: darkseagreen;text-align:left;min-height: 100px;font-size: 16px;"></textarea>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- L0 -->
+        <div class="control-section e-tbar-section mt-3">
+          <div class="e-sample-resize-container">
+            <div class="col-md-12 d-flex justify-content-left align-items-center">
+              <h5 style="font-size: 22pt;">{{"NEW_ATT_DETAIL_LABEL_QUES_L0" | translate}}</h5>
+            </div>
+          </div>
+        </div>
+        <div class="container">
+          <div class="row">
+            <div class="col-md-6 mb-2">
+              <div class="mb-1" style="font-size: 18pt;">
+                1. {{"NEW_ATT_LABEL_QUES1_L0" | translate}}
+              </div>
+              <div class="row pl-4">
+                <div class="col-md-4 mt-2">
+                  <ejs-checkbox label="{{'NEW_ATT_LABEL_QUES_TICK1' | translate}}" [disabled]="frozen" [(ngModel)]="dataAttEvaluation.firstQuestion1L0" cssClass="e-info" #checkbox></ejs-checkbox>
+                </div>
+                <div class="col-md-4 mt-2">
+                  <ejs-checkbox label="{{'NEW_ATT_LABEL_QUES_TICK2' | translate}}" [disabled]="frozen" [(ngModel)]="dataAttEvaluation.firstQuestion2L0" cssClass="e-info" #checkbox></ejs-checkbox>
+                </div>
+                <div class="col-md-4 mt-2">
+                  <ejs-checkbox label="{{'NEW_ATT_LABEL_QUES_TICK3' | translate}}" [disabled]="frozen" [(ngModel)]="dataAttEvaluation.firstQuestion3L0" cssClass="e-info" #checkbox></ejs-checkbox>
+                </div>
+                <div class="col-md-4 mt-2">
+                  <ejs-checkbox label="{{'NEW_ATT_LABEL_QUES_TICK4' | translate}}" [disabled]="frozen" [(ngModel)]="dataAttEvaluation.firstQuestion4L0" cssClass="e-info" #checkbox></ejs-checkbox>
+                </div>
+                <div class="col-md-4 mt-2">
+                  <ejs-checkbox label="{{'NEW_ATT_LABEL_QUES_TICK5' | translate}}" [disabled]="frozen" [(ngModel)]="dataAttEvaluation.firstQuestion5L0" cssClass="e-info" #checkbox></ejs-checkbox>
+                </div>
+                <div class="col-md-4 mt-2">
+                  <ejs-checkbox label="{{'NEW_ATT_LABEL_QUES_TICK6' | translate}}" [disabled]="frozen" [(ngModel)]="dataAttEvaluation.firstQuestion6L0" cssClass="e-info" #checkbox></ejs-checkbox>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6 mb-2">
+              <div class="mb-1" style="font-size: 18pt;">
+                2. {{"NEW_ATT_LABEL_QUES2_L0" | translate}}
+              </div>
+              <div class="row pl-4">
+                <div class="col-md-4 mt-2">
+                  <ejs-checkbox label="{{'NEW_ATT_LABEL_QUES_TICK1' | translate}}" [disabled]="frozen" [(ngModel)]="dataAttEvaluation.secondQuestion1L0" cssClass="e-info" #checkbox></ejs-checkbox>
+                </div>
+                <div class="col-md-4 mt-2">
+                  <ejs-checkbox label="{{'NEW_ATT_LABEL_QUES_TICK2' | translate}}" [disabled]="frozen" [(ngModel)]="dataAttEvaluation.secondQuestion2L0" cssClass="e-info" #checkbox></ejs-checkbox>
+                </div>
+                <div class="col-md-4 mt-2">
+                  <ejs-checkbox label="{{'NEW_ATT_LABEL_QUES_TICK3' | translate}}" [disabled]="frozen" [(ngModel)]="dataAttEvaluation.secondQuestion3L0" cssClass="e-info" #checkbox></ejs-checkbox>
+                </div>
+                <div class="col-md-4 mt-2">
+                  <ejs-checkbox label="{{'NEW_ATT_LABEL_QUES_TICK4' | translate}}" [disabled]="frozen" [(ngModel)]="dataAttEvaluation.secondQuestion4L0" cssClass="e-info" #checkbox></ejs-checkbox>
+                </div>
+                <div class="col-md-4 mt-2">
+                  <ejs-checkbox label="{{'NEW_ATT_LABEL_QUES_TICK5' | translate}}" [disabled]="frozen" [(ngModel)]="dataAttEvaluation.secondQuestion5L0" cssClass="e-info" #checkbox></ejs-checkbox>
+                </div>
+                <div class="col-md-4 mt-2">
+                  <ejs-checkbox label="{{'NEW_ATT_LABEL_QUES_TICK6' | translate}}" [disabled]="frozen" [(ngModel)]="dataAttEvaluation.secondQuestion6L0" cssClass="e-info" #checkbox></ejs-checkbox>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="mb-1 mt-1" style="font-size: 18pt;">
+                3. {{"NEW_ATT_LABEL_QUES3_L0" | translate}}
+              </div>
+              <div class="row">
+                <div class="col-md-12 pl-4 mb-3">
+                  <textarea  row="4" type="text" [readonly]="frozen" [(ngModel)]="dataAttEvaluation.thirdQuestionL0" placeholder="{{'NEW_ATT_LABEL_QUES3_L0' | translate}}..." class="form-control" name="comment2" style="border-color: darkseagreen;text-align:left;min-height: 100px;font-size: 16px;"></textarea>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="mb-1 mt-1" style="font-size: 18pt;">
+                4. {{"NEW_ATT_LABEL_QUES4_L0" | translate}}
+              </div>
+              <div class="row">
+                <div class="col-md-12 pl-4 mb-3">
+                  <textarea  row="4" type="text" [readonly]="frozen" [(ngModel)]="dataAttEvaluation.fourthQuestionL0" placeholder="{{'NEW_ATT_LABEL_QUES4_L0' | translate}}..." class="form-control" name="comment3" style="border-color: darkseagreen;text-align:left;min-height: 100px;font-size: 16px;"></textarea>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- L1 -->
+        <div class="control-section e-tbar-section mt-3">
+          <div class="e-sample-resize-container">
+            <div class="col-md-12 d-flex justify-content-left align-items-center">
+              <h5 style="font-size: 22pt;">{{"NEW_ATT_DETAIL_LABEL_QUES_L1" | translate}}</h5>
+            </div>
+          </div>
+        </div>
+        <div class="container">
+          <div class="row">
+            <div class="col-md-6 mb-2">
+              <div class="mb-1" style="font-size: 18pt;">
+                1. {{"NEW_ATT_LABEL_QUES1_L1" | translate}}
+              </div>
+              <div class="row pl-4">
+                <div class="col-md-4 mt-2">
+                  <ejs-checkbox label="{{'NEW_ATT_LABEL_QUES_TICK1' | translate}}" [disabled]="frozen" [(ngModel)]="dataAttEvaluation.firstQuestion1L1" cssClass="e-info" #checkbox></ejs-checkbox>
+                </div>
+                <div class="col-md-4 mt-2">
+                  <ejs-checkbox label="{{'NEW_ATT_LABEL_QUES_TICK2' | translate}}" [disabled]="frozen" [(ngModel)]="dataAttEvaluation.firstQuestion2L1" cssClass="e-info" #checkbox></ejs-checkbox>
+                </div>
+                <div class="col-md-4 mt-2">
+                  <ejs-checkbox label="{{'NEW_ATT_LABEL_QUES_TICK3' | translate}}" [disabled]="frozen" [(ngModel)]="dataAttEvaluation.firstQuestion3L1" cssClass="e-info" #checkbox></ejs-checkbox>
+                </div>
+                <div class="col-md-4 mt-2">
+                  <ejs-checkbox label="{{'NEW_ATT_LABEL_QUES_TICK4' | translate}}" [disabled]="frozen" [(ngModel)]="dataAttEvaluation.firstQuestion4L1" cssClass="e-info" #checkbox></ejs-checkbox>
+                </div>
+                <div class="col-md-4 mt-2">
+                  <ejs-checkbox label="{{'NEW_ATT_LABEL_QUES_TICK5' | translate}}" [disabled]="frozen" [(ngModel)]="dataAttEvaluation.firstQuestion5L1" cssClass="e-info" #checkbox></ejs-checkbox>
+                </div>
+                <div class="col-md-4 mt-2">
+                  <ejs-checkbox label="{{'NEW_ATT_LABEL_QUES_TICK6' | translate}}" [disabled]="frozen" [(ngModel)]="dataAttEvaluation.firstQuestion6L1" cssClass="e-info" #checkbox></ejs-checkbox>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6 mb-2">
+              <div class="mb-1" style="font-size: 18pt;">
+                2. {{"NEW_ATT_LABEL_QUES2_L1" | translate}}
+              </div>
+              <div class="row pl-4">
+                <div class="col-md-4 mt-2">
+                  <ejs-checkbox label="{{'NEW_ATT_LABEL_QUES_TICK1' | translate}}" [disabled]="frozen" [(ngModel)]="dataAttEvaluation.secondQuestion1L1" cssClass="e-info" #checkbox></ejs-checkbox>
+                </div>
+                <div class="col-md-4 mt-2">
+                  <ejs-checkbox label="{{'NEW_ATT_LABEL_QUES_TICK2' | translate}}" [disabled]="frozen" [(ngModel)]="dataAttEvaluation.secondQuestion2L1" cssClass="e-info" #checkbox></ejs-checkbox>
+                </div>
+                <div class="col-md-4 mt-2">
+                  <ejs-checkbox label="{{'NEW_ATT_LABEL_QUES_TICK3' | translate}}" [disabled]="frozen" [(ngModel)]="dataAttEvaluation.secondQuestion3L1" cssClass="e-info" #checkbox></ejs-checkbox>
+                </div>
+                <div class="col-md-4 mt-2">
+                  <ejs-checkbox label="{{'NEW_ATT_LABEL_QUES_TICK4' | translate}}" [disabled]="frozen" [(ngModel)]="dataAttEvaluation.secondQuestion4L1" cssClass="e-info" #checkbox></ejs-checkbox>
+                </div>
+                <div class="col-md-4 mt-2">
+                  <ejs-checkbox label="{{'NEW_ATT_LABEL_QUES_TICK5' | translate}}" [disabled]="frozen" [(ngModel)]="dataAttEvaluation.secondQuestion5L1" cssClass="e-info" #checkbox></ejs-checkbox>
+                </div>
+                <div class="col-md-4 mt-2">
+                  <ejs-checkbox label="{{'NEW_ATT_LABEL_QUES_TICK6' | translate}}" [disabled]="frozen" [(ngModel)]="dataAttEvaluation.secondQuestion6L1" cssClass="e-info" #checkbox></ejs-checkbox>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-12">
+              <div class="mb-1 mt-1" style="font-size: 18pt;">
+                3. {{"NEW_ATT_LABEL_QUES3_L1" | translate}}
+              </div>
+              <div class="row">
+                <div class="col-md-12 pl-4 mb-3">
+                  <textarea  row="4" type="text" [readonly]="frozen" [(ngModel)]="dataAttEvaluation.thirdQuestionL1" placeholder="{{'NEW_ATT_LABEL_QUES3_L1' | translate}}..." class="form-control" name="comment2" style="border-color: darkseagreen;text-align:left;min-height: 100px;font-size: 16px;"></textarea>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- L2 -->
+        <div class="control-section e-tbar-section mt-3">
+          <div class="e-sample-resize-container">
+            <div class="col-md-12 d-flex justify-content-left align-items-center">
+              <h5 style="font-size: 22pt;">{{"NEW_ATT_DETAIL_LABEL_QUES_L2" | translate}}</h5>
+            </div>
+          </div>
+        </div>
+        <div class="container mb-3">
+          <div class="row">
+            <div class="col-md-12">
+              <div class="row">
+                <div class="col-md-12 pl-4 mb-3">
+                  <textarea  row="4" type="text" [readonly]="frozen" [(ngModel)]="dataAttEvaluation.commentL2" placeholder="{{'NEW_ATT_DETAIL_LABEL_QUES_L2' | translate}}..." class="form-control" name="comment2" style="border-color: darkseagreen;text-align:left;min-height: 100px;font-size: 16px;"></textarea>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+
+
+        <div class="card-body mb-3">
+          <h4 class="ml-2" style="text-align: left; font-size: 22pt;">{{"SPECIAL_CONTRIBUTION_OR_MISTAKE_LABEL" | translate}}: </h4>
+          <!-- <span class="ml-2" *ngIf="isDataSpecial == false" style="color: grey;">(data is not available)</span> -->
+          <div class="col-12">
+            <div class="container">
+
+              <div class="row mb-4">
+                <div class="col">
+                  <div class="form-outline" style="font-size: 18pt;">
+                    <label class="form-label" >{{"KPI_SCORE_TYPE_LABEL" | translate}}</label>
+                    <ejs-multiselect
+                      id="ddlelementType"
+                      #ddlelementType
+                      [showDropDownIcon]="true"
+                      [(ngModel)]="typel1"
+                      [dataSource]="typeDataL1"
+                      placeholder="{{ 'CHOOSE TYPE' | translate }}"
+                      [fields]="typeFields"
+                      [readonly]="frozen"
+                      [mode]="'Box'"
+                    >
+                    </ejs-multiselect>
+                    <!-- <ejs-dropdownlist
+                      id='ddlelementType'
+                      #ddlelementType
+                      [enabled]='true'
+                      [(ngModel)]='typel1'
+                      [allowFiltering]='true'
+                      [fields]="typeFields"
+                      placeholder='Select a Type'
+                      [dataSource]='typeDataL1'
+                      [readonly]="frozen">
+                    </ejs-dropdownlist> -->
+                  </div>
+                </div>
+                <div class="col">
+                  <div class="form-outline" style="font-size: 18pt;">
+                    <label class="form-label" >{{"KPI_SCORE_COMPACT_LABEL" | translate}}</label>
+                    <ejs-multiselect
+                      id="ddlelementImpact"
+                      #ddlelementImpact
+                      [showDropDownIcon]="true"
+                      [(ngModel)]="compactl1"
+
+                      [dataSource]="compactDataL1"
+                      [readonly]="frozen"
+                      placeholder="{{ 'CHOOSE IMPACT' | translate }}"
+                      [fields]="compactFields"
+                      [mode]="'Box'"
+                    >
+                    </ejs-multiselect>
+                    <!-- <ejs-dropdownlist
+                      id='ddlelementImpact' #ddlelementImpact
+                      [(ngModel)]='compactl1'
+
+                      [allowFiltering]='true'
+                      [fields]="compactFields"
+                      [enabled]='true'
+                      placeholder='Select a Impact'
+                      [dataSource]='compactDataL1'
+                      [readonly]="frozen">
+                    </ejs-dropdownlist> -->
+                  </div>
+                </div>
+              </div>
+
+              <div class="form-outline mb-4"  style="font-size: 18pt;">
+                <label class="form-label" >{{"KPI_SCORE_SUBJECT_LABEL" | translate}}</label>
+                <textarea
+                  class="form-control"
+
+                  [(ngModel)]="subjectl1"
+                  style="border-color: darkseagreen; font-size: 16px;"
+                  placeholder="{{'KPI_SCORE_SUBJECT_LABEL' | translate}}"
+                  rows="4"
+                  [readonly]="frozen">
+                </textarea>
+              </div>
+
+              <div class="form-outline mb-4" style="font-size: 18pt;">
+                <label class="form-label" >{{"KPI_SCORE_CONTENT_LABEL" | translate}}</label>
+                <textarea
+
+                  class="form-control"
+                  [(ngModel)]="contentl1"
+                  style="border-color: darkseagreen; font-size: 16px;"
+                  placeholder="{{'KPI_SCORE_CONTENT_LABEL' | translate}}"
+                  rows="4"
+                  [readonly]="frozen">
+                </textarea>
+              </div>
+
+              <div class="row mb-4">
+                <div class="col">
+                  <div class="form-outline" style="font-size: 18pt;">
+                    <label class="form-label" >{{"KPI_SCORE_RATIO_LABEL" | translate}}</label>
+                    <ejs-dropdownlist
+                      id='ddlelementRatio' #ddlelementRatio
+                      [(ngModel)]='ratiol1'
+                      [allowFiltering]='true'
+
+                      [fields]="ratioFields"
+                      [enabled]='true'
+                      placeholder='Select a Responsibility ratio'
+                      [dataSource]='ratioDataL1'
+                      [readonly]="frozen">
+                    </ejs-dropdownlist>
+                  </div>
+                </div>
+                <div class="col">
+                  <div class="form-outline" style="font-size: 18pt;">
+                    <label class="form-label" >{{"KPI_SCORE_SCORE_LABEL" | translate}}</label>
+                    <ejs-dropdownlist
+                      id='ddlelementScore' #ddlelementScore
+                      [(ngModel)]='scorel1'
+
+                      [allowFiltering]='true'
+                      [enabled]='true'
+                      [fields]="scoreFields"
+                      placeholder='Select a Score'
+                      [dataSource]='scoreDataL1'
+                      [readonly]="frozen">
+                    </ejs-dropdownlist>
+                  </div>
+                </div>
+              </div>
+
+              <div class="row mb-4">
+                <div class="col-12">
+                  <div class="control_wrapper">
+                    <ul class="list-group mr-3" style="width: 100%;" *ngIf="filel1?.length > 0" >
+                      <li class="list-group-item" *ngFor="let item of filel1">
+                        <a [id]='item.path' href="javascript:void(0)" style="cursor: pointer; color: #20a8d8; background-color: transparent;" (click)="downloadFile(item)">{{item.name}}</a>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+          </div>
+
+
+
+        </div>
+
+        <div class="card-body table-responsive p-0 mb-3">
+          <h4 class="font-weight-bold ml-2 committee-title">
+            {{"L2_SCORE_COMMITTEE_DETAIL" | translate}}
+          </h4>
+          <ejs-grid #gridKpiScoreL2
+            id='gridKpiScoreL2'
+            [dataSource]="dataKpiScoreL2"
+            [allowResizing]='true'
+            [showColumnMenu]='true'
+            gridLines='Both'
+            [locale]='locale'
+
+            allowEditing='true'
+            [editSettings]="editSettings"
+            (actionBegin)="actionBeginEditKpiScoreL2($event)"
+            allowTextWrap='true'
+            (keyPressed)="keyPressedKpiScoreL2($event)"
+          >
+            <e-columns>
+
+              <e-column field="content" textAlign='Center' headerText="{{ 'KPI_COMMENT_COMMITTEE_DETAIL_LABLE' | translate}}">
+                <ng-template #headerTemplate let-data>
+                  <span class="headercell">
+                    {{"KPI_COMMENT_COMMITTEE_DETAIL_LABLE" | translate}}
+                  </span>
+                </ng-template>
+                <ng-template #template let-data>
+                  <textarea disabled type="text" [value]="data.content" class="e-field e-input e-defaultcell textarea-disabled" name="content" cols="5" rows="3"></textarea>
+                </ng-template>
+                <ng-template #editTemplate let-data>
+                  <textarea type="text" [value]="data.content" class="e-field e-input e-defaultcell" name="content" cols="5" rows="3"></textarea>
+                </ng-template>
+              </e-column>
+
+              <e-column field="point" textAlign='Center' width="80" headerText="{{ 'KPI_SOCRE_COMMITTEE_DETAIL_LABLE' | translate}}">
+                <ng-template #headerTemplate let-data>
+                  <span class="headercell">
+                    {{"KPI_SOCRE_COMMITTEE_DETAIL_LABLE" | translate}}
+                  </span>
+                </ng-template>
+
+                <ng-template #editTemplate let-data>
+                  <ng-container>
+                    <ejs-dropdownlist #sample [dataSource]='scoreDataL2' (select)='onSpecialScoreL2($event)' [value]='data.point' [fields]='scoreFields' placeholder='Select score'></ejs-dropdownlist>
+                  </ng-container>
+                </ng-template>
+              </e-column>
+
+              <e-column field="files" textAlign='Center' headerText="{{ 'ATTITUDE_FILE_COMMITTEE_DETAIL_LABLE' | translate}}">
+                <ng-template #headerTemplate let-data>
+                  <span class="headercell">
+                    {{"ATTITUDE_FILE_COMMITTEE_DETAIL_LABLE" | translate}}
+                  </span>
+                </ng-template>
+
+                <ng-template #template let-data>
+                  <ul class="list-group mr-3" style="width: 100%;" *ngIf="data?.files.length > 0" >
+                    <li class="list-group-item" *ngFor="let item of data?.files">
+                      <a [id]='item.path' href="javascript:void(0)" style="cursor: pointer; color: #20a8d8; background-color: transparent;" (click)="downloadFile(item)">{{item.name}}</a>
+                    </li>
+                  </ul>
+                </ng-template>
+
+                <ng-template #editTemplate let-data>
+                  <ul class="list-group mr-3" style="width: 100%;" *ngIf="data?.files.length > 0" >
+                    <li class="list-group-item" *ngFor="let item of data?.files">
+                      <a [id]='item.path' href="javascript:void(0)" style="cursor: pointer; color: #20a8d8; background-color: transparent;" (click)="downloadFile(item)">{{item.name}}</a>
+                    </li>
+                  </ul>
+                </ng-template>
+              </e-column>
+
+            </e-columns>
+          </ejs-grid>
+        </div>
+
+        <div class="row">
+          <div class="col">
+            <table class="table-score">
+              <tr>
+                <th class="th-score text-center title-tooltip-detail" style="font-size: 30px;"><div class="th-label">{{"KPI_SCORE_CALCULATE_LABEL" | translate}}</div></th>
+                <th class="th-score" style="font-size: 30px;"><div class="th-label">{{"ATTITUDE_SCORE_CALCULATE_LABEL" | translate}}</div></th>
+                <th class="th-score" style="font-size: 30px;"><div class="th-label">{{"SPECIAL_SCORE_CALCULATE_LABEL" | translate}}</div></th>
+                <th class="th-score"></th>
+                <th class="th-score" style="font-size: 30px;"><div class="th-label">{{"H1_SCORE_CALCULATE_LABEL" | translate}}</div></th>
+              </tr>
+              <tr>
+                <td class="td-score">
+                  <ejs-tooltip #tooltip content="{{contentTooltipKpi}}">
+                    <input class="inputCal" [value]="kpiScoreCal" placeholder="0" readonly="true" type="text" style="width: 100%; height: 100px; font-size: 40px; padding-left: 10px;">
+                  </ejs-tooltip>
+                </td>
+                <td class="td-score">
+                  <ejs-tooltip #tooltip content="{{contentTooltipAttitude}}">
+                    <input class="inputCal" [value]="attitudeScoreCal" placeholder="0" readonly="true" type="text" style="width: 100%; height: 100px; font-size: 40px; padding-left: 10px;">
+                  </ejs-tooltip>
+                </td>
+                <td class="td-score">
+                  <form (ngSubmit)="updateCommitteeScore()" #form="ngForm">
+                    <input [readonly]="frozen" [(ngModel)]="specialScoreCal" name="specialScoreCal" (keypress)="numberOnly($event)" (keyup.enter)="updateCommitteeScore()" [placeholder]="0" type="text" style="width: 100%; height: 100px; font-size: 40px; padding-left: 10px;">
+                  </form>
+                </td>
+                <td class="p-3"></td>
+                <td class="td-score">
+                  <input class="inputCal" [value]="h1ScoreCal" placeholder="0" readonly="true" type="text" style="width: 100%; height: 100px; font-size: 40px; padding-left: 10px;">
+                </td>
+              </tr>
+            </table>
+          </div>
+        </div>
+      </div>
+      <div class="w-100">
+        <button type="button" (click)="saveSpecial()"  class="btn btn-lg btn-warning mr-2 float-right">{{'SAVE_BUTTON' | translate }}</button>
+      </div>
+      <hr>
+    </div>
+  </div>
+</div>

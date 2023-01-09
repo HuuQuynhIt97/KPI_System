@@ -1,0 +1,59 @@
+﻿* {
+
+}
+button#gridAc_add {
+  background-color: #3ea662;
+  color: white;
+}
+
+button#gridAc_add .e-icons.e-btn-icon {
+  color: white;
+}
+
+button#gridAc_delete {
+  background-color: red;
+  color: white;
+}
+
+button#gridAc_delete .e-tbar-btn-text {
+  color: white;
+}
+
+button#gridAc_delete .e-icons.e-btn-icon {
+  color: white;
+}
+
+
+
+
+
+
+button#gridPDCA_add {
+  background-color: #3ea662;
+  color: white;
+}
+
+button#gridPDCA_add .e-icons.e-btn-icon {
+  color: white;
+}
+
+button#gridPDCA_delete .e-icons.e-btn-icon {
+  color: white;
+}
+
+button#gridPDCA_delete .e-tbar-btn-text {
+  color: white;
+}
+
+button#gridPDCA_delete  {
+  background-color: red;
+  color: white;
+}
+
+/* .e-toolbar .e-toolbar-items .e-toolbar-item .e-tbar-btn.e-btn.e-tbtn-txt .e-icons.e-btn-icon {
+  color: white;
+} */
+
+
+
+

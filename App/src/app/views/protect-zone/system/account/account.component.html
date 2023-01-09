@@ -1,0 +1,341 @@
+<div class="row">
+  <div class="col-md-12">
+    <div class="card">
+      <div class="card-body table-responsive p-0">
+        <ejs-grid #grid
+          id='grid'
+          [dataSource]="data"
+          [allowPaging]='true'
+          [allowResizing]='true'
+          [showColumnMenu]='true'
+          gridLines='Both'
+          [locale]='locale'
+          (actionBegin)="actionBegin($event)"
+          (actionComplete)="actionComplete($event)"
+          [toolbar]='toolbarOptions'
+          [pageSettings]='pageSettings'
+          [allowExcelExport]='true'
+          (recordDoubleClick)='onDoubleClick($event)'
+          (toolbarClick)='toolbarClick($event)'
+          [editSettings]='editSettings'
+        >
+          <e-columns>
+            <e-column field="ID" textAlign='Center' width="80" isPrimaryKey="true" headerText="ID">
+              <ng-template #template let-data>
+                {{NO(data.index)}}
+              </ng-template>
+              <ng-template #editTemplate let-data>
+                #
+              </ng-template>
+            </e-column>
+            <e-column field="username" textAlign='Center' width="110" headerText="{{ 'Username' | translate}}">
+              <ng-template #headerTemplate let-data>
+                {{"Username" | translate}}
+              </ng-template>
+            </e-column>
+            <e-column field="fullName" textAlign='Center' width="110" headerText="{{ 'FullName'}}">
+              <ng-template #headerTemplate let-data>
+                {{"FullName" | translate}}
+              </ng-template>
+            </e-column>
+            <e-column field="password" textAlign='Center' width="110" headerText="{{ 'Password'}}">
+              <ng-template #headerTemplate let-data>
+                {{"Password" | translate}}
+              </ng-template>
+              <ng-template #template let-data>
+                ************
+              </ng-template>
+            </e-column>
+            <e-column field="role" textAlign='Center' headerText="{{ 'Authority group'}}">
+              <ng-template #editTemplate let-data>
+                <ejs-dropdownlist #positionDropdownlist [dataSource]='roles' [value]="data.role"
+                  [fields]='fieldsRole' [allowFiltering]='true'
+                  (change)='onChangeRole($event,data)'>
+                </ejs-dropdownlist>
+              </ng-template>
+            </e-column>
+            <e-column field='jobTitle' headerText="{{'ACCOUNT_JOB_TITLE' | translate}}" width='150' textAlign='Center'>
+              <ng-template #headerTemplate let-data>
+                {{'ACCOUNT_JOB_TITLE' | translate}}
+              </ng-template>
+              <ng-template #template let-data>
+                {{data.jobTitle}}
+              </ng-template>
+              <ng-template #editTemplate let-data>
+                <ejs-dropdownlist #sample [dataSource]='jobTitles' (select)='onChangeJobTitle($event)' [value]='data.jobTitleId' [fields]='fieldsJobTitle' placeholder='Select a job title'></ejs-dropdownlist>
+              </ng-template>
+            </e-column>
+            <e-column field="email" textAlign='Center' headerText="Email">
+              <ng-template #headerTemplate let-data>
+                {{"Email" | translate}}
+              </ng-template>
+            </e-column>
+
+            <e-column field="factName" textAlign='Center' width="100" headerText="Factory">
+              <ng-template #headerTemplate let-data>
+                {{"FactoryA" | translate}}
+              </ng-template>
+              <ng-template #template let-data>
+                <ng-container *ngIf="data.factName !== null; else elseTemplate">
+                  {{data.factName}}
+                </ng-container>
+                <ng-template #elseTemplate>
+                  {{'N/A'}}
+                </ng-template>
+              </ng-template>
+              <ng-template #editTemplate let-data>
+                <ejs-dropdownlist popupWidth='150px'  (change)='filterFact($event)' [(ngModel)]='factId' [allowFiltering]='true'  [fields]="ocFields" placeholder='Select a Factory' [dataSource]='dataOclv3'></ejs-dropdownlist>
+              </ng-template>
+            </e-column>
+
+            <e-column field="centerName" textAlign='Center' width="100" headerText="Center">
+              <ng-template #headerTemplate let-data>
+                {{"CenterA" | translate}}
+              </ng-template>
+              <ng-template #template let-data>
+                <ng-container *ngIf="data.centerName !== null; else elseTemplate">
+                  {{data.centerName}}
+                </ng-container>
+                <ng-template #elseTemplate>
+                  {{'N/A'}}
+                </ng-template>
+              </ng-template>
+              <ng-template #editTemplate let-data>
+                <ejs-dropdownlist popupWidth='150px'  (change)='filterCenter($event)' [(ngModel)]='centerId' [allowFiltering]='true'  [fields]="ocFields" placeholder='Select a Center' [dataSource]='dataOclv4'></ejs-dropdownlist>
+              </ng-template>
+            </e-column>
+
+            <e-column field="deptName" textAlign='Center' width="100" headerText="Dept">
+              <ng-template #headerTemplate let-data>
+                {{"DeptA" | translate}}
+              </ng-template>
+              <ng-template #template let-data>
+                <ng-container *ngIf="data.deptName !== null; else elseTemplate">
+                  {{data.deptName}}
+                </ng-container>
+                <ng-template #elseTemplate>
+                  {{'N/A'}}
+                </ng-template>
+              </ng-template>
+              <ng-template #editTemplate let-data>
+                <ejs-dropdownlist popupWidth='150px' id='ddlelement'  [(ngModel)]='deptId' [allowFiltering]='true'  [fields]="ocFields" placeholder='Select a Dept.' [dataSource]='dataOclv5'></ejs-dropdownlist>
+              </ng-template>
+            </e-column>
+
+            <!-- <e-column field='accountGroupText' headerText="{{'Account Group'}}" width='200' textAlign='Center'>
+              <ng-template #headerTemplate let-data>
+                {{"AccountGroup" | translate}}
+              </ng-template>
+              <ng-template #template let-data>
+                {{data.accountGroupText}}
+              </ng-template>
+              <ng-template #editTemplate let-data>
+                <ejs-multiselect [(ngModel)]='accountGroupItem' [fields]="fields" [showDropDownIcon]='true' mode='CheckBox' placeholder='Select months of the Year' [dataSource]='accountGroupData'></ejs-multiselect>
+              </ng-template>
+            </e-column> -->
+
+
+
+
+
+
+            <e-column field='l0' headerText="{{'ACCOUNT_L0' | translate}}" width='80' textAlign='Center'>
+              <ng-template #headerTemplate let-data>
+                {{'ACCOUNT_L0' | translate}}
+              </ng-template>
+              <ng-template #template let-data>
+                <ejs-switch #switch style="width: 50px;" onLabel="{{'YES'}}" offLabel="{{'NO'}}" (click)="onClickL0(data.id)" [checked]='data.l0'></ejs-switch>
+              </ng-template>
+              <ng-template #editTemplate let-data>
+                <ng-container *ngIf="editing !== true; else elseEditTemplate">
+                  <ejs-switch #switch style="width: 50px;" onLabel="{{'YES'}}" offLabel="{{'NO'}}" (click)="onClickL0(data.id)" [checked]='data.l0'></ejs-switch>
+                </ng-container>
+                <ng-template #elseEditTemplate>
+                  {{'N/A'}}
+                </ng-template>
+              </ng-template>
+            </e-column>
+            <e-column field='functionalLeader' headerText="{{'ACCOUNT_FUNCTIONAL_LEADER' | translate}}" width='160' textAlign='Center'>
+              <ng-template #headerTemplate let-data>
+                {{'ACCOUNT_FUNCTIONAL_LEADER' | translate}}
+              </ng-template>
+              <ng-template #template let-data>
+                {{data.functionalLeaderName}}
+              </ng-template>
+              <ng-template #editTemplate let-data>
+                <ejs-dropdownlist [(ngModel)]='functionalLeaderId' [allowFiltering]='true' (created)='createdFunctionalLeader($event, data)' [fields]="functionalLeaderFields" placeholder='Select a manager' [dataSource]='functionalLeaders'></ejs-dropdownlist>
+              </ng-template>
+            </e-column>
+
+            <!-- <e-column field='l1' headerText="{{'L1'}}" width='150' textAlign='Center'>
+              <ng-template #headerTemplate let-data>
+                {{"L1"}}
+              </ng-template>
+              <ng-template #template let-data>
+                {{data.l1Name}}
+              </ng-template>
+              <ng-template #editTemplate let-data>
+                <ejs-dropdownlist [(ngModel)]='l1Id' [allowFiltering]='true' (created)='createdL1($event, data)' [fields]="l1Fields" placeholder='Select a manager' [dataSource]='l1s'></ejs-dropdownlist>
+              </ng-template>
+            </e-column> -->
+            <e-column field='manager' headerText="{{'L1 Manager'}}" width='150' textAlign='Center'>
+              <ng-template #headerTemplate let-data>
+                {{"L1Manager" | translate}}
+              </ng-template>
+              <ng-template #template let-data>
+                {{data.managerName}}
+              </ng-template>
+              <ng-template #editTemplate let-data>
+                <ejs-dropdownlist [(ngModel)]='managerId' [allowFiltering]='true' (created)='createdManager($event, data)' [fields]="managerFields" placeholder='Select a manager' [dataSource]='managers'></ejs-dropdownlist>
+              </ng-template>
+            </e-column>
+
+            <e-column field='l2' headerText="{{'ACCOUNT_L2' | translate}}" width='150' textAlign='Center'>
+              <ng-template #headerTemplate let-data>
+                {{'ACCOUNT_L2' | translate}}
+              </ng-template>
+              <ng-template #template let-data>
+                {{data.l2Name}}
+              </ng-template>
+              <ng-template #editTemplate let-data>
+                <ejs-dropdownlist [(ngModel)]='l2Id' [allowFiltering]='true' (created)='createdL2($event, data)' [fields]="l2Fields" placeholder='Select a manager' [dataSource]='l2s'></ejs-dropdownlist>
+              </ng-template>
+            </e-column>
+
+            <e-column field='systemFlow' headerText="{{'ACCOUNT_SYSTEM_FLOW' | translate}}" width='150' textAlign='Center'>
+              <ng-template #headerTemplate let-data>
+                {{'ACCOUNT_SYSTEM_FLOW' | translate}}
+              </ng-template>
+              <ng-template #template let-data>
+                {{data.systemFlow === 0 ? "N/A" : data.systemFlow}}
+              </ng-template>
+              <ng-template #editTemplate let-data>
+                <ng-container *ngIf="editing !== true; else elseEditTemplate">
+                  <ejs-dropdownlist (select)='onChangeSystemFlow($event)' [value]='5' [fields]='fieldsSystemFlow' placeholder='Select a system flow' [dataSource]='systemFlows'></ejs-dropdownlist>
+                </ng-container>
+                <ng-template #elseEditTemplate>
+                  <ejs-dropdownlist (select)='onChangeSystemFlow($event)' [value]='data.systemFlow' [fields]='fieldsSystemFlow' placeholder='Select a system flow' [dataSource]='systemFlows'></ejs-dropdownlist>
+                </ng-template>
+              </ng-template>
+            </e-column>
+
+            <e-column field='ghr' headerText="{{'GHR'}}" width='80' textAlign='Center'>
+              <ng-template #headerTemplate let-data>
+                {{"GHR"}}
+              </ng-template>
+              <ng-template #template let-data>
+                <ejs-switch #switch style="width: 50px;" onLabel="{{'YES'}}" offLabel="{{'NO'}}" (click)="onClickGhr(data.id)" [checked]='data.ghr'></ejs-switch>
+              </ng-template>
+              <ng-template #editTemplate let-data>
+                <ng-container *ngIf="editing !== true; else elseEditTemplate">
+                  <ejs-switch #switch style="width: 50px;" onLabel="{{'YES'}}" offLabel="{{'NO'}}" (click)="onClickGhr(data.id)" [checked]='data.ghr'></ejs-switch>
+                </ng-container>
+                <ng-template #elseEditTemplate>
+                  {{'N/A'}}
+                </ng-template>
+              </ng-template>
+            </e-column>
+
+            <e-column field='gm' headerText="{{'GM'}}" width='80' textAlign='Center'>
+              <ng-template #headerTemplate let-data>
+                {{"GM"}}
+              </ng-template>
+              <ng-template #template let-data>
+                <ejs-switch #switch style="width: 50px;" onLabel="{{'YES'}}" offLabel="{{'NO'}}" (click)="onClickGm(data.id)" [checked]='data.gm'></ejs-switch>
+              </ng-template>
+              <ng-template #editTemplate let-data>
+                <ng-container *ngIf="editing !== true; else elseEditTemplate">
+                  <ejs-switch #switch style="width: 50px;" onLabel="{{'YES'}}" offLabel="{{'NO'}}" (click)="onClickGm(data.id)" [checked]='data.gm'></ejs-switch>
+                </ng-container>
+                <ng-template #elseEditTemplate>
+                  {{'N/A'}}
+                </ng-template>
+              </ng-template>
+            </e-column>
+
+
+
+            <!-- <e-column field='gmScore' headerText="{{'GM Score'}}" width='110' textAlign='Center'>
+              <ng-template #headerTemplate let-data>
+                {{"GM Score"}}
+              </ng-template>
+              <ng-template #template let-data>
+                <ejs-switch #switch style="width: 50px;" onLabel="{{'YES'}}" offLabel="{{'NO'}}" (click)="onClickGmScore(data.id)" [checked]='data.gmScore'></ejs-switch>
+              </ng-template>
+              <ng-template #editTemplate let-data>
+                <ng-container *ngIf="editing !== true; else elseEditTemplate">
+                  <ejs-switch #switch style="width: 50px;" onLabel="{{'YES'}}" offLabel="{{'NO'}}" (click)="onClickGmScore(data.id)" [checked]='data.gmScore'></ejs-switch>
+                </ng-container>
+                <ng-template #elseEditTemplate>
+                  {{'N/A'}}
+                </ng-template>
+              </ng-template>
+            </e-column> -->
+
+
+
+            <!-- <e-column field='leaderName' headerText="{{'Functional Leader'}}" width='150' textAlign='Center'>
+              <ng-template #headerTemplate let-data>
+                {{"FunctionalLeader" | translate}}
+              </ng-template>
+              <ng-template #template let-data>
+                {{data.leaderName}}
+              </ng-template>
+              <ng-template #editTemplate let-data>
+                <ejs-dropdownlist [(ngModel)]='leaderId' [allowFiltering]='true' (created)='createdLeader($event, data)' [fields]="leaderFields" placeholder='Select a leader' [dataSource]='leaders'></ejs-dropdownlist>
+              </ng-template>
+            </e-column> -->
+
+            <e-column field="option" width="100" textAlign='Center' headerText="{{ 'Option'}}">
+              <ng-template #headerTemplate let-data>
+                {{"OptionA" | translate}}
+              </ng-template>
+              <ng-template #template let-data>
+                <div class="btn-group">
+                  <button type="button" *ngIf="data.isLock" (click)='lock(data.id)' class="btn btn-xs btn-danger"><i class="fa fa-lock"></i></button>
+                </div>
+                <div class="btn-group">
+                  <button type="button" *ngIf="!data.isLock" (click)='lock(data.id)' class="btn btn-xs btn-success"><i class="fa fa-unlock"></i></button>
+                </div>
+              </ng-template>
+              <ng-template #editTemplate let-data>
+               N/A
+              </ng-template>
+            </e-column>
+
+          </e-columns>
+        </ejs-grid>
+      </div>
+      <!-- /.card-body -->
+    </div>
+  </div>
+</div>
+
+<div>
+  <p>
+    <i style="color: red">
+      {{"NOTE_ACCOUNT_PAGE" | translate}}
+    </i>
+  </p>
+</div>
+
+<ng-template #password let-modal name="frm">
+  <form (ngSubmit)="checkPasswordAdmin()">
+    <div class="modal-header">
+      <h4 class="modal-title text-danger" id="modal-basic-title">*Require Admin Password To Delete Account User</h4>
+      <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')"><span aria-hidden="true">&times;</span></button>
+    </div>
+    <div class="modal-body">
+      <div class="mb-3">
+        <label for="passwordAdmin" class="form-lable">Password</label>
+        <input type="password" class="form-control" [(ngModel)]="passwordAdmin" name="passwordAdmin">
+      </div>
+    </div>
+
+    <div class="modal-footer">
+      <button class="btn btn-primary" (click)="checkPasswordAdmin()">Ok</button>
+      <button type="button" class="btn btn-light" (click)="modal.close('Close click')">Close</button>
+    </div>
+  </form>
+</ng-template>
+

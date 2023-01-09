@@ -1,0 +1,967 @@
+<ngx-spinner [fullScreen]="true" type="square-jelly-box" size="medium">
+  <p class="loading">Loading data...</p>
+</ngx-spinner>
+<div class="modal-header">
+  <h4 class="modal-title">{{'CORE_COMPE_MODEL_LABEL' | translate}} </h4>
+  <button type="button" class="close" aria-label="Close" (click)="activeModal.dismiss('Cross click')">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+
+<div class="modal-body">
+
+  <ejs-tab id="element" (selecting)="select($event)" [animation]="animation">
+    <div class="e-tab-header">
+        <div>{{'CORE_COMPE_SHEET_ALL_LABEL' | translate}}</div>
+        <div>{{'CORE_COMPE_SHEET_SCORE_2_LABEL' | translate}}</div>
+        <div>{{'CORE_COMPE_SHEET_SCORE_THAN_2_LABEL' | translate}}</div>
+        <div>{{'CORE_COMPE_SHEET_SCORE_THAN_3_LABEL' | translate}}</div>
+        <div>{{'CORE_COMPE_SHEET_AVERAGE_LABEL' | translate}}</div>
+        <div>{{'CORE_COMPE_SHEET_BEHAVIOR_LABEL' | translate}}</div>
+    </div>
+    <div class="e-content">
+
+      <!-- page show all -->
+        <div>
+          <div class="row">
+            <div class="col-md-12">
+              <div class="card">
+                <div class="card-body table-responsive p-0">
+
+                  <ejs-grid #gridShowAll
+                    id='gridShowAll'
+                    [dataSource]="dataCore"
+                    [allowPaging]='true'
+                    [allowResizing]='true'
+                    [showColumnMenu]='true'
+                    gridLines='Both'
+                    [locale]='locale'
+                    [toolbar]='toolbarOptions' (toolbarClick)='toolbarClickExcelExport($event)'
+                    [pageSettings]='pageSettings'
+                    [allowExcelExport]='true'
+                    allowTextWrap='true'
+                    (dataBound)='dataBound()'
+                  >
+                    <e-columns>
+                      <e-column field="index" textAlign='Center' headerTextAlign='center' width="50" isPrimaryKey="true" headerText="#">
+                        <ng-template #headerTemplate let-data>
+                          <span class="headercell">
+                            #
+                          </span>
+                        </ng-template>
+                        <ng-template #template let-data>
+                          {{data.index}}
+                        </ng-template>
+                      </e-column>
+
+                      <e-column field="attHeading" headerText="{{'ATTHEADING_CORE_COMPE_LABEL' | translate}}" width='400' textAlign='Left'>
+                        <ng-template #headerTemplate let-data>
+                          <span class="headercell">
+                            {{"ATTHEADING_CORE_COMPE_LABEL" | translate}}
+                          </span>
+                        </ng-template>
+                        <ng-template #template let-data>
+                          {{data.attHeading | translate}}
+                        </ng-template>
+                      </e-column>
+
+                      <e-column field="factory" textAlign='Center' headerText="{{ 'FACTORY_CORE_COMPE_LABEL' | translate}}">
+                        <ng-template #headerTemplate let-data>
+                          <span class="headercell">
+                            {{"FACTORY_CORE_COMPE_LABEL" | translate}}
+                          </span>
+                        </ng-template>
+                      </e-column>
+
+                      <e-column field="center" textAlign='Center' headerText="{{ 'CENTER_CORE_COMPE_LABEL' | translate}}">
+                        <ng-template #headerTemplate let-data>
+                          <span class="headercell">
+                            {{"CENTER_CORE_COMPE_LABEL" | translate}}
+                          </span>
+                        </ng-template>
+                      </e-column>
+
+                      <e-column field="dept" textAlign='Center' headerText="{{ 'DEPT_CORE_COMPE_LABEL' | translate}}">
+                        <ng-template #headerTemplate let-data>
+                          <span class="headercell">
+                            {{"DEPT_CORE_COMPE_LABEL" | translate}}
+                          </span>
+                        </ng-template>
+                      </e-column>
+
+                      <e-column field="l1" textAlign='Center' width="100" headerText="{{ 'L1_CORE_COMPE_LABEL' | translate}}">
+                        <ng-template #headerTemplate let-data>
+                          <span class="headercell">
+                            {{"L1_CORE_COMPE_LABEL" | translate}}
+                          </span>
+                        </ng-template>
+                      </e-column>
+
+                      <e-column field="l2" textAlign='Center' width="100" headerText="{{ 'L2_CORE_COMPE_LABEL' | translate}}">
+                        <ng-template #headerTemplate let-data>
+                          <span class="headercell">
+                            {{"L2_CORE_COMPE_LABEL" | translate}}
+                          </span>
+                        </ng-template>
+                      </e-column>
+
+                      <e-column field="fl" textAlign='Center' width="100" headerText="{{ 'FL_CORE_COMPE_LABEL' | translate}}">
+                        <ng-template #headerTemplate let-data>
+                          <span class="headercell">
+                            {{"FL_CORE_COMPE_LABEL" | translate}}
+                          </span>
+                        </ng-template>
+                      </e-column>
+
+                      <e-column field="l0" textAlign='Center' width="100" headerText="{{ 'L0_CORE_COMPE_LABEL' | translate}}">
+                        <ng-template #headerTemplate let-data>
+                          <span class="headercell">
+                            {{"L0_CORE_COMPE_LABEL" | translate}}
+                          </span>
+                        </ng-template>
+                      </e-column>
+
+                      <e-column field="scoreBy" textAlign='Center' width="100" headerText="{{ 'SCOREBY_CORE_COMPE_LABEL' | translate}}">
+                        <ng-template #headerTemplate let-data>
+                          <span class="headercell">
+                            {{"SCOREBY_CORE_COMPE_LABEL" | translate}}
+                          </span>
+                        </ng-template>
+                      </e-column>
+
+                      <e-column field="score" textAlign='Center' width="50" headerText="{{ 'SCORE_CORE_COMPE_LABEL' | translate}}">
+                        <ng-template #headerTemplate let-data>
+                          <span class="headercell">
+                            {{"SCORE_CORE_COMPE_LABEL" | translate}}
+                          </span>
+                        </ng-template>
+                      </e-column>
+
+                      <e-column field="comment" textAlign='Center' width="600" maxWidth="600" minWidth="600" headerText="{{ 'COMMENT_CORE_COMPE_LABEL' | translate}}">
+                        <ng-template #headerTemplate let-data>
+                          <span class="headercell">
+                            {{"COMMENT_CORE_COMPE_LABEL" | translate}}
+                          </span>
+                        </ng-template>
+                        <ng-template #template let-data>
+                          <ng-container *ngIf="data.comment !== null && data.comment !== ''; else elseEditTemplate">
+                            <textarea readonly type="text" [value]="data.comment" class="e-field e-input e-defaultcell textarea-disabled" name="comment" cols="5" rows="3"></textarea>
+                          </ng-container>
+                          <ng-template #elseEditTemplate>
+                            <textarea readonly type="text" [value]="data.comment" class="e-field e-input e-defaultcell textarea-disabled" name="comment" cols="5" rows="1"></textarea>
+                          </ng-template>
+                        </ng-template>
+                      </e-column>
+
+                    </e-columns>
+                  </ejs-grid>
+                </div>
+                <!-- /.card-body -->
+              </div>
+            </div>
+          </div>
+        </div>
+
+      <!-- page show score equals 2 -->
+      <div>
+        <div class="row">
+          <div class="col-md-12">
+            <div class="card">
+              <div class="card-body table-responsive p-0">
+
+                <ejs-grid #gridShowScore2
+                  id='gridShowScore2'
+                  [dataSource]="dataCoreScore2"
+                  [allowPaging]='true'
+                  [allowResizing]='true'
+                  [showColumnMenu]='true'
+                  gridLines='Both'
+                  [locale]='locale'
+                  [toolbar]='toolbarOptions' (toolbarClick)='toolbarClickExcelExport($event)'
+                  [pageSettings]='pageSettings'
+                  [allowExcelExport]='true'
+                  allowTextWrap='true'
+                  (dataBound)='dataBoundShowScore2()'
+                >
+                  <e-columns>
+                    <e-column field="index" textAlign='Center' headerTextAlign='center' width="50" isPrimaryKey="true" headerText="#">
+                      <ng-template #headerTemplate let-data>
+                        <span class="headercell">
+                          #
+                        </span>
+                      </ng-template>
+                      <ng-template #template let-data>
+                        {{data.index}}
+                      </ng-template>
+                    </e-column>
+
+                    <e-column field="attHeading" headerText="{{'ATTHEADING_CORE_COMPE_LABEL' | translate}}" width='400' textAlign='Left'>
+                      <ng-template #headerTemplate let-data>
+                        <span class="headercell">
+                          {{"ATTHEADING_CORE_COMPE_LABEL" | translate}}
+                        </span>
+                      </ng-template>
+                      <ng-template #template let-data>
+                        {{data.attHeading | translate}}
+                      </ng-template>
+                    </e-column>
+
+                    <e-column field="factory" textAlign='Center' headerText="{{ 'FACTORY_CORE_COMPE_LABEL' | translate}}">
+                      <ng-template #headerTemplate let-data>
+                        <span class="headercell">
+                          {{"FACTORY_CORE_COMPE_LABEL" | translate}}
+                        </span>
+                      </ng-template>
+                    </e-column>
+
+                    <e-column field="center" textAlign='Center' headerText="{{ 'CENTER_CORE_COMPE_LABEL' | translate}}">
+                      <ng-template #headerTemplate let-data>
+                        <span class="headercell">
+                          {{"CENTER_CORE_COMPE_LABEL" | translate}}
+                        </span>
+                      </ng-template>
+                    </e-column>
+
+                    <e-column field="dept" textAlign='Center' headerText="{{ 'DEPT_CORE_COMPE_LABEL' | translate}}">
+                      <ng-template #headerTemplate let-data>
+                        <span class="headercell">
+                          {{"DEPT_CORE_COMPE_LABEL" | translate}}
+                        </span>
+                      </ng-template>
+                    </e-column>
+
+                    <e-column field="l1" textAlign='Center' width="100" headerText="{{ 'L1_CORE_COMPE_LABEL' | translate}}">
+                      <ng-template #headerTemplate let-data>
+                        <span class="headercell">
+                          {{"L1_CORE_COMPE_LABEL" | translate}}
+                        </span>
+                      </ng-template>
+                    </e-column>
+
+                    <e-column field="l2" textAlign='Center' width="100" headerText="{{ 'L2_CORE_COMPE_LABEL' | translate}}">
+                      <ng-template #headerTemplate let-data>
+                        <span class="headercell">
+                          {{"L2_CORE_COMPE_LABEL" | translate}}
+                        </span>
+                      </ng-template>
+                    </e-column>
+
+                    <e-column field="fl" textAlign='Center' width="100" headerText="{{ 'FL_CORE_COMPE_LABEL' | translate}}">
+                      <ng-template #headerTemplate let-data>
+                        <span class="headercell">
+                          {{"FL_CORE_COMPE_LABEL" | translate}}
+                        </span>
+                      </ng-template>
+                    </e-column>
+
+                    <e-column field="l0" textAlign='Center' width="100" headerText="{{ 'L0_CORE_COMPE_LABEL' | translate}}">
+                      <ng-template #headerTemplate let-data>
+                        <span class="headercell">
+                          {{"L0_CORE_COMPE_LABEL" | translate}}
+                        </span>
+                      </ng-template>
+                    </e-column>
+
+                    <e-column field="scoreBy" textAlign='Center' width="100" headerText="{{ 'SCOREBY_CORE_COMPE_LABEL' | translate}}">
+                      <ng-template #headerTemplate let-data>
+                        <span class="headercell">
+                          {{"SCOREBY_CORE_COMPE_LABEL" | translate}}
+                        </span>
+                      </ng-template>
+                    </e-column>
+
+                    <e-column field="score" textAlign='Center' width="50" headerText="{{ 'SCORE_CORE_COMPE_LABEL' | translate}}">
+                      <ng-template #headerTemplate let-data>
+                        <span class="headercell">
+                          {{"SCORE_CORE_COMPE_LABEL" | translate}}
+                        </span>
+                      </ng-template>
+                    </e-column>
+
+                    <!-- <e-column field="comment" textAlign='Center' width="600" maxWidth="600" minWidth="600" headerText="{{ 'COMMENT_CORE_COMPE_LABEL' | translate}}">
+                      <ng-template #headerTemplate let-data>
+                        <span class="headercell">
+                          {{"COMMENT_CORE_COMPE_LABEL" | translate}}
+                        </span>
+                      </ng-template>
+                      <ng-template #template let-data>
+                        <ng-container *ngIf="data.comment !== null && data.comment !== ''; else elseEditTemplate">
+                          <textarea readonly type="text" [value]="data.comment" class="e-field e-input e-defaultcell textarea-disabled" name="comment" cols="5" rows="3"></textarea>
+                        </ng-container>
+                        <ng-template #elseEditTemplate>
+                          <textarea readonly type="text" [value]="data.comment" class="e-field e-input e-defaultcell textarea-disabled" name="comment" cols="5" rows="1"></textarea>
+                        </ng-template>
+                      </ng-template>
+                    </e-column> -->
+
+                  </e-columns>
+                </ejs-grid>
+              </div>
+              <!-- /.card-body -->
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- page show score than 2 -->
+      <div>
+        <div class="row">
+          <div class="col-md-12">
+            <div class="card">
+              <div class="card-body table-responsive p-0">
+
+                <ejs-grid #gridShowScoreThan2
+                  id='gridShowScoreThan2'
+                  [dataSource]="dataCoreScoreThan2"
+                  [allowPaging]='true'
+                  [allowResizing]='true'
+                  [showColumnMenu]='true'
+                  gridLines='Both'
+                  [locale]='locale'
+                  [toolbar]='toolbarOptions' (toolbarClick)='toolbarClickExcelExport($event)'
+                  [pageSettings]='pageSettings'
+                  [allowExcelExport]='true'
+                  allowTextWrap='true'
+                  (dataBound)='dataBoundShowScoreThan2()'
+                >
+                  <e-columns>
+                    <e-column field="index" textAlign='Center' headerTextAlign='center' width="50" isPrimaryKey="true" headerText="#">
+                      <ng-template #headerTemplate let-data>
+                        <span class="headercell">
+                          #
+                        </span>
+                      </ng-template>
+                      <ng-template #template let-data>
+                        {{data.index}}
+                      </ng-template>
+                    </e-column>
+
+                    <e-column field="attHeading" headerText="{{'ATTHEADING_CORE_COMPE_LABEL' | translate}}" width='400' textAlign='Left'>
+                      <ng-template #headerTemplate let-data>
+                        <span class="headercell">
+                          {{"ATTHEADING_CORE_COMPE_LABEL" | translate}}
+                        </span>
+                      </ng-template>
+                      <ng-template #template let-data>
+                        {{data.attHeading | translate}}
+                      </ng-template>
+                    </e-column>
+
+                    <e-column field="factory" textAlign='Center' headerText="{{ 'FACTORY_CORE_COMPE_LABEL' | translate}}">
+                      <ng-template #headerTemplate let-data>
+                        <span class="headercell">
+                          {{"FACTORY_CORE_COMPE_LABEL" | translate}}
+                        </span>
+                      </ng-template>
+                    </e-column>
+
+                    <e-column field="center" textAlign='Center' headerText="{{ 'CENTER_CORE_COMPE_LABEL' | translate}}">
+                      <ng-template #headerTemplate let-data>
+                        <span class="headercell">
+                          {{"CENTER_CORE_COMPE_LABEL" | translate}}
+                        </span>
+                      </ng-template>
+                    </e-column>
+
+                    <e-column field="dept" textAlign='Center' headerText="{{ 'DEPT_CORE_COMPE_LABEL' | translate}}">
+                      <ng-template #headerTemplate let-data>
+                        <span class="headercell">
+                          {{"DEPT_CORE_COMPE_LABEL" | translate}}
+                        </span>
+                      </ng-template>
+                    </e-column>
+
+                    <e-column field="l1" textAlign='Center' width="100" headerText="{{ 'L1_CORE_COMPE_LABEL' | translate}}">
+                      <ng-template #headerTemplate let-data>
+                        <span class="headercell">
+                          {{"L1_CORE_COMPE_LABEL" | translate}}
+                        </span>
+                      </ng-template>
+                    </e-column>
+
+                    <e-column field="l2" textAlign='Center' width="100" headerText="{{ 'L2_CORE_COMPE_LABEL' | translate}}">
+                      <ng-template #headerTemplate let-data>
+                        <span class="headercell">
+                          {{"L2_CORE_COMPE_LABEL" | translate}}
+                        </span>
+                      </ng-template>
+                    </e-column>
+
+                    <e-column field="fl" textAlign='Center' width="100" headerText="{{ 'FL_CORE_COMPE_LABEL' | translate}}">
+                      <ng-template #headerTemplate let-data>
+                        <span class="headercell">
+                          {{"FL_CORE_COMPE_LABEL" | translate}}
+                        </span>
+                      </ng-template>
+                    </e-column>
+
+                    <e-column field="l0" textAlign='Center' width="100" headerText="{{ 'L0_CORE_COMPE_LABEL' | translate}}">
+                      <ng-template #headerTemplate let-data>
+                        <span class="headercell">
+                          {{"L0_CORE_COMPE_LABEL" | translate}}
+                        </span>
+                      </ng-template>
+                    </e-column>
+
+                    <e-column field="selfScore" textAlign='Center' width="50" headerText="{{ 'SELF_SCORE_CORE_COMPE_LABEL' | translate}}">
+                      <ng-template #headerTemplate let-data>
+                        <span class="headercell">
+                          {{"SELF_SCORE_CORE_COMPE_LABEL" | translate}}
+                        </span>
+                      </ng-template>
+                    </e-column>
+
+                    <e-column field="scoreBy" textAlign='Center' width="100" headerText="{{ 'SCOREBY_CORE_COMPE_LABEL' | translate}}">
+                      <ng-template #headerTemplate let-data>
+                        <span class="headercell">
+                          {{"SCOREBY_CORE_COMPE_LABEL" | translate}}
+                        </span>
+                      </ng-template>
+                    </e-column>
+
+                    <e-column field="score" textAlign='Center' width="50" headerText="{{ 'SCORE_CORE_COMPE_LABEL' | translate}}">
+                      <ng-template #headerTemplate let-data>
+                        <span class="headercell">
+                          {{"SCORE_CORE_COMPE_LABEL" | translate}}
+                        </span>
+                      </ng-template>
+                    </e-column>
+
+                    <!-- <e-column field="comment" textAlign='Center' width="600" maxWidth="600" minWidth="600" headerText="{{ 'COMMENT_CORE_COMPE_LABEL' | translate}}">
+                      <ng-template #headerTemplate let-data>
+                        <span class="headercell">
+                          {{"COMMENT_CORE_COMPE_LABEL" | translate}}
+                        </span>
+                      </ng-template>
+                      <ng-template #template let-data>
+                        <ng-container *ngIf="data.comment !== null && data.comment !== ''; else elseEditTemplate">
+                          <textarea readonly type="text" [value]="data.comment" class="e-field e-input e-defaultcell textarea-disabled" name="comment" cols="5" rows="3"></textarea>
+                        </ng-container>
+                        <ng-template #elseEditTemplate>
+                          <textarea readonly type="text" [value]="data.comment" class="e-field e-input e-defaultcell textarea-disabled" name="comment" cols="5" rows="1"></textarea>
+                        </ng-template>
+                      </ng-template>
+                    </e-column> -->
+
+                  </e-columns>
+                </ejs-grid>
+              </div>
+              <!-- /.card-body -->
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- page show score than 3 -->
+      <div>
+        <div class="row">
+          <div class="col-md-12">
+            <div class="card">
+              <div class="card-body table-responsive p-0">
+
+                <ejs-grid #gridShowScoreThan3
+                  id='gridShowScoreThan3'
+                  [dataSource]="dataCoreScoreThan3"
+                  [allowPaging]='true'
+                  [allowResizing]='true'
+                  [showColumnMenu]='true'
+                  gridLines='Both'
+                  [locale]='locale'
+                  [toolbar]='toolbarOptions' (toolbarClick)='toolbarClickExcelExport($event)'
+                  [pageSettings]='pageSettings'
+                  [allowExcelExport]='true'
+                  allowTextWrap='true'
+                  (dataBound)='dataBoundShowScoreThan3()'
+                >
+                  <e-columns>
+                    <e-column field="index" textAlign='Center' headerTextAlign='center' width="50" isPrimaryKey="true" headerText="#">
+                      <ng-template #headerTemplate let-data>
+                        <span class="headercell">
+                          #
+                        </span>
+                      </ng-template>
+                      <ng-template #template let-data>
+                        {{data.index}}
+                      </ng-template>
+                    </e-column>
+
+                    <e-column field="attHeading" headerText="{{'ATTHEADING_CORE_COMPE_LABEL' | translate}}" width='400' textAlign='Left'>
+                      <ng-template #headerTemplate let-data>
+                        <span class="headercell">
+                          {{"ATTHEADING_CORE_COMPE_LABEL" | translate}}
+                        </span>
+                      </ng-template>
+                      <ng-template #template let-data>
+                        {{data.attHeading | translate}}
+                      </ng-template>
+                    </e-column>
+
+                    <e-column field="factory" textAlign='Center' headerText="{{ 'FACTORY_CORE_COMPE_LABEL' | translate}}">
+                      <ng-template #headerTemplate let-data>
+                        <span class="headercell">
+                          {{"FACTORY_CORE_COMPE_LABEL" | translate}}
+                        </span>
+                      </ng-template>
+                    </e-column>
+
+                    <e-column field="center" textAlign='Center' headerText="{{ 'CENTER_CORE_COMPE_LABEL' | translate}}">
+                      <ng-template #headerTemplate let-data>
+                        <span class="headercell">
+                          {{"CENTER_CORE_COMPE_LABEL" | translate}}
+                        </span>
+                      </ng-template>
+                    </e-column>
+
+                    <e-column field="dept" textAlign='Center' headerText="{{ 'DEPT_CORE_COMPE_LABEL' | translate}}">
+                      <ng-template #headerTemplate let-data>
+                        <span class="headercell">
+                          {{"DEPT_CORE_COMPE_LABEL" | translate}}
+                        </span>
+                      </ng-template>
+                    </e-column>
+
+                    <e-column field="l1" textAlign='Center' width="100" headerText="{{ 'L1_CORE_COMPE_LABEL' | translate}}">
+                      <ng-template #headerTemplate let-data>
+                        <span class="headercell">
+                          {{"L1_CORE_COMPE_LABEL" | translate}}
+                        </span>
+                      </ng-template>
+                    </e-column>
+
+                    <e-column field="l2" textAlign='Center' width="100" headerText="{{ 'L2_CORE_COMPE_LABEL' | translate}}">
+                      <ng-template #headerTemplate let-data>
+                        <span class="headercell">
+                          {{"L2_CORE_COMPE_LABEL" | translate}}
+                        </span>
+                      </ng-template>
+                    </e-column>
+
+                    <e-column field="fl" textAlign='Center' width="100" headerText="{{ 'FL_CORE_COMPE_LABEL' | translate}}">
+                      <ng-template #headerTemplate let-data>
+                        <span class="headercell">
+                          {{"FL_CORE_COMPE_LABEL" | translate}}
+                        </span>
+                      </ng-template>
+                    </e-column>
+
+                    <e-column field="l0" textAlign='Center' width="100" headerText="{{ 'L0_CORE_COMPE_LABEL' | translate}}">
+                      <ng-template #headerTemplate let-data>
+                        <span class="headercell">
+                          {{"L0_CORE_COMPE_LABEL" | translate}}
+                        </span>
+                      </ng-template>
+                    </e-column>
+
+                    <e-column field="selfScore" textAlign='Center' width="50" headerText="{{ 'SELF_SCORE_CORE_COMPE_LABEL' | translate}}">
+                      <ng-template #headerTemplate let-data>
+                        <span class="headercell">
+                          {{"SELF_SCORE_CORE_COMPE_LABEL" | translate}}
+                        </span>
+                      </ng-template>
+                    </e-column>
+
+                    <e-column field="scoreBy" textAlign='Center' width="100" headerText="{{ 'SCOREBY_CORE_COMPE_LABEL' | translate}}">
+                      <ng-template #headerTemplate let-data>
+                        <span class="headercell">
+                          {{"SCOREBY_CORE_COMPE_LABEL" | translate}}
+                        </span>
+                      </ng-template>
+                    </e-column>
+
+                    <e-column field="score" textAlign='Center' width="50" headerText="{{ 'SCORE_CORE_COMPE_LABEL' | translate}}">
+                      <ng-template #headerTemplate let-data>
+                        <span class="headercell">
+                          {{"SCORE_CORE_COMPE_LABEL" | translate}}
+                        </span>
+                      </ng-template>
+                    </e-column>
+
+                    <!-- <e-column field="comment" textAlign='Center' width="600" maxWidth="600" minWidth="600" headerText="{{ 'COMMENT_CORE_COMPE_LABEL' | translate}}">
+                      <ng-template #headerTemplate let-data>
+                        <span class="headercell">
+                          {{"COMMENT_CORE_COMPE_LABEL" | translate}}
+                        </span>
+                      </ng-template>
+                      <ng-template #template let-data>
+                        <ng-container *ngIf="data.comment !== null && data.comment !== ''; else elseEditTemplate">
+                          <textarea readonly type="text" [value]="data.comment" class="e-field e-input e-defaultcell textarea-disabled" name="comment" cols="5" rows="3"></textarea>
+                        </ng-container>
+                        <ng-template #elseEditTemplate>
+                          <textarea readonly type="text" [value]="data.comment" class="e-field e-input e-defaultcell textarea-disabled" name="comment" cols="5" rows="1"></textarea>
+                        </ng-template>
+                      </ng-template>
+                    </e-column> -->
+
+                  </e-columns>
+                </ejs-grid>
+              </div>
+              <!-- /.card-body -->
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- page show score average -->
+      <div>
+        <div class="row">
+          <div class="col-md-12">
+            <div class="card">
+              <div class="card-body table-responsive p-0">
+
+                <ejs-grid #gridShowScoreAverage
+                  id='gridShowScoreAverage'
+                  [dataSource]="dataCoreScoreAverage"
+                  [allowPaging]='true'
+                  [allowResizing]='true'
+                  [showColumnMenu]='true'
+                  gridLines='Both'
+                  [locale]='locale'
+                  [toolbar]='toolbarOptions' (toolbarClick)='toolbarClickExcelExport($event)'
+                  [pageSettings]='pageSettings'
+                  [allowExcelExport]='true'
+                  allowTextWrap='true'
+                  (dataBound)='dataBoundShowScoreAverage()'
+                >
+                  <e-columns>
+                    <e-column field="index" textAlign='Center' headerTextAlign='center' width="50" isPrimaryKey="true" headerText="#">
+                      <ng-template #headerTemplate let-data>
+                        <span class="headercell">
+                          #
+                        </span>
+                      </ng-template>
+                      <ng-template #template let-data>
+                        {{data.index}}
+                      </ng-template>
+                    </e-column>
+
+                    <e-column field="factory" textAlign='Center' headerText="{{ 'FACTORY_CORE_COMPE_LABEL' | translate}}">
+                      <ng-template #headerTemplate let-data>
+                        <span class="headercell">
+                          {{"FACTORY_CORE_COMPE_LABEL" | translate}}
+                        </span>
+                      </ng-template>
+                    </e-column>
+
+                    <e-column field="attHeading" headerText="{{'ATTHEADING_CORE_COMPE_LABEL' | translate}}" width='400' textAlign='Left'>
+                      <ng-template #headerTemplate let-data>
+                        <span class="headercell">
+                          {{"ATTHEADING_CORE_COMPE_LABEL" | translate}}
+                        </span>
+                      </ng-template>
+                      <!-- <ng-template #template let-data>
+                        {{data.attHeading | translate}}
+                      </ng-template> -->
+                    </e-column>
+
+                    <e-column field="l0Average" textAlign='Center' width="50" textAlign="Right" headerTextAlign="Center" headerText="{{ 'L0_AVG_COMPE_LABEL' | translate}}">
+                      <ng-template #headerTemplate let-data>
+                        <span class="headercell">
+                          {{"L0_AVG_COMPE_LABEL" | translate}}
+                        </span>
+                      </ng-template>
+                    </e-column>
+
+                    <e-column field="l1Average" textAlign='Center' width="50" textAlign="Right" headerTextAlign="Center" headerText="{{ 'L1_AVG_COMPE_LABEL' | translate}}">
+                      <ng-template #headerTemplate let-data>
+                        <span class="headercell">
+                          {{"L1_AVG_COMPE_LABEL" | translate}}
+                        </span>
+                      </ng-template>
+                    </e-column>
+
+                    <e-column field="l2Average" textAlign='Center' width="50" textAlign="Right" headerTextAlign="Center" headerText="{{ 'L2_AVG_COMPE_LABEL' | translate}}">
+                      <ng-template #headerTemplate let-data>
+                        <span class="headercell">
+                          {{"L2_AVG_COMPE_LABEL" | translate}}
+                        </span>
+                      </ng-template>
+                    </e-column>
+
+                    <e-column field="flAverage" textAlign='Center' width="50" textAlign="Right" headerTextAlign="Center" headerText="{{ 'FL_AVG_COMPE_LABEL' | translate}}">
+                      <ng-template #headerTemplate let-data>
+                        <span class="headercell">
+                          {{"FL_AVG_COMPE_LABEL" | translate}}
+                        </span>
+                      </ng-template>
+                    </e-column>
+
+                    <e-column field="ftyAverage" textAlign='Center' width="50" textAlign="Right" headerTextAlign="Center" headerText="{{ 'FTY_AVG_COMPE_LABEL' | translate}}">
+                      <ng-template #headerTemplate let-data>
+                        <span class="headercell">
+                          {{"FTY_AVG_COMPE_LABEL" | translate}}
+                        </span>
+                      </ng-template>
+                    </e-column>
+                  </e-columns>
+                </ejs-grid>
+              </div>
+              <!-- /.card-body -->
+            </div>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-md-12">
+            <div class="card">
+              <div class="card-body table-responsive p-0">
+
+                <ejs-grid #gridShowScorePercentile
+                  id='gridShowScorePercentile'
+                  [dataSource]="dataCoreScorePercentile"
+                  [allowPaging]='true'
+                  [allowResizing]='true'
+                  [showColumnMenu]='true'
+                  gridLines='Both'
+                  [locale]='locale'
+                  [toolbar]='toolbarOptions' (toolbarClick)='toolbarClickExcelExport($event)'
+                  [pageSettings]='pageSettings'
+                  [allowExcelExport]='true'
+                  allowTextWrap='true'
+                  (dataBound)='dataBoundShowScorePercentile()'
+                >
+                  <e-columns>
+                    <e-column field="index" textAlign='Center' headerTextAlign='center' width="50" isPrimaryKey="true" headerText="#">
+                      <ng-template #headerTemplate let-data>
+                        <span class="headercell">
+                          #
+                        </span>
+                      </ng-template>
+                      <ng-template #template let-data>
+                        {{data.index}}
+                      </ng-template>
+                    </e-column>
+
+                    <e-column field="factory" textAlign='Center' headerText="{{ 'FACTORY_CORE_COMPE_LABEL' | translate}}">
+                      <ng-template #headerTemplate let-data>
+                        <span class="headercell">
+                          {{"FACTORY_CORE_COMPE_LABEL" | translate}}
+                        </span>
+                      </ng-template>
+                    </e-column>
+
+                    <e-column field="attHeading" headerText="{{'ATTHEADING_CORE_COMPE_LABEL' | translate}}" width='400' textAlign='Left'>
+                      <ng-template #headerTemplate let-data>
+                        <span class="headercell">
+                          {{"ATTHEADING_CORE_COMPE_LABEL" | translate}}
+                        </span>
+                      </ng-template>
+                      <!-- <ng-template #template let-data>
+                        {{data.attHeading | translate}}
+                      </ng-template> -->
+                    </e-column>
+
+                    <e-column field="p10" textAlign='Center' width="50" textAlign="Right" headerTextAlign="Center" headerText="{{ '10TH_PERCENTILE_CORE_COMPE_LABEL' | translate}}">
+                      <ng-template #headerTemplate let-data>
+                        <span class="headercell">
+                          {{"10TH_PERCENTILE_CORE_COMPE_LABEL" | translate}}
+                        </span>
+                      </ng-template>
+                    </e-column>
+
+                    <e-column field="p25" textAlign='Center' width="50" textAlign="Right" headerTextAlign="Center" headerText="{{ '25TH_PERCENTILE_CORE_COMPE_LABEL' | translate}}">
+                      <ng-template #headerTemplate let-data>
+                        <span class="headercell">
+                          {{"25TH_PERCENTILE_CORE_COMPE_LABEL" | translate}}
+                        </span>
+                      </ng-template>
+                    </e-column>
+
+                    <e-column field="p50" textAlign='Center' width="50" textAlign="Right" headerTextAlign="Center" headerText="{{ '50TH_PERCENTILE_CORE_COMPE_LABEL' | translate}}">
+                      <ng-template #headerTemplate let-data>
+                        <span class="headercell">
+                          {{"50TH_PERCENTILE_CORE_COMPE_LABEL" | translate}}
+                        </span>
+                      </ng-template>
+                    </e-column>
+
+                    <e-column field="p75" textAlign='Center' width="50" textAlign="Right" headerTextAlign="Center" headerText="{{ '75TH_PERCENTILE_CORE_COMPE_LABEL' | translate}}">
+                      <ng-template #headerTemplate let-data>
+                        <span class="headercell">
+                          {{"75TH_PERCENTILE_CORE_COMPE_LABEL" | translate}}
+                        </span>
+                      </ng-template>
+                    </e-column>
+
+                    <e-column field="p90" textAlign='Center' width="50" textAlign="Right" headerTextAlign="Center" headerText="{{ '90TH_PERCENTILE_CORE_COMPE_LABEL' | translate}}">
+                      <ng-template #headerTemplate let-data>
+                        <span class="headercell">
+                          {{"90TH_PERCENTILE_CORE_COMPE_LABEL" | translate}}
+                        </span>
+                      </ng-template>
+                    </e-column>
+                  </e-columns>
+                </ejs-grid>
+              </div>
+              <!-- /.card-body -->
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- page show all attitude behavior checked -->
+      <div>
+        <div class="row">
+          <div class="col-md-12">
+            <div class="card">
+              <div class="card-body table-responsive p-0">
+
+                <ejs-grid #gridShowBehaviorChecked
+                  id='gridShowBehaviorChecked'
+                  [dataSource]="dataCoreBehaviorChecked"
+                  [allowPaging]='true'
+                  [allowResizing]='true'
+                  [showColumnMenu]='true'
+                  gridLines='Both'
+                  [locale]='locale'
+                  [toolbar]='toolbarOptions' (toolbarClick)='toolbarClickExcelExport($event)'
+                  [pageSettings]='pageSettings'
+                  [allowExcelExport]='true'
+                  allowTextWrap='true'
+                  (dataBound)='dataBoundShowBehaviorChecked()'
+                >
+                  <e-columns>
+                    <e-column field="index" textAlign='Center' headerTextAlign='center' width="50" isPrimaryKey="true" headerText="#">
+                      <ng-template #headerTemplate let-data>
+                        <span class="headercell">
+                          #
+                        </span>
+                      </ng-template>
+                      <ng-template #template let-data>
+                        {{data.index}}
+                      </ng-template>
+                    </e-column>
+
+                    <e-column field="factory" textAlign='Center' headerText="{{ 'FACTORY_CORE_COMPE_LABEL' | translate}}">
+                      <ng-template #headerTemplate let-data>
+                        <span class="headercell">
+                          {{"FACTORY_CORE_COMPE_LABEL" | translate}}
+                        </span>
+                      </ng-template>
+                    </e-column>
+
+                    <e-column field="center" textAlign='Center' headerText="{{ 'CENTER_CORE_COMPE_LABEL' | translate}}">
+                      <ng-template #headerTemplate let-data>
+                        <span class="headercell">
+                          {{"CENTER_CORE_COMPE_LABEL" | translate}}
+                        </span>
+                      </ng-template>
+                    </e-column>
+
+                    <e-column field="dept" textAlign='Center' headerText="{{ 'DEPT_CORE_COMPE_LABEL' | translate}}">
+                      <ng-template #headerTemplate let-data>
+                        <span class="headercell">
+                          {{"DEPT_CORE_COMPE_LABEL" | translate}}
+                        </span>
+                      </ng-template>
+                    </e-column>
+
+                    <e-column field="l1" textAlign='Center' width="100" headerText="{{ 'L1_CORE_COMPE_LABEL' | translate}}">
+                      <ng-template #headerTemplate let-data>
+                        <span class="headercell">
+                          {{"L1_CORE_COMPE_LABEL" | translate}}
+                        </span>
+                      </ng-template>
+                    </e-column>
+
+                    <e-column field="l2" textAlign='Center' width="100" headerText="{{ 'L2_CORE_COMPE_LABEL' | translate}}">
+                      <ng-template #headerTemplate let-data>
+                        <span class="headercell">
+                          {{"L2_CORE_COMPE_LABEL" | translate}}
+                        </span>
+                      </ng-template>
+                    </e-column>
+
+                    <e-column field="fl" textAlign='Center' width="100" headerText="{{ 'FL_CORE_COMPE_LABEL' | translate}}">
+                      <ng-template #headerTemplate let-data>
+                        <span class="headercell">
+                          {{"FL_CORE_COMPE_LABEL" | translate}}
+                        </span>
+                      </ng-template>
+                    </e-column>
+
+                    <e-column field="l0" textAlign='Center' width="100" headerText="{{ 'L0_CORE_COMPE_LABEL' | translate}}">
+                      <ng-template #headerTemplate let-data>
+                        <span class="headercell">
+                          {{"L0_CORE_COMPE_LABEL" | translate}}
+                        </span>
+                      </ng-template>
+                    </e-column>
+
+                    <e-column field="checkBy" textAlign='Center' width="100" headerText="{{ 'SCOREBY_CORE_COMPE_LABEL' | translate}}">
+                      <ng-template #headerTemplate let-data>
+                        <span class="headercell">
+                          {{"SCOREBY_CORE_COMPE_LABEL" | translate}}
+                        </span>
+                      </ng-template>
+                    </e-column>
+
+                    <e-column field="attHeading" headerText="{{'ATTHEADING_CORE_COMPE_LABEL' | translate}}" width='400' textAlign='Left'>
+                      <ng-template #headerTemplate let-data>
+                        <span class="headercell">
+                          {{"ATTHEADING_CORE_COMPE_LABEL" | translate}}
+                        </span>
+                      </ng-template>
+                    </e-column>
+
+                    <e-column field="category" textAlign="Left" headerTextAlign="Center" width="100" headerText="{{ 'CATEGORY_CORE_COMPE_LABEL' | translate}}">
+                      <ng-template #headerTemplate let-data>
+                        <span class="headercell">
+                          {{"CATEGORY_CORE_COMPE_LABEL" | translate}}
+                        </span>
+                      </ng-template>
+                    </e-column>
+
+                    <e-column field="level" textAlign='Center' width="100" headerText="{{ 'LEVEL_CORE_COMPE_LABEL' | translate}}">
+                      <ng-template #headerTemplate let-data>
+                        <span class="headercell">
+                          {{"LEVEL_CORE_COMPE_LABEL" | translate}}
+                        </span>
+                      </ng-template>
+                    </e-column>
+
+                    <e-column field="keypoint" textAlign="Left" headerTextAlign="Center" width="100" headerText="{{ 'KEYPOINT_CORE_COMPE_LABEL' | translate}}">
+                      <ng-template #headerTemplate let-data>
+                        <span class="headercell">
+                          {{"KEYPOINT_CORE_COMPE_LABEL" | translate}}
+                        </span>
+                      </ng-template>
+                    </e-column>
+
+                    <e-column field="tick" textAlign='Center' width="100" headerText="{{ 'TICK_CORE_COMPE_LABEL' | translate}}">
+                      <ng-template #headerTemplate let-data>
+                        <span class="headercell">
+                          {{"TICK_CORE_COMPE_LABEL" | translate}}
+                        </span>
+                      </ng-template>
+                    </e-column>
+
+                    <e-column field="behavior" textAlign="Left" headerTextAlign="Center" width="100" headerText="{{ 'BEHAVIOR_CORE_COMPE_LABEL' | translate}}">
+                      <ng-template #headerTemplate let-data>
+                        <span class="headercell">
+                          {{"BEHAVIOR_CORE_COMPE_LABEL" | translate}}
+                        </span>
+                      </ng-template>
+                    </e-column>
+
+                  </e-columns>
+                </ejs-grid>
+              </div>
+              <!-- /.card-body -->
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+</ejs-tab>
+
+
+
+</div>
+
+
+<!-- <div class="modal-footer">
+  <div class="w-100">
+    <button type="button" (click)="activeModal.dismiss('Cross click')" class="btn btn-secondary mr-2 float-right">{{'Close' }}</button>
+  </div>
+</div> -->

@@ -1,0 +1,283 @@
+<div class="row">
+  <div class="col-12">
+    <h4 class="title-kpi">{{'PERSONAL_KPI' | translate}},Type: Integer / Percentage / Decimal</h4>
+    <ng-container *ngIf="dataDefaultPerson?.length === 0; else elseTemplate1">
+      <div  class="cart">
+        <div class="card-header">
+          <div  class="row">
+            <div class="col-md-4">
+
+            </div>
+            <div class="col-md-4" style="text-align: center;">
+              <span  class="title-kpi"  style="color: red;font-weight: bold ;font-size: 20pt;">
+                No data
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </ng-container>
+    <ng-template #elseTemplate1>
+      <table class="table table-bordered" style="margin-bottom:20px;" >
+        <tbody style="box-shadow:  0 0 7px;">
+          <ng-container *ngFor="let item of dataDefaultPerson; let i=index">
+            <tr style="background-color: #f0f3f5;">
+              <th  class="text-center" width="30%">{{"KPI_SELF_SCORE_LABEL" | translate}}</th>
+              <th  class="text-center" width="5%">{{"meetingMonth" | translate}}</th>
+              <th *ngFor="let item_label of item.labels; let i=index" class="text-center">
+                {{item_label}}
+              </th>
+            </tr>
+
+            <tr>
+              <th style="vertical-align: middle;" rowspan="3" class="text-left" width="5%">
+                {{item.name}}
+              </th>
+              <th  class="text-center" width="5%">
+                {{"meetingTarget" | translate}}
+              </th>
+              <td *ngFor="let item_target of item.targets; let i=index" class="text-center" >
+                <ng-container *ngIf="item.typeId === 1; else elseTemplate">
+                  {{item_target}} %
+                </ng-container>
+                <ng-template #elseTemplate>
+                  {{item_target}}
+                </ng-template>
+              </td>
+
+            </tr>
+
+            <tr>
+              <th class="text-center" width="5%">
+                {{"meetingPer" | translate}}
+              </th>
+              <td *ngFor="let item_per of item.perfomances; let i=index" class="text-center" >
+                <ng-container *ngIf="item.typeId === 1; else elseTemplate">
+                  {{item_per}} %
+                </ng-container>
+                <ng-template #elseTemplate>
+                  {{item_per}}
+                </ng-template>
+              </td>
+            </tr>
+
+            <tr>
+              <th class="text-center" width="5%">
+                YTD
+              </th>
+              <td *ngFor="let item_ytd of item.ytds; let i=index" class="text-center" >
+                <ng-container *ngIf="item.typeId === 1; else elseTemplate">
+                  {{item_ytd}} %
+                </ng-container>
+                <ng-template #elseTemplate>
+                  {{item_ytd}}
+                </ng-template>
+              </td>
+            </tr>
+          </ng-container>
+
+        </tbody>
+      </table>
+    </ng-template>
+
+    <h4 class="title-kpi">{{'PERSONAL_KPI' | translate}},Type: Text</h4>
+    <ng-container *ngIf="dataStringPerson?.length === 0; else elseTemplate2">
+      <div  class="cart">
+        <div class="card-header">
+          <div  class="row">
+            <div class="col-md-4">
+
+            </div>
+            <div class="col-md-4" style="text-align: center;">
+              <span  class="title-kpi" style="color: red;font-weight: bold ;font-size: 20pt;">
+                No data
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </ng-container>
+    <ng-template #elseTemplate2>
+      <table class="table table-bordered " style="box-shadow:  0 0 20px; border-radius: 5px; overflow: hidden;">
+        <ng-container *ngFor="let item of dataStringPerson; let i= index;">
+          <thead>
+            <tr>
+              <th rowspan="2" scope="col" class="text-center" style="vertical-align: middle ;background-color: #bbbbbb6b;">{{"KPI_LABEL_SELF_SCORE" | translate}}</th>
+              <th rowspan="2" scope="col" class="text-center" style="vertical-align: middle ;background-color: #bbbbbb6b;">{{"PLAN_LABEL_SELF_SCORE" | translate}}</th>
+              <th rowspan="2" scope="col" class="text-center" style="vertical-align: middle;background-color: #bbbbbb6b;">{{"TARGET_LABEL_SELF_SCORE" | translate}}</th>
+              <ng-container *ngIf="i === 0; else elseTemplate">
+                <th scope="col" colspan="6" style="vertical-align: middle ;background-color: #bbbbbb6b;" class="text-center">{{"PERF_LABEL_SELF_SCORE" | translate}}</th>
+              </ng-container>
+              <ng-template #elseTemplate>
+
+              </ng-template>
+            </tr>
+            <tr >
+              <th *ngFor="let item_label of item.labels; let x=index" style="vertical-align: middle;background-color: #bbbbbb6b;" class="text-center" > {{item_label}} </th>
+            </tr>
+          </thead>
+          <tbody>
+            <ng-container *ngFor="let items of item.data; let x= index;">
+              <tr >
+                <th [attr.rowspan]="item.data.length" *ngIf="x == 0" style="vertical-align: text-top ">
+                  {{item.name}}
+                </th>
+                <td style="vertical-align: text-top;" class="border" >
+                  {{items.content}}
+                </td>
+                <td style="vertical-align: text-top;" >{{items.target}}</td>
+
+                <ng-container *ngFor="let item_perl of items.item; let i=index">
+                  <td class="text-center"> {{item_perl}}</td>
+                </ng-container>
+              </tr>
+            </ng-container>
+          </tbody>
+        </ng-container>
+      </table>
+
+    </ng-template>
+
+
+    <h4  class="title-kpi">{{'MUTI_PIC_KPI' | translate}},Type: Integer / Percentage / Decimal</h4>
+    <ng-container *ngIf="dataDefaultMuti?.length === 0; else elseTemplate3">
+      <div  class="cart">
+        <div class="card-header">
+          <div  class="row">
+            <div class="col-md-4">
+
+            </div>
+            <div class="col-md-4" style="text-align: center;">
+              <span  class="title-kpi" style="color: red;font-weight: bold ;font-size: 20pt;">
+                No data
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </ng-container>
+    <ng-template #elseTemplate3>
+      <table class="table table-bordered" style="margin-bottom:20px;" >
+        <tbody style="box-shadow:  0 0 7px;">
+          <ng-container *ngFor="let item of dataDefaultMuti; let i=index">
+            <tr style="background-color: #f0f3f5;">
+              <th  class="text-center" width="30%">{{"KPI_SELF_SCORE_LABEL" | translate}}</th>
+              <th  class="text-center" width="5%">{{"meetingMonth" | translate}}</th>
+              <th *ngFor="let item_label of item.labels; let i=index" class="text-center">
+                {{item_label}}
+              </th>
+            </tr>
+
+            <tr>
+              <th style="vertical-align: middle;" rowspan="3" class="text-left" width="5%">
+                {{item.name}}
+              </th>
+              <th  class="text-center" width="5%">
+                {{"meetingTarget" | translate}}
+              </th>
+              <td *ngFor="let item_target of item.targets; let i=index" class="text-center" >
+                <ng-container *ngIf="item.typeId === 1; else elseTemplate">
+                  {{item_target}} %
+                </ng-container>
+                <ng-template #elseTemplate>
+                  {{item_target}}
+                </ng-template>
+              </td>
+
+            </tr>
+
+            <tr>
+              <th class="text-center" width="5%">
+                {{"meetingPer" | translate}}
+              </th>
+              <td *ngFor="let item_per of item.perfomances; let i=index" class="text-center" >
+                <ng-container *ngIf="item.typeId === 1; else elseTemplate">
+                  {{item_per}} %
+                </ng-container>
+                <ng-template #elseTemplate>
+                  {{item_per}}
+                </ng-template>
+              </td>
+            </tr>
+
+            <tr>
+              <th class="text-center" width="5%">
+                YTD
+              </th>
+              <td *ngFor="let item_ytd of item.ytds; let i=index" class="text-center" >
+                <ng-container *ngIf="item.typeId === 1; else elseTemplate">
+                  {{item_ytd}} %
+                </ng-container>
+                <ng-template #elseTemplate>
+                  {{item_ytd}}
+                </ng-template>
+              </td>
+            </tr>
+          </ng-container>
+
+        </tbody>
+      </table>
+    </ng-template>
+
+
+
+    <h4 class="title-kpi">{{'MUTI_PIC_KPI' | translate}},Type: Text</h4>
+    <ng-container *ngIf="dataStringMuti?.length === 0; else elseTemplate4">
+      <div  class="cart">
+        <div class="card-header">
+          <div  class="row">
+            <div class="col-md-4">
+
+            </div>
+            <div class="col-md-4" style="text-align: center;">
+              <span  class="title-kpi" style="color: red;font-weight: bold ;font-size: 20pt;">
+                No data
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </ng-container>
+    <ng-template #elseTemplate4>
+      <table class="table table-bordered " style="box-shadow:  0 0 20px; border-radius: 5px; overflow: hidden;">
+        <ng-container *ngFor="let item of dataStringMuti; let i= index;">
+          <thead>
+            <tr>
+              <th rowspan="2" scope="col" class="text-center" style="vertical-align: middle ;background-color: #bbbbbb6b;">{{"KPI_LABEL_SELF_SCORE" | translate}}</th>
+              <th rowspan="2" scope="col" class="text-center" style="vertical-align: middle ;background-color: #bbbbbb6b;">{{"PLAN_LABEL_SELF_SCORE" | translate}}</th>
+              <th rowspan="2" scope="col" class="text-center" style="vertical-align: middle;background-color: #bbbbbb6b;">{{"TARGET_LABEL_SELF_SCORE" | translate}}</th>
+              <ng-container *ngIf="i === 0; else elseTemplate">
+                <th scope="col" colspan="6" style="vertical-align: middle ;background-color: #bbbbbb6b;" class="text-center">{{"PERF_LABEL_SELF_SCORE" | translate}}</th>
+              </ng-container>
+              <ng-template #elseTemplate>
+
+              </ng-template>
+            </tr>
+            <tr >
+              <th *ngFor="let item_label of item.labels; let x=index" style="vertical-align: middle;background-color: #bbbbbb6b;" class="text-center" > {{item_label}} </th>
+            </tr>
+          </thead>
+          <tbody>
+            <ng-container *ngFor="let items of item.data; let x= index;">
+              <tr >
+                <th [attr.rowspan]="item.data.length" *ngIf="x == 0" style="vertical-align: text-top ">
+                  {{item.name}}
+                </th>
+                <td style="vertical-align: text-top;" class="border" >
+                  {{items.content}}
+                </td>
+                <td style="vertical-align: text-top;" >{{items.target}}</td>
+
+                <ng-container *ngFor="let item_perl of items.item; let i=index">
+                  <td class="text-center"> {{item_perl}}</td>
+                </ng-container>
+              </tr>
+            </ng-container>
+          </tbody>
+        </ng-container>
+      </table>
+    </ng-template>
+
+  </div>
+
+</div>

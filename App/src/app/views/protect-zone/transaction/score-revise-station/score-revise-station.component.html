@@ -1,0 +1,89 @@
+<div class="row">
+  <div class="col-md-12">
+    <div class="card">
+      <div class="card-body table-responsive p-0">
+        <ejs-grid #grid
+          id='grid'
+          [dataSource]="data"
+          [allowPaging]='true'
+          [allowResizing]='true'
+          [showColumnMenu]='true'
+          gridLines='Both'
+          [locale]='locale'
+          (actionBegin)="actionBegin($event)"
+          (actionComplete)="actionComplete($event)"
+          [pageSettings]='pageSettings'
+          [allowExcelExport]='true'
+          [toolbar]="toolbarOptions"
+          (recordDoubleClick)='onDoubleClick($event)'
+          [editSettings]='editSettings'
+        >
+          <e-columns>
+
+            <e-column field="username" textAlign='Center' width="110" headerText="{{ 'Username' | translate}}">
+              <ng-template #headerTemplate let-data>
+                {{"Username" | translate}}
+              </ng-template>
+              <ng-template #editTemplate let-data>
+                {{data.username}}
+              </ng-template>
+            </e-column>
+            <e-column field="fullName" textAlign='Center' width="110" headerText="{{ 'FullName'}}">
+              <ng-template #headerTemplate let-data>
+                {{"FullName" | translate}}
+              </ng-template>
+              <ng-template #template let-data>
+                <ejs-tooltip  content='{{"Campaign: " + data.name}}'>
+                  {{data.fullName}}
+                </ejs-tooltip>
+              </ng-template>
+              
+              <ng-template #editTemplate let-data>
+                {{data.fullName}}
+              </ng-template>
+            </e-column>
+
+            <e-column field='functionalLeader' headerText="{{'SCORE_REVISE_KPISTATION_LABEL' | translate}}" width='160' textAlign='Center'>
+              <ng-template #headerTemplate let-data>
+                {{'SCORE_REVISE_KPISTATION_LABEL' | translate}}
+              </ng-template>
+              <ng-template #template let-data>
+                {{data.currentKPI}}
+              </ng-template>
+              <ng-template #editTemplate let-data>
+                <!-- <ng-container *ngIf='data.currentKPI === "N/A"; else elseEditTemplate'>
+                  {{'N/A'}}
+                </ng-container>
+                <ng-template #elseEditTemplate>
+                </ng-template> -->
+                <ejs-dropdownlist [(ngModel)]='data.currentKPI' [allowFiltering]='true' (change)="onchangeKPIStation($event, data)"  [fields]="kpiStationFields"  [dataSource]='data.kpiStation'></ejs-dropdownlist>
+              </ng-template>
+            </e-column>
+
+            <e-column field='manager' headerText="{{'SCORE_REVISE_ATTSTATION_LABEL' | translate}}" width='150' textAlign='Center'>
+              <ng-template #headerTemplate let-data>
+                {{"SCORE_REVISE_ATTSTATION_LABEL" | translate}}
+              </ng-template>
+              <ng-template #template let-data>
+                {{data.currentAtt}}
+              </ng-template>
+              <ng-template #editTemplate let-data>
+                <!-- <ng-container *ngIf='data.currentAtt === "N/A"; else elseEditTemplate'>
+                  {{'N/A'}}
+                </ng-container>
+                <ng-template #elseEditTemplate>
+                </ng-template> -->
+                <ejs-dropdownlist [(ngModel)]='data.currentAtt' [allowFiltering]='true' (change)="onchangeAttStation($event, data)"  [fields]="attStationFields"  [dataSource]='data.attStation'></ejs-dropdownlist>
+              </ng-template>
+            </e-column>
+
+          </e-columns>
+        </ejs-grid>
+      </div>
+      <!-- /.card-body -->
+    </div>
+  </div>
+</div>
+
+
+

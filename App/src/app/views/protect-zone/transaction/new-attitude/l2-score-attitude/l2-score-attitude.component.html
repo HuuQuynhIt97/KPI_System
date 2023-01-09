@@ -1,0 +1,296 @@
+<ngx-spinner [fullScreen]="true" type="square-jelly-box" size="medium">
+  <p class="loading">Loading data...</p>
+</ngx-spinner>
+<div class="card">
+
+  <div class="row">
+    <div class="col-md-12">
+
+      <div class="col-md-12 text-right">
+        <button type="button" (click)="openDetail()" class="my-2 mr-3 btn btn-warning">{{'Detail' | translate}}</button>
+      </div>
+
+      <div class="card">
+        <div class="card-body table-responsive p-0">
+          <table class="table table-bordered " style="box-shadow:  0 0 20px; border-radius: 5px; overflow: hidden;">
+            <tbody>
+              <tr>
+                <th rowspan="2" class="text-center align-middle" style=" background-color: #f0f3f5;">{{"NEW_ATT_LABEL_NO" | translate}}</th>
+                <th rowspan="2" class="text-center align-middle" style=" background-color: #f0f3f5;">{{"NEW_ATT_LABEL_NAME" | translate}}</th>
+                <th rowspan="2" class="text-center align-middle" style=" background-color: #f0f3f5;">{{"NEW_ATT_LABEL_DEFINITION" | translate}}</th>
+                <th rowspan="2" class="text-center align-middle" style=" background-color: #f0f3f5;">{{"NEW_ATT_LABEL_BEHAVIOR" | translate}}</th>
+                <th colspan="2" class="text-center" style=" background-color: #f0f3f5;">
+                  <div>
+                    較少
+                  </div>
+                  <div>
+                    Seldom
+                  </div>
+                  (~20%)
+                </th>
+                <th colspan="2" class="text-center" style=" background-color: #f0f3f5;">
+                  <div>
+                    有時
+                  </div>
+                  <div>
+                    Sometimes
+                  </div>
+                  (~40%)
+                </th>
+                <th colspan="2" class="text-center" style=" background-color: #f0f3f5;">
+                  <div>
+                    通常
+                  </div>
+                  <div>
+                    Often
+                  </div>
+                  (~60%)
+                </th>
+                <th colspan="2" class="text-center" style=" background-color: #f0f3f5;">
+                  <div>
+                    經常
+                  </div>
+                  <div>
+                    Usually
+                  </div>
+                  (~80%)
+                </th>
+                <th colspan="2" class="text-center" style=" background-color: #f0f3f5;">
+                  <div>
+                    總是
+                  </div>
+                  <div>
+                    Always
+                  </div>
+                  (~100%)
+                </th>
+              </tr>
+
+              <tr>
+                <th class="text-center" style=" background-color: #f0f3f5;">1</th>
+                <th class="text-center" style=" background-color: #f0f3f5;">2</th>
+                <th class="text-center" style=" background-color: #f0f3f5;">3</th>
+                <th class="text-center" style=" background-color: #f0f3f5;">4</th>
+                <th class="text-center" style=" background-color: #f0f3f5;">5</th>
+                <th class="text-center" style=" background-color: #f0f3f5;">6</th>
+                <th class="text-center" style=" background-color: #f0f3f5;">7</th>
+                <th class="text-center" style=" background-color: #f0f3f5;">8</th>
+                <th class="text-center" style=" background-color: #f0f3f5;">9</th>
+                <th class="text-center" style=" background-color: #f0f3f5;">10</th>
+              </tr>
+
+              <ng-container *ngFor="let data of dataList">
+                <tr *ngFor="let item of data.newAttitudeScore; let i = index;">
+                  <td *ngIf="i == 0" [attr.rowspan]="data.newAttitudeScore.length" class="text-center align-middle td-score td-text" style=" background-color: #f0f3f5;">{{data.orderNumber}}</td>
+                  <td *ngIf="i == 0" [attr.rowspan]="data.newAttitudeScore.length" class="text-center align-middle td-score td-text" style=" background-color: #f0f3f5;">{{data.name | translate}}</td>
+                  <td *ngIf="i == 0" [attr.rowspan]="data.newAttitudeScore.length" class="text-left align-middle td-score td-text td-definition" style=" background-color: #f0f3f5;">{{data.definition | translate}}</td>
+                  <td class="text-left td-score td-text" style=" background-color: #f0f3f5;">{{item.behavior | translate}}</td>
+                  <td class="text-center align-middle td-score" style=" background-color: #f0f3f5;">
+                    <ejs-checkbox ngbTooltip="point 1" cssClass="e-info" #checkbox
+                      [checked]="item.point1"
+                      [disabled]="!item.point1 ? submitCheck : true"
+                      (click)="onCheck(item.id, '1')"
+                      >
+                    </ejs-checkbox>
+                  </td>
+                  <td class="text-center align-middle td-score" style=" background-color: #f0f3f5;">
+                    <ejs-checkbox ngbTooltip="point 2" cssClass="e-info" #checkbox
+                      [checked]="item.point2"
+                      [disabled]="!item.point2 ? submitCheck : true"
+                      (click)="onCheck(item.id, '2')"
+                      >
+                    </ejs-checkbox>
+                  </td>
+                  <td class="text-center align-middle td-score" style=" background-color: #f0f3f5;">
+                    <ejs-checkbox ngbTooltip="point 3" cssClass="e-info" #checkbox
+                      [checked]="item.point3"
+                      [disabled]="!item.point3  ? submitCheck : true"
+                      (click)="onCheck(item.id, '3')"
+                      >
+                    </ejs-checkbox>
+                  </td>
+                  <td class="text-center align-middle td-score" style=" background-color: #f0f3f5;">
+                    <ejs-checkbox ngbTooltip="point 4" cssClass="e-info" #checkbox
+                      [checked]="item.point4"
+                      [disabled]="!item.point4 ? submitCheck : true"
+                      (click)="onCheck(item.id, '4')"
+                      >
+                    </ejs-checkbox>
+                  </td>
+                  <td class="text-center align-middle td-score" style=" background-color: #f0f3f5;">
+                    <ejs-checkbox ngbTooltip="point 5" cssClass="e-info" #checkbox
+                      [checked]="item.point5"
+                      [disabled]="!item.point5 ? submitCheck : true"
+                      (click)="onCheck(item.id, '5')"
+                      >
+                    </ejs-checkbox>
+                  </td>
+                  <td class="text-center align-middle td-score" style=" background-color: #f0f3f5;">
+                    <ejs-checkbox ngbTooltip="point 6" cssClass="e-info" #checkbox
+                      [checked]="item.point6"
+                      [disabled]="!item.point6 ? submitCheck : true"
+                      (click)="onCheck(item.id, '6')"
+                      >
+                    </ejs-checkbox>
+                  </td>
+                  <td class="text-center align-middle td-score" style=" background-color: #f0f3f5;">
+                    <ejs-checkbox ngbTooltip="point 7" cssClass="e-info" #checkbox
+                      [checked]="item.point7"
+                      [disabled]="!item.point7 ? submitCheck : true"
+                      (click)="onCheck(item.id, '7')"
+                      >
+                    </ejs-checkbox>
+                  </td>
+                  <td class="text-center align-middle td-score" style=" background-color: #f0f3f5;">
+                    <ejs-checkbox ngbTooltip="point 8" cssClass="e-info" #checkbox
+                      [checked]="item.point8"
+                      [disabled]="!item.point8 ? submitCheck : true"
+                      (click)="onCheck(item.id, '8')"
+                      >
+                    </ejs-checkbox>
+                  </td>
+                  <td class="text-center align-middle td-score" style=" background-color: #f0f3f5;">
+                    <ejs-checkbox ngbTooltip="point 9" cssClass="e-info" #checkbox
+                      [checked]="item.point9"
+                      [disabled]="!item.point9 ? submitCheck : true"
+                      (click)="onCheck(item.id, '9')"
+                      >
+                    </ejs-checkbox>
+                  </td>
+                  <td class="text-center align-middle td-score" style=" background-color: #f0f3f5;">
+                    <ejs-checkbox ngbTooltip="point 10" cssClass="e-info" #checkbox
+                      [checked]="item.point10"
+                      [disabled]="!item.point10 ? submitCheck : true"
+                      (click)="onCheck(item.id, '10')"
+                      >
+                    </ejs-checkbox>
+                  </td>
+
+                </tr>
+              </ng-container>
+
+            </tbody>
+          </table>
+        </div>
+        <!-- /.card-body -->
+      </div>
+    </div>
+  </div>
+  <div class="control-section e-tbar-section">
+    <div class="e-sample-resize-container">
+      <div class="col-md-12 d-flex justify-content-left align-items-center">
+        <h5 class="font-weight-bold">{{"NEW_ATT_LABEL_QUES_L2" | translate}}</h5>
+      </div>
+    </div>
+  </div>
+  <div class="container">
+    <div class="row">
+      <!-- <div class="col-md-6 mb-2">
+        <div class="mb-2" style="font-size: 15px; font-weight: 500;">
+          1. 我表現較佳的職能項目有哪些？
+        </div>
+        <div class="row pl-4">
+          <div class="col-md-2">
+            <ejs-checkbox label="創新與改善的熱情" [disabled]="submitCheck" [(ngModel)]="dataAttEvaluation.firstQuestion1" cssClass="e-info" #checkbox></ejs-checkbox>
+          </div>
+          <div class="col-md-2">
+            <ejs-checkbox label="當責" [disabled]="submitCheck" [(ngModel)]="dataAttEvaluation.firstQuestion2" cssClass="e-info" #checkbox></ejs-checkbox>
+          </div>
+          <div class="col-md-2">
+            <ejs-checkbox label="專注細節" [disabled]="submitCheck" [(ngModel)]="dataAttEvaluation.firstQuestion3" cssClass="e-info" #checkbox></ejs-checkbox>
+          </div>
+          <div class="col-md-2">
+            <ejs-checkbox label="有效溝通" [disabled]="submitCheck" [(ngModel)]="dataAttEvaluation.firstQuestion4" cssClass="e-info" #checkbox></ejs-checkbox>
+          </div>
+          <div class="col-md-2">
+            <ejs-checkbox label="恢復力" [disabled]="submitCheck" [(ngModel)]="dataAttEvaluation.firstQuestion5" cssClass="e-info" #checkbox></ejs-checkbox>
+          </div>
+          <div class="col-md-2">
+            <ejs-checkbox label="持續學習" [disabled]="submitCheck" [(ngModel)]="dataAttEvaluation.firstQuestion6" cssClass="e-info" #checkbox></ejs-checkbox>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-6 mb-2">
+        <div class="mb-2" style="font-size: 15px; font-weight: 500;">
+          2. 我認為我需要再提升的職能項目為何？
+        </div>
+        <div class="row pl-4">
+          <div class="col-md-2">
+            <ejs-checkbox label="創新與改善的熱情" [disabled]="submitCheck" [(ngModel)]="dataAttEvaluation.secondQuestion1" cssClass="e-info" #checkbox></ejs-checkbox>
+          </div>
+          <div class="col-md-2">
+            <ejs-checkbox label="當責" [disabled]="submitCheck" [(ngModel)]="dataAttEvaluation.secondQuestion2" cssClass="e-info" #checkbox></ejs-checkbox>
+          </div>
+          <div class="col-md-2">
+            <ejs-checkbox label="專注細節" [disabled]="submitCheck" [(ngModel)]="dataAttEvaluation.secondQuestion3" cssClass="e-info" #checkbox></ejs-checkbox>
+          </div>
+          <div class="col-md-2">
+            <ejs-checkbox label="有效溝通" [disabled]="submitCheck" [(ngModel)]="dataAttEvaluation.secondQuestion4" cssClass="e-info" #checkbox></ejs-checkbox>
+          </div>
+          <div class="col-md-2">
+            <ejs-checkbox label="恢復力" [disabled]="submitCheck" [(ngModel)]="dataAttEvaluation.secondQuestion5" cssClass="e-info" #checkbox></ejs-checkbox>
+          </div>
+          <div class="col-md-2">
+            <ejs-checkbox label="持續學習" [disabled]="submitCheck" [(ngModel)]="dataAttEvaluation.secondQuestion6" cssClass="e-info" #checkbox></ejs-checkbox>
+          </div>
+        </div>
+      </div> -->
+      <div class="col-md-9">
+        <!-- <div class="mb-1" style="font-size: 15px; font-weight: 500;">
+          3. (承2.)我預計的行動規劃？
+        </div> -->
+        <div class="row">
+          <div class="col-md-12 pl-4 mb-3">
+            <textarea  autosize type="text" [disabled]="submitCheck" [(ngModel)]="dataAttEvaluation.thirdQuestion" placeholder="Please leave your comment here,,, 請留下您的評語" class="form-control" name="comment2" style="border-color: darkseagreen;text-align:left;min-height: 100px;"></textarea>
+          </div>
+        </div>
+      </div>
+      <!-- <div class="col-md-6">
+        <div class="mb-1" style="font-size: 15px; font-weight: 500;">
+          4. (承3.)需主管協助之處？
+        </div>
+        <div class="row">
+          <div class="col-md-12 pl-4 mb-3">
+            <textarea  autosize type="text" [disabled]="submitCheck" [(ngModel)]="dataAttEvaluation.fourthQuestion" placeholder="需主管協助之處..." class="form-control" name="comment3" style="border-color: darkseagreen;text-align:left;min-height: 100px;"></textarea>
+          </div>
+        </div>
+      </div> -->
+    </div>
+    <div class="col-md-12 p-0 mb-4 text-right">
+      <button type="button" [disabled]="submitCheck" (click)="save(true)"  class="btn btn-success ml-3">{{'NEW_ATT_BUTTON_SAVE' | translate}}</button>
+      <button type="button" [disabled]="submitCheck" (click)="submit()" class="btn btn-secondary ml-3">{{'NEW_ATT_BUTTON_SUBMIT' | translate}}</button>
+  </div>
+  </div>
+
+</div>
+
+<ng-template #editComment let-modal>
+  <div class="modal-body" style="max-height: auto;">
+    <textarea autosize type="text" [(ngModel)]="commentEdit" placeholder="行為指標評語..." class="form-control" style="border-color: darkseagreen;text-align:left;min-height: 120px;"></textarea>
+
+    <div class="row justify-content-center mt-3">
+      <button type="button" (click)="updateComment()" class="btn btn-success btn-lg" >{{'Update'| translate}}</button>
+      <span style="color: transparent;">|</span>
+      <button  type="button" class="btn btn-secondary btn-lg" (click)="modal.close('Close click')" >{{'Cancel'| translate}}</button>
+    </div>
+  </div>
+
+</ng-template>
+
+<ng-template #message let-modal>
+  <div class="modal-header text-center">
+    <h2 class="modal-title w-100" style="font-size: 40px;">{{'MESSAGE_SUBMIT_PDCA_1'| translate}}</h2>
+  </div>
+  <div class="modal-body" style="max-height: 400px;">
+    <h3>{{'MESSAGE_SUBMIT_PDCA_2'| translate}}</h3>
+    <h3>{{'MESSAGE_SUBMIT_PDCA_3'| translate}}</h3>
+
+    <div class="row justify-content-center">
+      <button type="button" class="btn btn-success btn-lg" (click)="yesConfirm()" >{{'YES_CONFIRM_ALERTIFY'| translate}}</button>
+      <span style="color: transparent;">|</span>
+      <button  type="button" class="btn btn-secondary btn-lg" (click)="modal.close('Close click')" >{{'NO_CONFIRM_ALERTIFY'| translate}}</button>
+    </div>
+  </div>
+
+</ng-template>
+

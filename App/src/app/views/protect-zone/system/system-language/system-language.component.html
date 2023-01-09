@@ -1,0 +1,30 @@
+<div class="row">
+  <div class="col-md-12">
+    <div class="card">
+      <div class="card-header">
+        <h5 class="card-title">SYSTEM LANGUAGE</h5>
+      </div>
+      <ejs-grid #grid id="grid" (actionBegin)="actionBegin($event)" gridLines='Both' (actionComplete)="actionComplete($event)"
+        [toolbar]='toolbarOptions' [dataSource]='data' allowPaging='true' [allowSorting]='true' allowResizing='true'
+        showColumnMenu='true' [allowExcelExport]='true' allowFiltering='true' [filterSettings]='filterSettings'
+        [pageSettings]='pageSettings' (toolbarClick)='toolbarClick($event)' [editSettings]='editSettings'>
+        <e-columns>
+          <e-column headerText='#' width='70' textAlign='Center' isPrimaryKey='true'>
+            <ng-template #template let-data>
+              {{NO(data.index)}}
+            </ng-template>
+            <ng-template #editTemplate let-data>
+
+            </ng-template>
+          </e-column>
+          <e-column field='slPage' headerText='Page'  textAlign='Center'></e-column>
+          <e-column field='slKey' headerText='Key'  textAlign='Center'></e-column>
+          <e-column field='sltw' headerText='中文'  textAlign='Center'></e-column>
+          <e-column field='slen' headerText='En'  textAlign='Center'></e-column>
+
+
+        </e-columns>
+      </ejs-grid>
+    </div>
+  </div>
+</div>

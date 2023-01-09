@@ -1,0 +1,19 @@
+.form-control[disabled], .form-control[readonly], fieldset[disabled] .form-control {
+  background-color: white;
+  border: none;
+  color: #000;
+  background-color: transparent;
+  outline: none;
+  resize: none;
+}
+.e-grid .e-headercell {
+  background-color: #f0f3f5;
+}
+
+.e-grid {
+  box-shadow: 0 0 20px;
+  border-radius: 5px;
+}
+.e-pager {
+  font-size: 10px;
+}

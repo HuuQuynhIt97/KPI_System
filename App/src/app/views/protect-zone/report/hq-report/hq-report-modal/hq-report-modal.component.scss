@@ -1,0 +1,37 @@
+.e-grid .e-headercell {
+  background-color: #f0f3f5;;
+}
+.e-grid .e-altrow {
+  background-color: #f0f3f5;
+}
+.e-pager {
+  font-size: 10px;
+}
+
+.e-grid * {
+  font-size: 16px;
+}
+
+td {
+  font-size: 20pt !important;
+  padding: 0px !important;
+  line-height: 30px !important;
+}
+
+.headercell {
+  font-size: 20pt !important;
+  padding: 5px 0 !important;
+  line-height: 30px;
+}
+
+.e-grid .e-headercell {
+  padding: 6px 10px 6px;
+}
+
+.e-grid.e-wrap .e-columnmenu {
+  margin: -25px -15px -20px -20px;
+}
+
+.e-grid .e-columnmenu::before {
+  font-size: 16px;
+}

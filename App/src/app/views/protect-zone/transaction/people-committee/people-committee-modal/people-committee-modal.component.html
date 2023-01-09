@@ -1,0 +1,123 @@
+<ngx-spinner [fullScreen]="true" type="square-jelly-box" size="medium">
+  <p class="loading">Loading data...</p>
+</ngx-spinner>
+<div class="modal-header">
+  <h4 class="modal-title">{{'PEOPLE_COMMITTEE_MODEL_LABEL' | translate}} </h4>
+  <button type="button" class="close" aria-label="Close" (click)="activeModal.dismiss('Cross click')">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+
+<div class="modal-body">
+  <div class="row">
+    <div class="col-md-12">
+      <div class="card">
+        <div class="card-body table-responsive p-0">
+
+          <ejs-toolbar #toolbarTodo >
+            <e-items>
+              <e-item >
+                <ng-template #template>
+                  <span class="mr-2" style="font-size: 16px;">{{'FROZEN_CMTEE_LABEL' | translate}}:</span>
+                  <ejs-switch #switch style="width: 80px;" (click)="lockUpdate()" onLabel="{{'LOCK_BTN' | translate}}" offLabel="{{'UNLOCK_BTN' | translate}}" [checked]="frozen" ></ejs-switch>
+                </ng-template>
+              </e-item>
+
+              <e-item align='right'>
+                <ng-template #template>
+                  <div class="e-toolbar-item e-search-wrapper e-toolbar-right" aria-disabled="false" title="Search">
+                    <div class="e-input-group e-search" role="search"> <input id="toolbar_searchbar" style="width:178px" autocomplete="off"
+                        [(ngModel)]="name" (change)='search($event)'  class="e-input"
+                        placeholder="{{ 'SEARCH_PEOPLE_COMMITTEE' | translate }}">
+                      <span id="toolbar_searchbutton" class="e-input-group-icon fa fa-search e-icons" tabindex="-1"
+                        title="Search" aria-label="search"></span>
+                    </div>
+                  </div>
+                </ng-template>
+              </e-item>
+          </e-items>
+          </ejs-toolbar>
+
+          <ejs-grid #grid
+            id='grid'
+            [allowRowDragAndDrop]='true'
+            (rowDrop)="rowDrop($event)"
+            [dataSource]="dataAc"
+            [allowPaging]='true'
+            [allowResizing]='true'
+            [showColumnMenu]='true'
+            gridLines='Both'
+            [locale]='locale'
+
+            [pageSettings]='pageSettings'
+            allowTextWrap='true'
+          >
+            <e-columns>
+              <e-column field="index" textAlign='Center' width="50" isPrimaryKey="true" headerText="#">
+                <ng-template #template let-data>
+                  {{data.index}}
+                </ng-template>
+                <ng-template #editTemplate let-data>
+                  #
+                </ng-template>
+              </e-column>
+
+              <e-column field="l1Manager" headerText="{{'L1Manager' | translate}}" width='150' textAlign='Center'>
+                <ng-template #headerTemplate let-data>
+                  <span class="headercell">
+                    {{"L1Manager" | translate}}
+                  </span>
+                </ng-template>
+              </e-column>
+
+              <e-column field="appraisee" textAlign='Center' width="110" headerText="{{ 'APPRAISEE_COMMITTEE_LABLE' | translate}}">
+                <ng-template #headerTemplate let-data>
+                  <span class="headercell">
+                    {{"APPRAISEE_COMMITTEE_LABLE" | translate}}
+                  </span>
+                </ng-template>
+              </e-column>
+
+              <e-column field="center" textAlign='Center' width="100" headerText="{{'CenterA' | translate}}">
+                <ng-template #headerTemplate let-data>
+                  <span class="headercell">
+                    {{"CenterA" | translate}}
+                  </span>
+                </ng-template>
+              </e-column>
+
+              <e-column field="dept" textAlign='Center' width="100" headerText="{{'DeptA' | translate}}">
+                <ng-template #headerTemplate let-data>
+                  <span class="headercell">
+                    {{"DeptA" | translate}}
+                  </span>
+                </ng-template>
+              </e-column>
+
+              <e-column field="" width="100" textAlign='Center' headerText="{{ 'DETAIL_COMMITTEE' | translate}}">
+                <ng-template #headerTemplate let-data>
+                  <span class="headercell">
+                    {{"DETAIL_COMMITTEE" | translate}}
+                  </span>
+                </ng-template>
+                <ng-template #template let-data>
+                  <div class="btn-group">
+                    <button type="button" style="font-size: 13px;" class="btn btn-sm btn-success" (click)="clickDetail(data)"><i class="fa fa-paperclip mr-2" style="font-size: 13px;"></i>{{"BTN_DETAIL_COMMITTEE" | translate}}</button>
+                  </div>
+                </ng-template>
+              </e-column>
+            </e-columns>
+          </ejs-grid>
+        </div>
+        <!-- /.card-body -->
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- <div class="modal-footer">
+  <div class="w-100">
+    <button type="button" (click)="activeModal.dismiss('Cross click')" class="btn btn-secondary mr-2 float-right">{{'Close' }}</button>
+  </div>
+</div> -->

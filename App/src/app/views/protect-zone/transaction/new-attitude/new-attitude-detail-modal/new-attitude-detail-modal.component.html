@@ -1,0 +1,266 @@
+<ngx-spinner [fullScreen]="true" type="square-jelly-box" size="medium">
+  <p class="loading">Loading data...</p>
+</ngx-spinner>
+<!-- <div class="modal-header">
+  <h4 class="modal-title">{{'態度分數細節' | translate}} </h4>
+  <button type="button" class="close" aria-label="Close" (click)="activeModal.dismiss('Cross click')">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div> -->
+
+<!-- <div class="modal-body">
+
+
+</div> -->
+
+<div class="card" style="border: none;">
+  <div class="row">
+    <div class="col-md-12">
+      <div class="card">
+        <div class="card-body table-responsiveee p-0">
+          <table class="table table-bordered " style="box-shadow:  0 0 20px; border-radius: 5px;">
+            <tbody>
+              <tr>
+                <th class="text-center align-middle" style=" background-color: #f0f3f5;">{{"NEW_ATT_LABEL_NO" | translate}}</th>
+                <th class="text-center align-middle" style=" background-color: #f0f3f5;">{{"NEW_ATT_LABEL_NAME" | translate}}</th>
+                <th class="text-center align-middle" style=" background-color: #f0f3f5;">{{"NEW_ATT_LABEL_DEFINITION" | translate}}</th>
+                <th class="text-center align-middle" style=" background-color: #f0f3f5;">{{"NEW_ATT_LABEL_BEHAVIOR" | translate}}</th>
+                <th scope="col" class="text-center align-middle title-tooltip-detail" style=" background-color: #f0f3f5;">FL<span class="title-tooltip-detail-text">{{"TOOLTIP_FUNCTIONAL_TEAM" | translate}}</span></th>
+                <th scope="col" class="text-center align-middle title-tooltip-detail" style=" background-color: #f0f3f5;">L0<span class="title-tooltip-detail-text">{{"TOOLTIP_SELF_APPRAISAL" | translate}}</span></th>
+                <th scope="col" class="text-center align-middle title-tooltip-detail" style=" background-color: #f0f3f5;">L1<span class="title-tooltip-detail-text">{{"TOOLTIP_1ST_ASSESSMENT" | translate}}</span></th>
+                <th scope="col" class="text-center align-middle title-tooltip-detail" style=" background-color: #f0f3f5;">L2<span class="title-tooltip-detail-text">{{"TOOLTIP_2ND_ASSESSMENT" | translate}}</span></th>
+                <th class="text-center align-middle" style=" background-color: #f0f3f5; width: 200px;">{{"NEW_ATT_LABEL_BEHAVIOR_COMMENT" | translate}}</th>
+              </tr>
+
+              <ng-container *ngFor="let data of dataDetail">
+                <tr *ngFor="let item of data.newAttitudeScoreDetai; let i = index;">
+                  <td *ngIf="i == 0" [attr.rowspan]="data.newAttitudeScoreDetai.length" class="text-center align-middle td-score td-text" style=" background-color: #f0f3f5;">{{data.orderNumber}}</td>
+                  <td *ngIf="i == 0" [attr.rowspan]="data.newAttitudeScoreDetai.length" class="text-left align-middle td-score td-text" style=" background-color: #f0f3f5;">{{data.name | translate}}</td>
+                  <td *ngIf="i == 0" [attr.rowspan]="data.newAttitudeScoreDetai.length" class="text-left align-middle td-score td-text td-definition" style=" background-color: #f0f3f5;">{{data.definition | translate}}</td>
+                  <td class="text-left td-score td-text" style=" background-color: #f0f3f5;">{{item.behavior | translate}}</td>
+
+                  <td class="text-center align-middle td-score td-text" style=" background-color: #f0f3f5;">
+                    {{item.pointFL}}
+                  </td>
+                  <td class="text-center align-middle td-score td-text" style=" background-color: #f0f3f5;">
+                    {{item.pointL0}}
+                  </td>
+                  <td class="text-center align-middle td-score td-text" style=" background-color: #f0f3f5;">
+                    {{item.pointL1}}
+                  </td>
+                  <td class="text-center align-middle td-score td-text" style=" background-color: #f0f3f5;">
+                    {{item.pointL2}}
+                  </td>
+                  <td *ngIf="i == 0" [attr.rowspan]="data.newAttitudeScoreDetai.length" class="text-left align-top td-comment" style=" background-color: #f0f3f5;">
+                    <div class=" textarea-comment">
+                      <textarea disabled="true" type="text" placeholder="{{'NEW_ATT_PLA_BEHAVIOR_COMMENT' | translate}}..." class="form-control" name="comment" style="border-color: #f0f3f5;text-align:left;min-height: 120px;">{{data.comment}}</textarea>
+                    </div>
+                  </td>
+                </tr>
+              </ng-container>
+
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FL -->
+  <div class="control-section e-tbar-section mt-3">
+    <div class="e-sample-resize-container">
+      <div class="col-md-12 d-flex justify-content-left align-items-center">
+        <h5 class="font-weight-bold">{{"NEW_ATT_DETAIL_LABEL_QUES_FL" | translate}}</h5>
+      </div>
+    </div>
+  </div>
+  <div class="container">
+    <div class="row">
+      <div class="col-md-12">
+        <div class="row">
+          <div class="col-md-12 pl-4 mb-3">
+            <textarea  autosize type="text" [disabled]="true" [(ngModel)]="dataAttEvaluation.commentFL" placeholder="{{'NEW_ATT_DETAIL_LABEL_QUES_FL' | translate}}..." class="form-control" name="comment2" style="border-color: darkseagreen;text-align:left;min-height: 100px;"></textarea>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- L0 -->
+  <div class="control-section e-tbar-section mt-3">
+    <div class="e-sample-resize-container">
+      <div class="col-md-12 d-flex justify-content-left align-items-center">
+        <h5 class="font-weight-bold">{{"NEW_ATT_DETAIL_LABEL_QUES_L0" | translate}}</h5>
+      </div>
+    </div>
+  </div>
+  <div class="container">
+    <div class="row">
+      <div class="col-md-6 mb-2">
+        <div class="mb-1" style="font-size: 15px; font-weight: 500;">
+          1. {{"NEW_ATT_LABEL_QUES1_L0" | translate}}
+        </div>
+        <div class="row pl-4">
+          <div class="col-md-4 mt-2">
+            <ejs-checkbox label="{{'NEW_ATT_LABEL_QUES_TICK1' | translate}}" [disabled]="true" [(ngModel)]="dataAttEvaluation.firstQuestion1L0" cssClass="e-info" #checkbox></ejs-checkbox>
+          </div>
+          <div class="col-md-4 mt-2">
+            <ejs-checkbox label="{{'NEW_ATT_LABEL_QUES_TICK2' | translate}}" [disabled]="true" [(ngModel)]="dataAttEvaluation.firstQuestion2L0" cssClass="e-info" #checkbox></ejs-checkbox>
+          </div>
+          <div class="col-md-4 mt-2">
+            <ejs-checkbox label="{{'NEW_ATT_LABEL_QUES_TICK3' | translate}}" [disabled]="true" [(ngModel)]="dataAttEvaluation.firstQuestion3L0" cssClass="e-info" #checkbox></ejs-checkbox>
+          </div>
+          <div class="col-md-4 mt-2">
+            <ejs-checkbox label="{{'NEW_ATT_LABEL_QUES_TICK4' | translate}}" [disabled]="true" [(ngModel)]="dataAttEvaluation.firstQuestion4L0" cssClass="e-info" #checkbox></ejs-checkbox>
+          </div>
+          <div class="col-md-4 mt-2">
+            <ejs-checkbox label="{{'NEW_ATT_LABEL_QUES_TICK5' | translate}}" [disabled]="true" [(ngModel)]="dataAttEvaluation.firstQuestion5L0" cssClass="e-info" #checkbox></ejs-checkbox>
+          </div>
+          <div class="col-md-4 mt-2">
+            <ejs-checkbox label="{{'NEW_ATT_LABEL_QUES_TICK6' | translate}}" [disabled]="true" [(ngModel)]="dataAttEvaluation.firstQuestion6L0" cssClass="e-info" #checkbox></ejs-checkbox>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-6 mb-2">
+        <div class="mb-1" style="font-size: 15px; font-weight: 500;">
+          2. {{"NEW_ATT_LABEL_QUES2_L0" | translate}}
+        </div>
+        <div class="row pl-4">
+          <div class="col-md-4 mt-2">
+            <ejs-checkbox label="{{'NEW_ATT_LABEL_QUES_TICK1' | translate}}" [disabled]="true" [(ngModel)]="dataAttEvaluation.secondQuestion1L0" cssClass="e-info" #checkbox></ejs-checkbox>
+          </div>
+          <div class="col-md-4 mt-2">
+            <ejs-checkbox label="{{'NEW_ATT_LABEL_QUES_TICK2' | translate}}" [disabled]="true" [(ngModel)]="dataAttEvaluation.secondQuestion2L0" cssClass="e-info" #checkbox></ejs-checkbox>
+          </div>
+          <div class="col-md-4 mt-2">
+            <ejs-checkbox label="{{'NEW_ATT_LABEL_QUES_TICK3' | translate}}" [disabled]="true" [(ngModel)]="dataAttEvaluation.secondQuestion3L0" cssClass="e-info" #checkbox></ejs-checkbox>
+          </div>
+          <div class="col-md-4 mt-2">
+            <ejs-checkbox label="{{'NEW_ATT_LABEL_QUES_TICK4' | translate}}" [disabled]="true" [(ngModel)]="dataAttEvaluation.secondQuestion4L0" cssClass="e-info" #checkbox></ejs-checkbox>
+          </div>
+          <div class="col-md-4 mt-2">
+            <ejs-checkbox label="{{'NEW_ATT_LABEL_QUES_TICK5' | translate}}" [disabled]="true" [(ngModel)]="dataAttEvaluation.secondQuestion5L0" cssClass="e-info" #checkbox></ejs-checkbox>
+          </div>
+          <div class="col-md-4 mt-2">
+            <ejs-checkbox label="{{'NEW_ATT_LABEL_QUES_TICK6' | translate}}" [disabled]="true" [(ngModel)]="dataAttEvaluation.secondQuestion6L0" cssClass="e-info" #checkbox></ejs-checkbox>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="mb-1 mt-1" style="font-size: 15px; font-weight: 500;">
+          3. {{"NEW_ATT_LABEL_QUES3_L0" | translate}}
+        </div>
+        <div class="row">
+          <div class="col-md-12 pl-4 mb-3">
+            <textarea  autosize type="text" [disabled]="true" [(ngModel)]="dataAttEvaluation.thirdQuestionL0" placeholder="{{'NEW_ATT_LABEL_QUES3_L0' | translate}}..." class="form-control" name="comment2" style="border-color: darkseagreen;text-align:left;min-height: 100px;"></textarea>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="mb-1 mt-1" style="font-size: 15px; font-weight: 500;">
+          4. {{"NEW_ATT_LABEL_QUES4_L0" | translate}}
+        </div>
+        <div class="row">
+          <div class="col-md-12 pl-4 mb-3">
+            <textarea  autosize type="text" [disabled]="true" [(ngModel)]="dataAttEvaluation.fourthQuestionL0" placeholder="{{'NEW_ATT_LABEL_QUES4_L0' | translate}}..." class="form-control" name="comment3" style="border-color: darkseagreen;text-align:left;min-height: 100px;"></textarea>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- L1 -->
+  <div class="control-section e-tbar-section mt-3">
+    <div class="e-sample-resize-container">
+      <div class="col-md-12 d-flex justify-content-left align-items-center">
+        <h5 class="font-weight-bold">{{"NEW_ATT_DETAIL_LABEL_QUES_L1" | translate}}</h5>
+      </div>
+    </div>
+  </div>
+  <div class="container">
+    <div class="row">
+      <div class="col-md-6 mb-2">
+        <div class="mb-1" style="font-size: 15px; font-weight: 500;">
+          1. {{"NEW_ATT_LABEL_QUES1_L1" | translate}}
+        </div>
+        <div class="row pl-4">
+          <div class="col-md-4 mt-2">
+            <ejs-checkbox label="{{'NEW_ATT_LABEL_QUES_TICK1' | translate}}" [disabled]="true" [(ngModel)]="dataAttEvaluation.firstQuestion1L1" cssClass="e-info" #checkbox></ejs-checkbox>
+          </div>
+          <div class="col-md-4 mt-2">
+            <ejs-checkbox label="{{'NEW_ATT_LABEL_QUES_TICK2' | translate}}" [disabled]="true" [(ngModel)]="dataAttEvaluation.firstQuestion2L1" cssClass="e-info" #checkbox></ejs-checkbox>
+          </div>
+          <div class="col-md-4 mt-2">
+            <ejs-checkbox label="{{'NEW_ATT_LABEL_QUES_TICK3' | translate}}" [disabled]="true" [(ngModel)]="dataAttEvaluation.firstQuestion3L1" cssClass="e-info" #checkbox></ejs-checkbox>
+          </div>
+          <div class="col-md-4 mt-2">
+            <ejs-checkbox label="{{'NEW_ATT_LABEL_QUES_TICK4' | translate}}" [disabled]="true" [(ngModel)]="dataAttEvaluation.firstQuestion4L1" cssClass="e-info" #checkbox></ejs-checkbox>
+          </div>
+          <div class="col-md-4 mt-2">
+            <ejs-checkbox label="{{'NEW_ATT_LABEL_QUES_TICK5' | translate}}" [disabled]="true" [(ngModel)]="dataAttEvaluation.firstQuestion5L1" cssClass="e-info" #checkbox></ejs-checkbox>
+          </div>
+          <div class="col-md-4 mt-2">
+            <ejs-checkbox label="{{'NEW_ATT_LABEL_QUES_TICK6' | translate}}" [disabled]="true" [(ngModel)]="dataAttEvaluation.firstQuestion6L1" cssClass="e-info" #checkbox></ejs-checkbox>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-6 mb-2">
+        <div class="mb-1" style="font-size: 15px; font-weight: 500;">
+          2. {{"NEW_ATT_LABEL_QUES2_L1" | translate}}
+        </div>
+        <div class="row pl-4">
+          <div class="col-md-4 mt-2">
+            <ejs-checkbox label="{{'NEW_ATT_LABEL_QUES_TICK1' | translate}}" [disabled]="true" [(ngModel)]="dataAttEvaluation.secondQuestion1L1" cssClass="e-info" #checkbox></ejs-checkbox>
+          </div>
+          <div class="col-md-4 mt-2">
+            <ejs-checkbox label="{{'NEW_ATT_LABEL_QUES_TICK2' | translate}}" [disabled]="true" [(ngModel)]="dataAttEvaluation.secondQuestion2L1" cssClass="e-info" #checkbox></ejs-checkbox>
+          </div>
+          <div class="col-md-4 mt-2">
+            <ejs-checkbox label="{{'NEW_ATT_LABEL_QUES_TICK3' | translate}}" [disabled]="true" [(ngModel)]="dataAttEvaluation.secondQuestion3L1" cssClass="e-info" #checkbox></ejs-checkbox>
+          </div>
+          <div class="col-md-4 mt-2">
+            <ejs-checkbox label="{{'NEW_ATT_LABEL_QUES_TICK4' | translate}}" [disabled]="true" [(ngModel)]="dataAttEvaluation.secondQuestion4L1" cssClass="e-info" #checkbox></ejs-checkbox>
+          </div>
+          <div class="col-md-4 mt-2">
+            <ejs-checkbox label="{{'NEW_ATT_LABEL_QUES_TICK5' | translate}}" [disabled]="true" [(ngModel)]="dataAttEvaluation.secondQuestion5L1" cssClass="e-info" #checkbox></ejs-checkbox>
+          </div>
+          <div class="col-md-4 mt-2">
+            <ejs-checkbox label="{{'NEW_ATT_LABEL_QUES_TICK6' | translate}}" [disabled]="true" [(ngModel)]="dataAttEvaluation.secondQuestion6L1" cssClass="e-info" #checkbox></ejs-checkbox>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-12">
+        <div class="mb-1 mt-1" style="font-size: 15px; font-weight: 500;">
+          3. {{"NEW_ATT_LABEL_QUES3_L1" | translate}}
+        </div>
+        <div class="row">
+          <div class="col-md-12 pl-4 mb-3">
+            <textarea  autosize type="text" [disabled]="true" [(ngModel)]="dataAttEvaluation.thirdQuestionL1" placeholder="{{'NEW_ATT_LABEL_QUES3_L1' | translate}}..." class="form-control" name="comment2" style="border-color: darkseagreen;text-align:left;min-height: 100px;"></textarea>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- L2 -->
+  <div class="control-section e-tbar-section mt-3">
+    <div class="e-sample-resize-container">
+      <div class="col-md-12 d-flex justify-content-left align-items-center">
+        <h5 class="font-weight-bold">{{"NEW_ATT_DETAIL_LABEL_QUES_L2" | translate}}</h5>
+      </div>
+    </div>
+  </div>
+  <div class="container mb-4">
+    <div class="row">
+      <div class="col-md-12">
+        <div class="row">
+          <div class="col-md-12 pl-4 mb-3">
+            <textarea  autosize type="text" [disabled]="true" [(ngModel)]="dataAttEvaluation.commentL2" placeholder="{{'NEW_ATT_DETAIL_LABEL_QUES_L2' | translate}}..." class="form-control" name="comment2" style="border-color: darkseagreen;text-align:left;min-height: 100px;"></textarea>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+

@@ -1,0 +1,162 @@
+<ngx-spinner [fullScreen]="true" type="square-jelly-box" size="medium">
+  <p class="loading">Loading data...</p>
+</ngx-spinner>
+
+<div class="row">
+  <div class="col-md-12">
+    <div class="card">
+      <div class="card-body table-responsive">
+        <!-- <div class="row my-3">
+          <div class="col-md-12">
+
+            <div class="row mb-2">
+              <div class="col-md-12 d-flex justify-content-center align-items-center">
+                <div class="font-weight-bold px-3">{{"Factory" | translate}} :</div>
+                <ejs-dropdownlist [dataSource]='dataFact' [fields]='levelFields' [allowFiltering]='true'
+                  (change)='filterFact($event)'
+                  [(ngModel)]='factId'
+                  placeholder="Select a Factory">
+                </ejs-dropdownlist>
+
+                <div class="font-weight-bold pr-3">{{"Center" | translate}}: </div>
+                <ejs-dropdownlist [dataSource]='dataCenter' [fields]='levelFields' [allowFiltering]='true'
+                   (change)='filterCenter($event)'
+                   [(ngModel)]='centerId'
+                  placeholder="Select a Center">
+                </ejs-dropdownlist>
+
+                <div class="font-weight-bold pr-3">{{"Dept" | translate}}: </div>
+                <ejs-dropdownlist [dataSource]='dataDept' [fields]='levelFields' [allowFiltering]='true'
+                   (change)='filterDept($event)'
+                   [(ngModel)]='deptId'
+                  placeholder="Select a Dept.">
+                </ejs-dropdownlist>
+
+
+                <div class="font-weight-bold pr-3">{{"Level" | translate}}: </div>
+                <ejs-dropdownlist [dataSource]='dataLevel' [fields]='levelFields' [allowFiltering]='true'
+                   (change)='filterlevel($event)'
+                   [(ngModel)]='levelId'
+                  placeholder="Select a Level">
+                </ejs-dropdownlist>
+
+
+              </div>
+            </div>
+          </div>
+        </div> -->
+
+        <div *ngIf="roleUser === 'SYSTEMADMIN'" class="col-md-3 d-flex justify-content-center">
+          <div class="form-group">
+            <label for="exampleInputEmail1">{{'KPI_MONTH_PERF_MONTH_LABEL' | translate}}</label>
+
+            <ejs-datepicker [start]='start' 
+              (change)='onChangeSystemDate($event)' 
+              [(ngModel)]="systemDate"
+              [values]="systemDate" 
+              [depth]='depth' 
+              [format]='format'>
+            </ejs-datepicker>
+            <!-- <kendo-datepicker style="width: 100%;" [(ngModel)]="currentTime" >
+            </kendo-datepicker> -->
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-12">
+            <ejs-grid #grid
+              id='grid'
+              [dataSource]="policyData"
+              [allowPaging]='true'
+              [allowResizing]='true'
+              [showColumnMenu]='true'
+              gridLines='Both'
+              [toolbar]="toolbar"
+              (created)="createdSearch($event)"
+              [locale]='locale'
+              (toolbarClick)='toolbarClick($event)'
+              [pageSettings]='pageSettings'
+              [allowExcelExport]='true'
+            >
+              <e-columns>
+                <e-column field="level" textAlign='Center' width="80" isPrimaryKey="true" headerText="Level">
+                  <ng-template #headerTemplate let-data>
+                    {{"Level" | translate}}
+                  </ng-template>
+                  <!-- <ng-template #template let-data>
+                    {{ data.level - 1}}
+                  </ng-template>
+                  <ng-template #editTemplate let-data>
+                    {{ data.level  - 1}}
+                  </ng-template> -->
+
+                </e-column>
+
+                <e-column field="name" textAlign='Center' headerText="KPI Name">
+                  <ng-template #headerTemplate let-data>
+                    {{"KPI Name" | translate}}
+                  </ng-template>
+                </e-column>
+
+                <e-column field="centerName" textAlign='Center' headerText="Center">
+                  <ng-template #headerTemplate let-data>
+                    {{"Center" | translate}}
+                  </ng-template>
+                </e-column>
+                <e-column field="deptName" textAlign='Center' headerText="Dept.">
+                  <ng-template #headerTemplate let-data>
+                    {{"Dept" | translate}}
+                  </ng-template>
+                </e-column>
+                <e-column field='picName' headerText="PIC" width='200' textAlign='Center'>
+                  <ng-template #headerTemplate let-data>
+                    {{"PIC" | translate}}
+                  </ng-template>
+                </e-column>
+
+                <e-column field="target" textAlign='Center' headerText="Target">
+                  <ng-template #headerTemplate let-data>
+                    {{"TARGET" | translate}}
+                  </ng-template>
+                 
+                </e-column>
+
+                <e-column field="performance" textAlign='Center' headerText="Performance">
+                  <ng-template #headerTemplate let-data>
+                    {{"PERFORMANCE" | translate}}
+                  </ng-template>
+
+                </e-column>
+
+                <e-column field="ytd" textAlign='Center' headerText="YTD">
+                  <ng-template #headerTemplate let-data>
+                    {{"YTD" | translate}}
+                  </ng-template>
+
+                </e-column>
+                <!-- <e-column field="option" width="100" textAlign='Center' headerText="PDCA">
+                  <ng-template #template let-data>
+                    <div class="btn-group">
+                      <button style="color: floralwhite; box-shadow: 1px 1px 2px black;" type="button" (click)='openModal(data,detailModal)' class="btn btn-xs btn-primary"><i class="fa fa-eye"></i></button>
+                    </div>
+                  </ng-template>
+                  <ng-template #editTemplate let-data>
+                  N/A
+                  </ng-template>
+                </e-column> -->
+
+              </e-columns>
+            </ejs-grid>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+

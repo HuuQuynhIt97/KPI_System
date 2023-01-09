@@ -1,0 +1,86 @@
+.e-grid .e-headercell {
+  background-color: #f0f3f5;
+}
+.e-pager {
+  font-size: 10px;
+}
+
+.table-score {
+  font-family: arial, sans-serif;
+  border-collapse: collapse;
+  width: 100%;
+}
+
+.td-score {
+  text-align: center;
+}
+
+.th-score {
+  text-align: center;
+  height: 50px;
+}
+
+.inputCal {
+  background-color: #cececf;
+  border: none;
+}
+
+.th-label{
+  width: 255px;
+  white-space: nowrap;
+  overflow-x: auto;
+}
+.h5 {
+  font-size: 20pt;
+}
+.committee-title{
+  font-size: 22pt;
+}
+.e-grid * {
+  font-size: 16px;
+}
+
+.e-input-group:not(.e-success):not(.e-warning):not(.e-error), .e-input-group.e-control-wrapper:not(.e-success):not(.e-warning):not(.e-error) {
+  font-size: 16px;
+}
+
+.textarea-disabled[disabled], .e-input[disabled], .textarea-disabled {
+  background-color: white;
+  border: none;
+  color: #000;
+  background-color: transparent;
+  outline: none;
+  // resize: none;
+  cursor: text;
+  -webkit-text-fill-color: #000;
+}
+
+td.e-rowcell * {
+  font-size: 20pt !important;
+  padding: 5px !important;
+}
+
+td {
+  font-size: 20pt !important;
+  padding: 8px !important;
+  line-height: 30px !important;
+}
+
+.headercell {
+  font-size: 20pt !important;
+  padding: 5px 0 !important;
+  line-height: 30px;
+}
+
+.e-grid .e-headercell {
+  padding: 6px 10px 6px;
+}
+
+.e-custom.e-checkbox-wrapper .e-label {
+  font-size: 22px;
+}
+
+.e-checkbox-wrapper .e-label {
+  font-size: 16px;
+  line-height: 20px;
+}

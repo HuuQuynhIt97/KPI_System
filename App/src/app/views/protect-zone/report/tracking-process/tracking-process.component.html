@@ -1,0 +1,124 @@
+<ngx-spinner [fullScreen]="true" type="square-jelly-box" size="medium">
+  <p class="loading">Loading data...</p>
+</ngx-spinner>
+<div  class="row">
+  <div class="col-md-3 d-flex justify-content-center">
+    <div class="form-group">
+      <label for="exampleInputEmail1">Change System Date</label>
+      <kendo-datepicker style="width: 100%;" [(ngModel)]="currentTime" (valueChange)="onChangeReportTime($event)">
+      </kendo-datepicker>
+    </div>
+  </div>
+</div>
+<div class="row">
+  <div class="col-md-12">
+    <ejs-grid #grid1 id="FirstGrid" gridLines='Both' 
+      [toolbar]='toolbarOptions' [dataSource]='dataTracking' allowPaging='true' [allowSorting]='true' allowResizing='true'
+      showColumnMenu='true' [allowExcelExport]='true' allowFiltering='true' [filterSettings]='filterSettings'
+      (toolbarClick)='toolbarClick($event)'
+      [aggregates]='aggreagtes'
+      [pageSettings]='pageSettings' >
+      <e-columns>
+        <e-column field='center' headerText="{{ 'TRACKING_PROCESS_CENTER' | translate }}" headerText='Center' width=150 textAlign='Center'>
+          <ng-template #headerTemplate let-data>
+            {{"TRACKING_PROCESS_CENTER" | translate}}
+          </ng-template>
+        </e-column>
+
+        <e-column field='dept' headerText="{{ 'TRACKING_PROCESS_DEPT' | translate }}"  width=150 textAlign='Center'>
+          <ng-template #headerTemplate let-data>
+            {{"TRACKING_PROCESS_DEPT" | translate}}
+          </ng-template>
+        </e-column>
+
+        <e-column field='fullName' headerText="{{ 'TRACKING_PROCESS_NAME' | translate }}" width=150  textAlign='Center'>
+          <ng-template #headerTemplate let-data>
+            {{"TRACKING_PROCESS_NAME" | translate}}
+          </ng-template>
+        </e-column>
+
+        <e-column field='todoPending' headerText="{{ 'TRACKING_PROCESS_TODOPENDING' | translate }}" width=150 textAlign='Center'>
+          <ng-template #headerTemplate let-data>
+            {{"TRACKING_PROCESS_TODOPENDING" | translate}}
+          </ng-template>
+        </e-column>
+
+        <e-column field='todoTotal' headerText="{{ 'TRACKING_PROCESS_TODOTOTAL' | translate }}" width=150 textAlign='Center'>
+          <ng-template #headerTemplate let-data>
+            {{"TRACKING_PROCESS_TODOTOTAL" | translate}}
+          </ng-template>
+        </e-column>
+
+        <e-column field='percentage' headerText="{{ 'TRACKING_PROCESS_PERCENTAGE' | translate }}" width=150 textAlign='Center'>
+          <ng-template #headerTemplate let-data>
+            {{"TRACKING_PROCESS_PERCENTAGE" | translate}}
+          </ng-template>
+
+          <ng-template #template let-data>
+            {{data.percentage}}
+          </ng-template>
+        </e-column>
+        
+      </e-columns>
+
+      <!-- <e-aggregates>
+        <e-aggregate>
+            <e-columns>
+              <e-column type="total" field="fullName">
+                <ng-template #footerTemplate let-data>Total</ng-template>
+              </e-column>
+              <e-column type="todoPending" field="todoPending">
+                <ng-template #footerTemplate let-data>
+                  {{todoPending}}
+                </ng-template>
+              </e-column>
+              <e-column type="todoTotal" field="todoTotal">
+                <ng-template #footerTemplate let-data>
+                  {{todoTotal}}
+                </ng-template>
+              </e-column>
+              <e-column type="percentage" field="percentage">
+                <ng-template #footerTemplate let-data>
+                  {{percentage}}%
+                </ng-template>
+              </e-column>
+            </e-columns>
+        </e-aggregate>
+      </e-aggregates> -->
+
+    </ejs-grid>
+   
+  </div>
+</div>
+<hr>
+<div class="row">
+  <div class="col-md-12">
+    <ejs-grid #grid2 id="SecondGrid"  gridLines='Both' 
+      [toolbar]='toolbarOptions' [dataSource]='dataKPI' allowPaging='true' [allowSorting]='true' allowResizing='true'
+      showColumnMenu='true' [allowExcelExport]='true'  allowFiltering='true' [filterSettings]='filterSettings'
+      [pageSettings]='pageSettings'  >
+      <e-columns>
+        
+        <e-column field='picName' headerText='PIC' width='150' headerTextAlign="Center" textAlign='Left'>
+          <ng-template #headerTemplate let-data>
+            {{"TRACKING_PROCESS_PIC" | translate}}
+          </ng-template>
+        </e-column>
+
+        <e-column field='index' headerText='#' width='100' headerTextAlign="Center" textAlign='Center'>
+          <ng-template #headerTemplate let-data>
+            {{"TRACKING_PROCESS_INDEX" | translate}}
+          </ng-template>
+        </e-column>
+
+        <e-column field='topic' headerText='KPI Objective' width='300' headerTextAlign="Center"  textAlign='Left'>
+          <ng-template #headerTemplate let-data>
+            {{"TRACKING_PROCESS_KPIOBJECTIVE" | translate}}
+          </ng-template>
+        </e-column>
+        
+      </e-columns>
+    </ejs-grid>
+   
+  </div>
+</div>

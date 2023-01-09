@@ -1,0 +1,125 @@
+<ngx-spinner [fullScreen]="false" type="square-jelly-box" size="medium">
+  <p class="loading">Loading data...</p>
+</ngx-spinner>
+<div class="modal-header">
+  <h4 class="modal-title">收到KPI項目後新增第一個P (Update the first Plan of KPI) </h4>
+  <button type="button" class="close" aria-label="Close" (click)="activeModal.dismiss('Cross click')">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+<div class="modal-body">
+  <div class="row">
+    <div class="col-6">
+      <table class="table table-borderless">
+        <tbody>
+          <tr>
+            <td>
+              <label class="font-weight-bold">{{"Policy" | translate}}: </label> <span>{{policy}}</span>
+
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <label class="font-weight-bold">{{"KPI" | translate}}: </label> <span>{{kpi}}</span>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <label class="font-weight-bold">{{'PICPDCA' | translate}}: </label> <span>{{pic}}</span>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+
+    </div>
+
+    <div class="col-12 d-flex align-items-start">
+      <div style="box-shadow: 2px 2px 3px black; border-radius: 4px; overflow: hidden;width:300px" class="input-group mb-3" >
+        <div class="input-group-prepend">
+          <span style=" background-color: gray; opacity: 0.75; color: white;" class="input-group-text font-weight-bold" id="target">{{"Next month Target" | translate}}</span>
+        </div>
+        <input (keypress)="numberOnly($event)" type="text" class="form-control" (ngModelChange)="onChangeTarget($event)" [(ngModel)]="targetValue" id="next-month-target" aria-describedby="target">
+      </div>
+
+      <div style="box-shadow: 2px 2px 3px black; border-radius: 4px; overflow: hidden;width:300px" class="input-group mb-3 ml-5" >
+        <div class="input-group-prepend">
+          <span style=" background-color: gray; opacity: 0.75; color: white;" class="input-group-text font-weight-bold" id="ytd">{{"Target YTD" | translate}}</span>
+        </div>
+        <input (keypress)="numberOnly($event)" type="text"   class="form-control" (ngModelChange)="onChangeTargetYTD($event)" [(ngModel)]="targetYTDValue" id="target-ytd" aria-describedby="ytd">
+      </div>
+
+    </div>
+
+  </div>
+
+  <div class="row">
+    <div class="col-12">
+      <ejs-grid #grid
+      id="gridAc"
+      [dataSource]='actions'
+      [allowPaging]='true'
+      [allowResizing]='true'
+      [showColumnMenu]='true'
+       allowTextWrap='true'
+      gridLines='Both'
+      (actionBegin)='actionBegin($event)'
+      [toolbar]='toolbarOptions'
+      [pageSettings]='pageSettings'
+      [editSettings]='editSettings'
+      [allowExcelExport]='true'>
+      <e-columns>
+        <e-column field='#' headerText='#' [allowEditing]='false' textAlign='Center' width=80 type='number'>
+          <ng-template #template let-data>
+            {{NO(data.index)}}
+          </ng-template>
+        </e-column>
+        <e-column field='content' headerText='{{"Content" | translate}}' type='string'>
+
+          <ng-template #template let-data>
+            <textarea autosize  type="text" class="form-control" readonly [value]="data.content" name="content"  style="text-align:left;" ></textarea>
+          </ng-template>
+
+          <ng-template #editTemplate let-data>
+            <textarea autosize maxlength="251"  type="text" [(ngModel)]="data.content" class="form-control" [value]="data.content" name="content" style="text-align:left;min-height: 60px;"></textarea>
+            <span style="color:red" *ngIf="data.content?.length > 250">
+              The content max 250 words
+           </span>
+          </ng-template>
+
+        </e-column>
+        <e-column field='target' headerText='{{"Target" | translate}}' type='string'>
+        </e-column>
+        <e-column field='deadline' width=100 editType='datepickeredit' [edit]='dpParams' headerText='{{"Deadline" | translate}}' type='date' format='MM/dd/yyyy' >
+        </e-column>
+      </e-columns>
+    </ejs-grid>
+    </div>
+  </div>
+</div>
+
+<!-- <div class="modal-footer d-flex justify-content-end">
+  <button type="button"
+  class="btn btn-secondary mr-2"
+
+  (click)="back()">{{'Save' }}
+</button>
+  <button type="button"
+  class="btn btn-success"
+
+  (click)="submit()">{{'Submit' }}</button>
+</div> -->
+<div class="modal-footer">
+  <div class="w-100">
+    <span style="color: red;font-size: 18px;">建議 Suggestion : 內容不超過250字 (Type the content within 250 words)</span>
+    <!-- <button type="button" (click)="submits()" class="btn btn-success float-right">{{'Submit' }}</button> -->
+    <button type="button" (click)="back()" class="btn btn-secondary mr-2 float-right">{{'Save' }}</button>
+  </div>
+</div>
+<!--
+data-toggle="tooltip"
+data-placement="top"
+title="Save data & Submit then close the window. In L0 tab hide this row."
+ data-toggle="tooltip"
+  data-placement="top"
+  title="Save data & close the window."
+-->

@@ -1,0 +1,146 @@
+<ngx-spinner [fullScreen]="true" type="square-jelly-box" size="medium">
+</ngx-spinner>
+
+<app-header [navbarBrandRouterLink]="['/transaction/todolist2']" [fixed]="true"
+  [navbarBrandFull]="{src: 'assets/img/SHC_Logo_v1.png', width: 50, height: 35, alt: 'Logo'}"
+  [navbarBrandMinimized]="{src: 'assets/img/SHC_Logo_v1.png', width: 25, height: 25, alt: 'Logo'}" [sidebarToggler]="'lg'"
+  [asideMenuToggler]="'lg'"
+  [asideMenuToggler]="false"
+  [style.background-color]="'#000000'"
+  [mobileAsideMenuToggler]="false"
+  >
+  <ul class="nav navbar-nav nav-link-dark ">
+    <li class="nav-item">
+      <a style="color: whitesmoke !important;" class="nav-link font-2xl" routerLink="/transaction/todolist2">KPI  System</a>
+    </li>
+  </ul>
+  <ul class="nav navbar-nav ml-auto p-0">
+    <li *ngIf="userName == 'admin' || roleName === SYSTEMADMIN" class="nav-item d-md-down-none mr-2" style="width: 150px;">
+      <a class="nav-link">
+
+        <ejs-dropdownlist #positionDropdownlist [dataSource]='userData' [value]="values"
+          [fields]='fieldsRole' [allowFiltering]='true'
+          (select)='onChangeRole($event)'>
+        </ejs-dropdownlist>
+      </a>
+    </li>
+
+    <li class="nav-item d-md-down-none mr-2">
+      <a class="nav-link">
+
+        <button type="button" (click)='openModal(versionHistoryModal)' class="btn btn-info text-white">Version
+          <span class="badge-pill" style="background-color: white; color:#63c2de;">{{firstItem?.name}}</span></button>
+      </a>
+    </li>
+
+    <li class="nav-item d-md-down-none mr-2">
+      <a class="nav-link">
+        <button type="button" (click)='openModal(versionHistoryModal)' class="btn btn-info text-white">Uploaded Time
+          <span class="badge-pill" style="background-color: white; color:#63c2de;">{{firstItem?.createdTime | date: 'YYYY-MM-dd HH:mm'}}</span></button>
+      </a>
+    </li>
+
+
+    <li class="nav-item d-md-down-none mr-2" style="width: 70px;">
+      <div class="nav-link">
+  <ejs-dropdownlist id='langs' #langs [dataSource]='langsData' (change)='onChange($event)' [value]='value'
+  [fields]='fields'></ejs-dropdownlist>
+      </div>
+    </li>
+    <li class="nav-item d-md-down-none mr-2">
+      <a class="nav-link">
+        <span class="font-weight-bold text-info">{{currentTime}}</span>
+      </a>
+    </li>
+
+    <li class="nav-item dropdown" style="cursor: pointer;">
+      <a style="color: whitesmoke !important;" class="nav-link font-weight-bold" data-toggle="dropdown">
+        {{userName | titlecase}}
+      </a>
+      <div class="dropdown-menu dropdown-menu-right">
+        <a class="dropdown-item" (click)="logout()">
+          <i class="fa fa-lock"></i>
+          {{ 'SIGN_OUT' | translate }}
+        </a>
+      </div>
+    </li>
+
+  </ul>
+</app-header>
+
+<div class="app-body">
+  <app-sidebar #appSidebar 
+  [fixed]="true" 
+  style="background-color: #004040;"
+  [display]='false' 
+  [minimized]="sidebarMinimized"
+    (minimizedChange)="toggleMinimize($event)">
+    <app-sidebar-nav [navItems]="navItems" [perfectScrollbar] [disabled]="appSidebar.minimized"></app-sidebar-nav>
+  </app-sidebar>
+  <!-- Main content -->
+  <main class="main">
+    <!-- Breadcrumb -->
+    <!-- breaking change 'cui-breadcrumb' -->
+    <cui-breadcrumb>
+      <!-- Breadcrumb Menu-->
+      <!-- <li class="breadcrumb-menu d-md-down-none">
+        <div class="btn-group" role="group" aria-label="Button group with nested dropdown">
+          <a class="btn" href="#"><i class="icon-speech"></i></a>
+          <a class="btn" [routerLink]="['/dashboard']"><i class="icon-graph"></i> &nbsp;Dashboard</a>
+          <a class="btn" href="#"><i class="icon-settings"></i> &nbsp;Settings</a>
+        </div>
+      </li> -->
+    </cui-breadcrumb>
+    <!-- deprecation warning for 'app-breadcrumb' -->
+    <!--<ol class="breadcrumb">-->
+    <!--<app-breadcrumb></app-breadcrumb>-->
+    <!--&lt;!&ndash; Breadcrumb Menu&ndash;&gt;-->
+    <!--<li class="breadcrumb-menu d-md-down-none">-->
+    <!--<div class="btn-group" role="group" aria-label="Button group with nested dropdown">-->
+    <!--<a class="btn" href="#"><i class="icon-speech"></i></a>-->
+    <!--<a class="btn" [routerLink]="['/dashboard']"><i class="icon-graph"></i> &nbsp;Dashboard</a>-->
+    <!--<a class="btn" href="#"><i class="icon-settings"></i> &nbsp;Settings</a>-->
+    <!--</div>-->
+    <!--</li>-->
+    <!--</ol>-->
+    <div class="container-fluid">
+
+      <router-outlet ></router-outlet>
+    </div><!-- /.container-fluid -->
+  </main>
+
+</div>
+<app-footer>
+  <span><a href="http://10.4.5.174:93" target="_blank">Copyright © 2021-{{currentYear}} SHYANG HUNG CHENG INDUSTRIAL CO., LTD All </a> &copy; Right reserved.</span>
+  <span class="ml-auto mr-2">Powered by <a href="http://10.4.5.174:93" target="_blank">Lab-team</a></span>
+  <i class="fa fa-users"></i> {{online}}
+</app-footer>
+
+<ng-template #versionHistoryModal let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title ml-1">
+      Version History
+    </h4>
+    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <div class="row">
+      <div class="col-md-12">
+
+        <div *ngFor="let item of data">
+
+          <div class="callout callout-info">
+            <h1>{{item.name}} ({{item.updatedTime | date: 'yyyy-MM-dd HH:mm:ss'}})</h1>
+            <div [innerHTML]="item.description"></div>
+            <p><label for="Name">Upload by:</label> {{item.uploadBy}}</p>
+          </div>
+
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+</ng-template>

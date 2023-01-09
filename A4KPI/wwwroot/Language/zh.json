@@ -1,0 +1,98 @@
+{
+ 
+  "PREVIEW": "Preview",
+  "SIGN_OUT": "Sign-out",
+  "ADD": "Add New",
+  "EDIT": "Edit",
+  "DELETE": "Delete",
+  "CANCEL": "Cancel",
+  "SEARCH": "Search",
+  "FINISHED": "Finished",
+
+
+
+  "Level": "階",
+  "Username": "帳號",
+  "Password": "密碼",
+  "#N/A": "#N/A",
+  "Close": "關閉",
+  "Policy": "項目",
+  "KPI": "KPI",
+
+  "This month Performance": "當月實績",
+  "This month Target": "當月目標",
+  "Next month Target": "下個月目標",
+  "This month YTD": "當月YTD",
+  "Target YTD": "目標YTD",
+
+  "meetingMonth": "月份",
+  "meetingPlan": "本期行動計劃",
+  "meetingTarget": "目標",
+  "meetingDeadline": "期限",
+  "meetingDo": "執行內容",
+  "meetingPcmc": "實績",
+  "meetingStatus": "狀態",
+  "meetingCheck": "執行狀況檢討",
+  "meetingAction": "下期行動計劃",
+  "meetingAtt": "附檔",
+  "meetingAtts": "附檔",
+
+
+  "meetingPer": "實績",
+  "meetingPertooltip": "實績",
+  "Content": "本期行動計劃",
+
+  "Target": "目標值",
+  "Deadline": "完成期限",
+  "Content2": "下期行動計劃",
+
+  "Processing": "進行中",
+  "Not yet start": "未開始",
+  "Postpone": "暫停",
+  "Terminate": "終止",
+  "Complete": "已完成",
+
+  "KPI Name": "KPI 名稱",
+  "Factory": "廠區",
+  "Center": "中心",
+  "Dept": "部.",
+  "PIC": "負責人",
+
+  "KPI Name 2": "KPI名稱",
+  "LevelKPINew": "階",
+  "PolicyNew": "項目",
+  "TypeNew": "數據型態",
+  "PICNew": "負責人",
+
+  "MGMT": "管理範圍",
+  "editor": "最後編輯者",
+  "editdate": "最後編輯時間",
+
+  "Email": "Email",
+  "FactoryA": "廠區",
+  "CenterA": "中心",
+  "DeptA": "部",
+  "AccountGroup": "角色群組",
+  "L1Manager": "一階主管",
+  "FunctionalLeader": "功能主管",
+  "OptionA": "權限開放",
+  "FullName": "姓名",
+  "KPIOBJ": "KPI 名稱",
+  "OptioTo": "更新PDCA",
+
+  "TextModal": "月更新PDCA",
+  "PICPDCA": "負責人",
+  "Download": "全部下載",
+  "Upload file": "上傳附檔",
+  "Chose Status": "選擇狀態",
+  "Add KPI": "建立KPI",
+  "Create": "建立",
+
+  "Upper level KPI": "上一階KPI",
+  "LY PCMC": "去年實績",
+  "LY YTD": "去年YTD",
+
+  "LY PCMC tooltip": "去年實績",
+  "LY YTD tooltip": "去年YTD"
+
+}

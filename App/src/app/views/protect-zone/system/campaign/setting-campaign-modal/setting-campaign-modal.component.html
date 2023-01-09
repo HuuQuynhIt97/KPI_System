@@ -1,0 +1,79 @@
+<div class="modal-header">
+  <h4 class="modal-title">
+    <i class="fas fa-plus mr-1"></i>{{title}}
+    <!-- <span style="color: #f86c6b; font-weight: 700;">
+      {{title}}
+    </span> -->
+  </h4>
+  <button type="button" class="close" aria-label="Close" (click)="activeModal.dismiss('Cross click')">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+<div class="modal-body">
+  <div class="row">
+    <div class="col-md-12">
+      <div class="card">
+
+
+        <div class="card-body table-responsive p-0 table-striped">
+
+          <ejs-grid #grid
+            [dataSource]="data"
+            allowPaging='true'
+            gridLines='Both'
+            allowResizing='true'
+            showColumnMenu='true'
+            (actionBegin)="actionBegin($event)"
+            [toolbar]='toolbarOptions'
+            [pageSettings]='pageSettings'
+            allowExcelExport='true'
+            (toolbarClick)='toolbarClick($event)'
+            [editSettings]='editSettings'
+          >
+            <e-columns>
+              <e-column field="" width="50px" isPrimaryKey="true" headerText="#" textAlign="center">
+                <ng-template #headerTemplate let-data>
+                  #
+                </ng-template>
+                <ng-template #template let-data>
+                  {{NO(data.index)}}
+                </ng-template>
+                <ng-template #editTemplate let-data>
+                  {{NO(data.index)}}
+                </ng-template>
+              </e-column>
+
+              <e-column field='attitudeHeadingName' headerText="Attitude Heading Name" width='150' textAlign='Center'>
+              <ng-template #headerTemplate let-data>
+                Adttitude Heading Name
+              </ng-template>
+              <ng-template #template let-data>
+                {{data.attitudeHeadingName}}
+              </ng-template>
+              <ng-template #editTemplate let-data>
+                <ejs-dropdownlist #sample [dataSource]='attitudeHeadings' (select)='onChangeAttitudeHeadings($event)' [value]='data.attitudeHeadingID' [fields]='fieldsAttitudeHeading' placeholder='Select a Attitude Heading'></ejs-dropdownlist>
+              </ng-template>
+            </e-column>
+              <e-column field="" isPrimaryKey="true" width="50px" headerText="Option" textAlign="center">
+                <ng-template #template let-data>
+                  <ng-container>
+                    <button type="button" (click)="openKeypointModal(data)"
+                      class="btn btn-info rounded-pill">
+                      <i class="fas fa-plus mr-1"></i>Option
+                    </button>
+                  </ng-container>
+                </ng-template>
+                <ng-template #editTemplate let-data>
+                  N/A
+                </ng-template>
+              </e-column>
+            </e-columns>
+          </ejs-grid>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="modal-footer">
+  <button type="button" class="btn btn-danger" (click)="activeModal.close('Close click')">Close</button>
+</div>

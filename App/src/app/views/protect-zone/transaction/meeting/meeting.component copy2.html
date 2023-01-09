@@ -1,0 +1,623 @@
+<div class="row">
+  <div class="col-md-12">
+    <div class="card">
+      <div class="card-body table-responsive p-0">
+        <div class="row my-3">
+          <div class="col-md-12">
+
+            <div class="row mb-2">
+              <div class="col-md-12 d-flex justify-content-center align-items-center">
+                <div class="font-weight-bold px-3">{{"Factory" | translate}} :</div>
+                <ejs-dropdownlist [dataSource]='dataFact' [fields]='levelFields' [allowFiltering]='true'
+                  (change)='filterFact($event)'
+                  [(ngModel)]='factId'
+                  placeholder="Select a Factory">
+                </ejs-dropdownlist>
+
+                <div class="font-weight-bold pr-3">{{"Center" | translate}}: </div>
+                <ejs-dropdownlist [dataSource]='dataCenter' [fields]='levelFields' [allowFiltering]='true'
+                   (change)='filterCenter($event)'
+                   [(ngModel)]='centerId'
+                  placeholder="Select a Center">
+                </ejs-dropdownlist>
+
+                <div class="font-weight-bold pr-3">{{"Dept" | translate}}: </div>
+                <ejs-dropdownlist [dataSource]='dataDept' [fields]='levelFields' [allowFiltering]='true'
+                   (change)='filterDept($event)'
+                   [(ngModel)]='deptId'
+                  placeholder="Select a Dept.">
+                </ejs-dropdownlist>
+
+
+                <div class="font-weight-bold pr-3">{{"Level" | translate}}: </div>
+                <ejs-dropdownlist [dataSource]='dataLevel' [fields]='levelFields' [allowFiltering]='true'
+                   (change)='filterlevel($event)'
+                   [(ngModel)]='levelId'
+                  placeholder="Select a Level">
+                </ejs-dropdownlist>
+
+
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-3 d-flex justify-content-center">
+          <div class="form-group">
+            <label for="exampleInputEmail1">Change System Date</label>
+            <kendo-datepicker style="width: 100%;" [(ngModel)]="currentTime" >
+            </kendo-datepicker>
+          </div>
+        </div>
+        <ejs-grid #grid
+          id='grid'
+          [dataSource]="policyData"
+          [allowPaging]='true'
+          [allowResizing]='true'
+          [showColumnMenu]='true'
+          gridLines='Both'
+          [locale]='locale'
+          (actionBegin)="actionBegin($event)"
+          (actionComplete)="actionComplete($event)"
+          [pageSettings]='pageSettings'
+          [allowExcelExport]='true'
+          (recordDoubleClick)='onDoubleClick($event)'
+        >
+          <e-columns>
+            <e-column field="level" textAlign='Center' width="80" isPrimaryKey="true" headerText="Level">
+              <ng-template #headerTemplate let-data>
+                {{"Level" | translate}}
+              </ng-template>
+
+            </e-column>
+            <e-column field="name" textAlign='Center' headerText="KPI Name">
+              <ng-template #headerTemplate let-data>
+                {{"KPI Name" | translate}}
+              </ng-template>
+            </e-column>
+            <e-column field="centerName" textAlign='Center' headerText="Center">
+              <ng-template #headerTemplate let-data>
+                {{"Center" | translate}}
+              </ng-template>
+            </e-column>
+            <e-column field="deptName" textAlign='Center' headerText="Dept.">
+              <ng-template #headerTemplate let-data>
+                {{"Dept" | translate}}
+              </ng-template>
+            </e-column>
+            <e-column field='picName' headerText="PIC" width='200' textAlign='Center'>
+              <ng-template #headerTemplate let-data>
+                {{"PIC" | translate}}
+              </ng-template>
+            </e-column>
+
+            <e-column field="option" width="100" textAlign='Center' headerText="PDCA">
+              <ng-template #template let-data>
+                <div class="btn-group">
+                  <button type="button" (click)='openModal(data,detailModal)' class="btn btn-xs btn-primary"><i class="fa fa-eye"></i></button>
+                </div>
+              </ng-template>
+              <ng-template #editTemplate let-data>
+               N/A
+              </ng-template>
+            </e-column>
+
+          </e-columns>
+        </ejs-grid>
+      </div>
+    </div>
+  </div>
+</div>
+
+<ng-template #detailModal let-modal>
+  <a #top></a>
+  <div class="modal-header">
+    <h4 class="modal-title">
+      <i class="fas fa-plus"></i> Monthly Review Meeting
+    </h4>
+    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+
+    <div class="row mb-2">
+      <div class="col-md-6">
+        <div class="row">
+          <div class="col-md-7">上一階KPI: {{policyTitle}}</div>
+          <div class="col-md-5">Level: {{levelTitle}}</div>
+        </div>
+        <hr>
+        <div class="row">
+          <div class="col-md-7">KPI: {{kpiTitle}}</div>
+          <div class="col-md-5">PIC: {{picTitle}}</div>
+        </div>
+      </div>
+      <div class="col-md-6">
+
+
+
+      </div>
+
+
+    </div>
+    <div *ngIf="typeText !== 'string'" class="row">
+      <div class="col-md-12">
+        <div class="chart">
+          <canvas  id="planet-chart" ></canvas>
+        </div>
+      </div>
+    </div>
+
+    <div *ngIf="typeText !== 'string'" class="row">
+      <div class="col-md-12">
+        <div class="box-body">
+          <div class="table-responsive">
+            <table class="table table-bordered" style="margin-bottom:20px;" id="tblDataChart">
+              <tbody>
+                <tr>
+                  <th  class="text-center" width="5%">{{"meetingMonth" | translate}}</th>
+                  <th *ngFor="let item of labels; let i=index" class="text-center">
+                    {{item}}
+                  </th>
+                  <th  class="text-center">YTD</th>
+                </tr>
+                <tr>
+                  <th class="text-center" width="5%">{{"meetingTarget" | translate}} </th>
+                  <td *ngFor="let item of targets; let i=index" class="text-center" >
+                    <ng-container *ngIf="typeId === 1; else elseTemplate">
+                      {{item}} %
+
+                    </ng-container>
+                    <ng-template #elseTemplate>
+                      {{item}}
+                    </ng-template>
+
+                  </td>
+                  <ng-container *ngIf="typeId === 1; else elseTemplate">
+                    <td  class="text-center"  >{{YTD}} %</td>
+                  </ng-container>
+                  <ng-template #elseTemplate>
+
+                    <td  class="text-center"  >{{YTD}}</td>
+                  </ng-template>
+
+                </tr>
+                <tr>
+                  <th class="text-center" width="5%">{{"meetingPer" | translate}} </th>
+                  <td *ngFor="let item of perfomance; let i=index" class="text-center" >
+                    <ng-container *ngIf="typeId === 1; else elseTemplate">
+                      {{item}} %
+
+                    </ng-container>
+                    <ng-template #elseTemplate>
+                      {{item}}
+                    </ng-template>
+                  </td>
+                  <ng-container *ngIf="typeId === 1; else elseTemplate">
+                      <td  class="text-center"  >{{targetYTD}} %</td>
+
+                    </ng-container>
+                    <ng-template #elseTemplate>
+
+                      <td  class="text-center"  >{{targetYTD}}</td>
+                    </ng-template>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-md-12">
+
+        <!-- <ejs-grid  #gridDataTable
+          id='grid'
+          [dataSource]="dataTable"
+          [allowResizing]='true'
+          [showColumnMenu]='true'
+          gridLines='Both'
+          isPrimaryKey='true'
+          (queryCellInfo)='queryCellInfoEvent($event)'
+          [allowExcelExport]='true'
+          [editSettings]='editSettings'
+          (headerCellInfo)='headerCellInfo($event)'
+          [pageSettings]='pageSettings'
+        >
+          <e-columns>
+            <e-column field='month' textAlign="Center" width='30px' headerText='內容'   >
+
+              <ng-template #headerTemplate>
+                <ejs-tooltip [content]="'meetingMonth' | translate">
+                  <span style="font-size: 14px; font-weight: bold;">
+                    {{"meetingMonth" | translate}}
+                  </span>
+                </ejs-tooltip>
+              </ng-template>
+
+            </e-column>
+            <e-column field=''  textAlign='Center' width='210px'  headerText='P'>
+              <ng-template #headerTemplate let-data>
+                <ejs-tooltip [content]="'meetingP' | translate">
+                  <span style="font-size: 14px; font-weight: bold;">
+                    {{"meetingP" | translate}}
+                  </span>
+                </ejs-tooltip>
+              </ng-template>
+
+
+            </e-column>
+            <e-column field="target" textAlign='Center' width='50px'  headerText="Target">
+              <ng-template #headerTemplate let-data>
+                <ejs-tooltip [content]="'meetingTarget' | translate">
+                  <span style="font-size: 14px; font-weight: bold;">
+                    {{"meetingTarget" | translate}}
+                  </span>
+                </ejs-tooltip>
+              </ng-template>
+
+            </e-column>
+            <e-column field="deadline" textAlign='Center' width='50px' headerText="Deadline">
+              <ng-template #headerTemplate let-data>
+                <ejs-tooltip [content]="'meetingDeadline' | translate">
+                  <span style="font-size: 14px; font-weight: bold;">
+                    {{"meetingDeadline" | translate}}
+                  </span>
+                </ejs-tooltip>
+              </ng-template>
+
+            </e-column>
+            <e-column field="doContent"  textAlign='Center' width='210px'  headerText="D">
+              <ng-template #headerTemplate let-data>
+                <ejs-tooltip [content]="'meetingD' | translate">
+                  <span style="font-size: 14px; font-weight: bold;">
+                    {{"meetingD" | translate}}
+                  </span>
+                </ejs-tooltip>
+              </ng-template>
+
+            </e-column>
+            <e-column field="achievement" textAlign='Center' width='50px' headerText="Achievement">
+              <ng-template #headerTemplate let-data>
+                <ejs-tooltip [content]="'meetingAtri' | translate">
+                  <span style="font-size: 14px; font-weight: bold;">
+                    {{"meetingAtri" | translate}}
+                  </span>
+                </ejs-tooltip>
+              </ng-template>
+
+            </e-column>
+            <e-column field="statusName" textAlign='Center' width='80px' headerText="Status">
+              <ng-template #headerTemplate let-data>
+                <ejs-tooltip [content]="'meetingStatus' | translate">
+                  <span style="font-size: 14px; font-weight: bold;">
+                    {{"meetingStatus" | translate}}
+                  </span>
+                </ejs-tooltip>
+              </ng-template>
+
+            </e-column>
+            <e-column field="content" textAlign='Center' width='210px' headerText="C">
+              <ng-template #headerTemplate let-data>
+                <ejs-tooltip [content]="'meetingC' | translate">
+                  <span style="font-size: 14px; font-weight: bold;">
+                    {{"meetingC" | translate}}
+                  </span>
+                </ejs-tooltip>
+              </ng-template>
+
+
+            </e-column>
+            <e-column field="aContent" textAlign='Center' width='210px' headerText="A">
+              <ng-template #headerTemplate let-data>
+                <ejs-tooltip [content]="'meetingA' | translate">
+                  <span style="font-size: 14px; font-weight: bold;">
+                    {{"meetingA" | translate}}
+                  </span>
+                </ejs-tooltip>
+              </ng-template>
+
+            </e-column>
+            <e-column field="aTarget" textAlign='Center' width='50px' headerText="Target">
+              <ng-template #headerTemplate let-data>
+                <ejs-tooltip [content]="'meetingTarget' | translate">
+                  <span style="font-size: 14px; font-weight: bold;">
+                    {{"meetingTarget" | translate}}
+                  </span>
+                </ejs-tooltip>
+              </ng-template>
+
+            </e-column>
+            <e-column field="aDeadline" textAlign='Center' width='50px' headerText="Deadline">
+              <ng-template #headerTemplate let-data>
+                <ejs-tooltip [content]="'meetingDeadline' | translate">
+                  <span style="font-size: 14px; font-weight: bold;">
+                    {{"meetingDeadline" | translate}}
+                  </span>
+                </ejs-tooltip>
+              </ng-template>
+
+            </e-column>
+            <e-column field="" textAlign='Center' width='50px' headerText="Attatchment">
+              <ng-template #headerTemplate let-data>
+                <ejs-tooltip [content]="'meetingAt' | translate">
+                  <span style="font-size: 14px; font-weight: bold;">
+                    {{"meetingAt" | translate}}
+                  </span>
+                </ejs-tooltip>
+              </ng-template>
+
+            </e-column>
+          </e-columns>
+
+
+          <ng-template #rowTemplate let-data>
+
+            <tr  *ngFor="let items of data.currentMonthData; let i= index;">
+              <th style="font-size: 14px; " scope="row" [attr.rowspan]="data.currentMonthData.length" *ngIf="i == 0"  class="border text-center align-middle">{{data.month}}</th>
+              <td style="font-size: 14px; " class="border align-top" >{{items.content}}</td>
+              <td style="font-size: 14px; word-wrap: break-word;;" class="border text-center" >{{items.target}}</td>
+              <td style="font-size: 14px; " class="border text-center"  >{{items.deadline}}</td>
+              <td style="font-size: 14px; " class="border align-top"  >
+                <textarea autosize type="text" readonly class="form-control" [value]="items.doContent" name="content" style="text-align:left;"></textarea>
+              </td>
+              <td style="font-size: 14px; " class="border text-center">
+                {{items.achievement}}
+              </td>
+              <td style="font-size: 14px; " class="border text-center">
+                {{items.statusName | translate}}
+              </td>
+              <td style="font-size: 14px; " class="border align-top"  >
+                <textarea autosize type="text" readonly class="form-control" [value]="items.resultContent" name="content" style="text-align:left;"></textarea>
+              </td>
+
+
+              <td style="font-size: 14px; "
+              scope="row"
+              [attr.rowspan]="data.currentMonthData.length"
+              *ngIf="i == 0"
+              class="border align-top " >
+                <span *ngFor="let itemss of data.nextMonthData; let i= index;">
+
+                  <ng-container *ngIf="data.nextMonthData.lastIndex === i; else elseTemplate">
+                    <p style="height: 12vh; overflow-y: scroll;">
+                      {{itemss.content}}
+                    </p>
+                  </ng-container>
+                  <ng-template #elseTemplate>
+                    <p style="height: 12vh; overflow-y: scroll;">
+                      {{itemss.content}}
+                    </p>
+                    <hr>
+                  </ng-template>
+                </span>
+              </td>
+
+
+              <td style="font-size: 14px; "
+              scope="row"
+              [attr.rowspan]="data.currentMonthData.length"
+              *ngIf="i == 0"
+              class="border  text-center"
+              >
+                <span  *ngFor="let itemss of data.nextMonthData; let i= index;">
+                  <ng-container *ngIf="data.nextMonthData.lastIndex === i; else elseTemplate">
+                    <p style="height: 12vh; padding-top: 5vh; word-wrap: break-word;">{{itemss.target}}</p>
+                  </ng-container>
+                  <ng-template #elseTemplate>
+                    <p style="height: 12vh; padding-top: 5vh; word-wrap: break-word;">{{itemss.target}}</p>
+                    <hr>
+                  </ng-template>
+                </span>
+              </td>
+
+              <td style="font-size: 14px; "
+              scope="row"
+              [attr.rowspan]="data.currentMonthData.length"
+              *ngIf="i == 0"
+              class="border text-center ">
+                <span *ngFor="let itemss of data.nextMonthData; let i= index;">
+                  <ng-container *ngIf="data.nextMonthData.lastIndex === i; else elseTemplate">
+                    <p style="height: 12vh; padding-top: 5vh;">{{itemss.deadline}}</p>
+                  </ng-container>
+                  <ng-template #elseTemplate>
+                    <p style="height: 12vh; padding-top: 5vh;">{{itemss.deadline}}</p>
+                    <hr>
+                  </ng-template>
+                </span>
+              </td>
+
+              <td style="font-size: 14px; " scope="row" [attr.rowspan]="data.currentMonthData.length"  *ngIf="i == 0" class="border text-center align-middle">
+                <div style="text-align: center;">
+                  <button type="button" (click)='download(data.date, fileModal)' class="btn btn-xs btn-primary"><i class="fa fa-download"></i></button>
+                </div>
+              </td>
+            </tr>
+          </ng-template>
+        </ejs-grid> -->
+
+        <table class="table table-bordered">
+          <thead>
+            <tr>
+              <th scope="col" rowspan="2" class="text-center align-middle" style="width: 5%">月份</th>
+              <th scope="col" class="text-center" style="width: 210px;">P</th>
+              <th scope="col" class="text-center" style="width: 50px;">Target</th>
+              <th scope="col" class="text-center" style="width: 50px;">Deadline</th>
+              <th scope="col" class="text-center" style="width: 210px">D</th>
+              <th scope="col" class="text-center" style="width: 50px">Achievement</th>
+              <th scope="col" class="text-center" style="width: 80px">Status</th>
+              <th scope="col" class="text-center" style="width: 210px">C</th>
+
+              <th rowspan="2" scope="col" class="text-center" style="width: 220px">A</th>
+              <th scope="col" class="text-center" style="width: 50px;">Target</th>
+              <th scope="col" class="text-center" style="width: 50px;">Deadline</th>
+
+              <th scope="col" class="text-center" style="width: 50px;">Option</th>
+            </tr>
+            <!-- <tr>
+              <th scope="col" class="text-center">月份計劃</th>
+              <th scope="col" class="text-center">目標值 </th>
+              <th scope="col" class="text-center">完成期限</th>
+              <th scope="col" class="text-center">執行狀況</th>
+              <th scope="col" class="text-center">實績</th>
+              <th scope="col" class="text-center">狀態</th>
+              <th scope="col" class="text-center">執行分析檢討</th>
+              <th scope="col" class="text-center">實績</th>
+              <th scope="col" class="text-center">狀態</th>
+              <th scope="col" class="text-center">執行分析檢討</th>
+              <th scope="col" class="text-center">狀態</th>
+            </tr> -->
+
+
+          </thead>
+          <tbody>
+            <ng-container *ngFor="let data of dataTable; let i= index;">
+              <tr  *ngFor="let items of data.currentMonthData; let i= index;">
+                <th style="font-size: 14px; " scope="row" [attr.rowspan]="data.currentMonthData.length" *ngIf="i == 0"  class="border text-center align-middle">{{data.month}}</th>
+                <td style="font-size: 14px; " class="border align-top" >{{items.content}}</td>
+                <td style="font-size: 14px; word-wrap: break-word;;" class="border text-center" >{{items.target}}</td>
+                <td style="font-size: 14px; " class="border text-center"  >{{items.deadline}}</td>
+                <td style="font-size: 14px; " class="border align-top"  >
+                  <textarea autosize type="text" readonly class="form-control" [value]="items.doContent" name="content" style="text-align:left;"></textarea>
+                </td>
+                <td style="font-size: 14px; " class="border text-center">
+                  {{items.achievement}}
+                </td>
+                <td style="font-size: 14px; " class="border text-center">
+                  {{items.statusName | translate}}
+                </td>
+                <td style="font-size: 14px; " class="border align-top"  >
+                  <textarea autosize type="text" readonly class="form-control" [value]="items.resultContent" name="content" style="text-align:left;"></textarea>
+                </td>
+
+                <td [attr.rowspan]="data.currentMonthData.length" *ngIf="i == 0" colspan="3">
+                  <table style="border: none;">
+                    <tr *ngFor="let itemss of data.nextMonthData; let i= index;">
+                      <td>{{itemss.content}}</td>
+                      <td>{{itemss.target}}</td>
+                      <td>{{itemss.deadline}}</td>
+                    </tr>
+                  </table>
+                </td>
+                <!-- <td style="font-size: 14px; "
+                scope="row"
+                [attr.rowspan]="data.currentMonthData.length"
+                *ngIf="i == 0"
+                class="border align-top " >
+                  <span *ngFor="let itemss of data.nextMonthData; let i= index;">
+
+                    <ng-container *ngIf="data.nextMonthData.lastIndex === i; else elseTemplate">
+                      <p style="height: 12vh; overflow-y: scroll;">
+                        {{itemss.content}}
+                      </p>
+                    </ng-container>
+                    <ng-template #elseTemplate>
+                      <p style="height: 12vh; overflow-y: scroll;">
+                        {{itemss.content}}
+                      </p>
+                      <hr>
+                    </ng-template>
+                  </span>
+                </td>
+
+
+                <td style="font-size: 14px; "
+                scope="row"
+                [attr.rowspan]="data.currentMonthData.length"
+                *ngIf="i == 0"
+                class="border  text-center"
+                >
+                  <span  *ngFor="let itemss of data.nextMonthData; let i= index;">
+                    <ng-container *ngIf="data.nextMonthData.lastIndex === i; else elseTemplate">
+                      <p style="height: 12vh; padding-top: 5vh; word-wrap: break-word;">{{itemss.target}}</p>
+                    </ng-container>
+                    <ng-template #elseTemplate>
+                      <p style="height: 12vh; padding-top: 5vh; word-wrap: break-word;">{{itemss.target}}</p>
+                      <hr>
+                    </ng-template>
+                  </span>
+                </td>
+
+                <td style="font-size: 14px; "
+                scope="row"
+                [attr.rowspan]="data.currentMonthData.length"
+                *ngIf="i == 0"
+                class="border text-center ">
+                  <span *ngFor="let itemss of data.nextMonthData; let i= index;">
+                    <ng-container *ngIf="data.nextMonthData.lastIndex === i; else elseTemplate">
+                      <p style="height: 12vh; padding-top: 5vh;">{{itemss.deadline}}</p>
+                    </ng-container>
+                    <ng-template #elseTemplate>
+                      <p style="height: 12vh; padding-top: 5vh;">{{itemss.deadline}}</p>
+                      <hr>
+                    </ng-template>
+                  </span>
+                </td> -->
+
+                <td style="font-size: 14px; " scope="row" [attr.rowspan]="data.currentMonthData.length"  *ngIf="i == 0" class="border text-center align-middle">
+                  <div style="text-align: center;">
+                    <button type="button" (click)='download(data.date, fileModal)' class="btn btn-xs btn-primary"><i class="fa fa-download"></i></button>
+                  </div>
+                </td>
+
+              </tr>
+            </ng-container>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+  </div>
+  <div class="modal-footer">
+
+    <button type="button" class="btn btn-danger" (click)="modal.close('Close click')">Close</button>
+    <span style="color: transparent;">| |</span>
+    <a class="btn btn-outline-warning" (click)="scroll(top)" ><i class="fas fa-chevron-up"></i></a>
+  </div>
+
+
+</ng-template>
+
+<ng-template #fileModal let-modal>
+  <a #top></a>
+  <div class="modal-header">
+    <h4 class="modal-title">
+      <i class="fas fa-plus"></i> Download File
+    </h4>
+    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+
+    <div class="mt-3 d-flex justify-content-start">
+      <ng-container *ngIf="files.length > 0; else elseTemplate">
+
+        <ul class="list-group" style="width: 100%;" >
+          <li class="list-group-item" *ngFor="let item of files">
+            <a [id]='item.path' [href]="item.path">{{item.name}}</a>
+          </li>
+        </ul>
+      </ng-container>
+      <ng-template #elseTemplate>
+        <span>No data</span>
+      </ng-template>
+
+  </div>
+
+
+  </div>
+  <div class="modal-footer">
+
+    <button type="button" class="btn btn-danger" (click)="modal.close('Close click')">Close</button>
+    <span style="color: transparent;">| |</span>
+    <a class="btn btn-outline-warning" (click)="scroll(top)" ><i class="fas fa-chevron-up"></i></a>
+  </div>
+
+
+</ng-template>
+
+
+

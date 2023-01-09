@@ -1,0 +1,134 @@
+.e-grid .e-headercell {
+  background-color: #f0f3f5;
+}
+.e-grid .e-altrow {
+  background-color: #f0f3f5;
+}
+.e-pager {
+  font-size: 10px;
+}
+
+.e-grid * {
+  font-size: 16px;
+}
+
+td {
+  font-size: 20pt !important;
+  padding: 0 5px 0 5px !important;
+  line-height: 30px !important;
+}
+
+.headercell {
+  font-size: 20pt !important;
+  padding: 5px 5px 5px 0 !important;
+  line-height: 30px;
+}
+
+.e-grid .e-headercell {
+  padding: 6px 10px 6px;
+}
+
+.textarea-disabled[disabled], .e-input[disabled], .textarea-disabled {
+  background-color: white;
+  border: none;
+  color: #21252900;
+  background-color: transparent;
+  outline: none;
+  // resize: none;
+  cursor: text;
+  -webkit-text-fill-color: #000;
+}
+
+.e-input-group:not(.e-success):not(.e-warning):not(.e-error), .e-input-group.e-control-wrapper:not(.e-success):not(.e-warning):not(.e-error) {
+  font-size: 16px;
+}
+
+td.e-rowcell * {
+  font-size: 20pt !important;
+  padding: 5px !important;
+}
+
+.e-grid.e-wrap .e-columnmenu {
+  margin: -30px -30px -20px -20px;
+}
+
+.e-grid .e-columnmenu::before {
+  font-size: 16px;
+}
+
+
+
+.e-tab .e-tab-header .e-toolbar-item.e-active .e-tab-text, .e-tab .e-tab-header .e-toolbar-item.e-active .e-tab-icon {
+  color: #1f6f43;
+  font-weight: 600;
+}
+.e-tab .e-toolbar-item .e-title {
+    display: none;
+}
+
+.e-toolbar .e-toolbar-items .e-toolbar-item:not(.e-separator),
+.e-toolbar .e-toolbar-items .e-toolbar-item .e-tab-wrap {
+    height: 45px;
+    margin: -1px;
+}
+
+.e-tab .e-tab-header .e-toolbar-item.e-active .e-tab-wrap { /* csslint allow: adjoining-classes */
+  background-color: whitesmoke;
+  color:#1f6f43;
+  border-top: 1px solid whitesmoke;
+  border-right: 2px solid #0000003d;
+  border-bottom: 4px solid #1f6f43;
+}
+.e-tab .e-tab-header {
+    background-color: #e6e6e6;
+}
+.e-tab .e-tab-header .e-toolbar-item:not(.e-active) .e-tab-wrap:hover {
+    background-color: whitesmoke;
+    color: #212529;
+}
+.e-tab .e-toolbar .e-toolbar-items .e-toolbar-item .e-text-wrap {
+    height: 45px;
+}
+
+
+.e-tab .e-toolbar-item.e-active .e-title { /* csslint allow: adjoining-classes */
+    display: block;
+    color: white;
+}
+
+.e-tab .e-toolbar-item .e-text-wrap,
+.e-tab .e-toolbar-item .e-tab-text {
+    width:  inherit;
+    text-align: center;
+}
+
+.e-tab .e-tab-header .e-toolbar-items {
+  height: 45px;
+}
+
+.e-tab .e-tab-header::before {
+  height: 45px;
+  border-top: 2px solid #0000003d;
+  border-right: 2px solid #0000003d;
+}
+
+.e-tab .e-tab-header .e-toolbar-item .e-tab-text {
+  font-size: 20pt;
+}
+
+.e-tab .e-tab-header .e-toolbar-item .e-tab-wrap {
+  color: #00000075;
+  border-top: 2px solid #0000003d;
+  border-right: 2px solid #0000003d;
+  border-radius: 0px;
+}
+
+.e-tab .e-tab-header .e-toolbar-item .e-tab-wrap:hover .e-tab-text {
+  color: #212529;
+  font-weight: 600;
+}
+
+.e-tab .e-tab-header .e-toolbar-item.e-active .e-tab-wrap:hover .e-tab-text {
+  color: #1f6f43;
+  font-weight: 600;
+}

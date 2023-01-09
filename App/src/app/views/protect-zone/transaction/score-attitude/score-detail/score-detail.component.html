@@ -1,0 +1,1209 @@
+<ngx-spinner [fullScreen]="true" type="square-jelly-box" size="medium">
+  <p class="loading">Loading data...</p>
+</ngx-spinner>
+
+<ejs-tab id="element" (selecting)="select($event)">
+  <div class="e-tab-header">
+    <div>Page 1 </div>
+    <div>Page 2 </div>
+    <div>Page 3 </div>
+    <div>Page 4 </div>
+    <div>Page 5 </div>
+    <div>Page 6 </div>
+  </div>
+  <div class="e-content score-attitude-detail-content">
+
+      <!-- page 1 -->
+      <div>
+        <div class="modal-body">
+          <div class="row mb-3">
+            <div class="col-12">
+              <table style="box-shadow:  -2px 1px 3px black; border-radius: 10px; overflow: hidden;" class="table table-bordered">
+                <tbody>
+                  <tr>
+                    <td>
+                      <h4 class="font-weight-bold score-attitude-detail-title">{{passionData?.headingName | translate}} </h4>
+                    </td>
+
+                  </tr>
+                  <tr>
+                    <td>
+                      <label class="font-weight-bold">{{"DEFINITION_LABEL_MODAL" | translate}}: </label> <span>{{passionData?.definition | translate}}</span>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-12">
+
+              <table class="table table-bordered " style="box-shadow:  0 0 20px; border-radius: 5px; overflow: hidden;">
+                <thead>
+                  <tr>
+                    <th scope="col" colspan="11" class="text-center" style=" background-color: #f0f3f5;">{{"BEHAVIORS_LABEL_MODAL" | translate}}</th>
+                  </tr>
+                  <tr>
+                    <th scope="col" class="text-center" style=" background-color: #f0f3f5;">{{"CATEGORY_LABEL_MODAL" | translate}}</th>
+                    <th scope="col" class="text-center" style=" background-color: #f0f3f5;">{{"LEVEL_LABEL_MODAL" | translate}} </th>
+                    <th scope="col" class="text-center" style=" background-color: #f0f3f5;">{{"KEY_POINTS_LABEL_MODAL" | translate}}</th>
+                    <th scope="col" class="text-center title-tooltip-detail" style=" background-color: #f0f3f5;">L0<span class="title-tooltip-detail-text">{{"TOOLTIP_SELF_APPRAISAL" | translate}}</span></th>
+                    <th scope="col" class="text-center title-tooltip-detail" style=" background-color: #f0f3f5;">FL<span class="title-tooltip-detail-text">{{"TOOLTIP_FUNCTIONAL_TEAM" | translate}}</span></th>
+                    <th scope="col" class="text-center title-tooltip-detail" style=" background-color: #f0f3f5;">L1<span class="title-tooltip-detail-text">{{"TOOLTIP_1ST_ASSESSMENT" | translate}}</span></th>
+                    <th scope="col" class="text-center title-tooltip-detail" style=" background-color: #f0f3f5;">L2<span class="title-tooltip-detail-text">{{"TOOLTIP_2ND_ASSESSMENT" | translate}}</span></th>
+                    <th scope="col" class="text-center" style=" background-color: #f0f3f5;">{{"OBSERVABLE_BEHAVIOR_INDICATORS_LABEL_MODAL" | translate}}</th>
+                    <th scope="col" class="text-center" style=" background-color: #f0f3f5;">{{"SCORE_LABEL_MODAL" | translate}}</th>
+                    <th scope="col" class="text-center" style=" background-color: #f0f3f5;">{{"COMMENT_LABEL_MODAL" | translate}}</th>
+                    <th scope="col" class="text-center" style=" background-color: #f0f3f5;">{{"ATTCHMENTS_LABEL_MODAL" | translate}}</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <ng-container *ngFor="let item of passionData?.data; let i= index;">
+                    <ng-container *ngFor="let items of item.keypoint; let x= index;">
+                      <tr >
+                        <th [attr.rowspan]="item.keypoint.length" *ngIf="x == 0"  class="text-center align-middle">
+                          {{item.name | translate}}
+                        </th>
+                        <td style="vertical-align: middle; text-align: center;" class="border" >
+                          {{items.level}}
+                        </td>
+                        <td style="vertical-align: middle; text-align: center;" >{{items.name | translate}}</td>
+
+                        <td class="border">
+                          <ng-container *ngFor="let itemsss of items.behavior; let i= index;">
+                            <ng-container *ngIf="items.behavior.lastIndex === i; else elseTemplate">
+                              <tr [style.height.px]="itemsss.height" >
+                                <td  style="border: none; vertical-align: middle;" >
+                                  <ejs-checkbox cssClass="e-info" #checkbox [disabled]="true"  [checked]="itemsss.l0"></ejs-checkbox>
+                                </td>
+                              </tr>
+                            </ng-container>
+                            <ng-template #elseTemplate>
+                              <tr [style.height.px]="itemsss.height" >
+                                <td  style="border: none; vertical-align: middle;" >
+                                  <ejs-checkbox cssClass="e-info" #checkbox [disabled]="true" [checked]="itemsss.l0"></ejs-checkbox>
+                                </td>
+                              </tr>
+                              <hr style="margin: 0; background: #c8ced3">
+                            </ng-template>
+                          </ng-container>
+                        </td>
+
+                        <td class="border">
+                          <ng-container *ngFor="let itemsss of items.behavior; let i= index;">
+                            <ng-container *ngIf="items.behavior.lastIndex === i; else elseTemplate">
+                              <tr  [style.height.px]="itemsss.height">
+                                <td  style="border: none; vertical-align: middle;" >
+                                  <ejs-checkbox cssClass="e-info" #checkbox [disabled]="true"  [checked]="itemsss.fl"></ejs-checkbox>
+                                </td>
+                              </tr>
+                            </ng-container>
+                            <ng-template #elseTemplate>
+                              <tr [style.height.px]="itemsss.height" >
+                                <td  style="border: none; vertical-align: middle;" >
+                                  <ejs-checkbox cssClass="e-info" #checkbox [disabled]="true"  [checked]="itemsss.fl"></ejs-checkbox>
+                                </td>
+                              </tr>
+                              <hr style="margin: 0; background: #c8ced3">
+                            </ng-template>
+                          </ng-container>
+                        </td>
+
+                        <td class="border">
+                          <ng-container *ngFor="let itemsss of items.behavior; let i= index;">
+                            <ng-container *ngIf="items.behavior.lastIndex === i; else elseTemplate">
+                              <tr  [style.height.px]="itemsss.height">
+                                <td  style="border: none; vertical-align: middle;" >
+                                  <ejs-checkbox cssClass="e-info" #checkbox [disabled]="true"  [checked]="itemsss.l1"></ejs-checkbox>
+                                </td>
+                              </tr>
+                            </ng-container>
+                            <ng-template #elseTemplate>
+                              <tr  [style.height.px]="itemsss.height">
+                                <td  style="border: none; vertical-align: middle;" >
+                                  <ejs-checkbox cssClass="e-info" #checkbox  [disabled]="true" [checked]="itemsss.l1"></ejs-checkbox>
+                                </td>
+                              </tr>
+                              <hr style="margin: 0; background: #c8ced3">
+                            </ng-template>
+                          </ng-container>
+                        </td>
+
+                        <td class="border">
+                          <ng-container *ngFor="let itemsss of items.behavior; let i= index;">
+                            <ng-container *ngIf="items.behavior.lastIndex === i; else elseTemplate">
+                              <tr  [style.height.px]="itemsss.height">
+                                <td  style="border: none; vertical-align: middle;" >
+                                  <ejs-checkbox cssClass="e-info" #checkbox [disabled]="true"  [checked]="itemsss.l2"></ejs-checkbox>
+                                </td>
+                              </tr>
+                            </ng-container>
+                            <ng-template #elseTemplate>
+                              <tr  [style.height.px]="itemsss.height">
+                                <td  style="border: none; vertical-align: middle;" >
+                                  <ejs-checkbox cssClass="e-info" [disabled]="true" #checkbox  [checked]="itemsss.l2"></ejs-checkbox>
+                                </td>
+                              </tr>
+                              <hr style="margin: 0; background: #c8ced3">
+                            </ng-template>
+                          </ng-container>
+                        </td>
+
+                        <td class="border" >
+                          <ng-container *ngFor="let itemsss of items.behavior; let i= index;">
+                            <ng-container *ngIf="items.behavior.lastIndex === i; else elseTemplate">
+                              <tr  [checkboxHeight]="itemsss">
+                                <td  style="border: none; vertical-align: middle;" >
+                                  {{itemsss.name | translate}}
+                                </td>
+                              </tr>
+                            </ng-container>
+                            <ng-template #elseTemplate>
+                              <tr  [checkboxHeight]="itemsss">
+                                <td  style="border: none; vertical-align: middle;" >
+                                    {{itemsss.name | translate}}
+                                </td>
+                              </tr>
+                              <hr style="margin: 0; background: #c8ced3">
+                            </ng-template>
+                          </ng-container>
+
+                        </td>
+
+                        <td class="score" [attr.rowspan]="i" *ngIf="x==0 && i==0" >
+                          <p>L0: {{passionData?.l0Score}}</p>
+                          <p>L1: {{passionData?.l1Score}}</p>
+                          <p>L2: {{passionData?.l2Score}}</p>
+                          <p>FL: {{passionData?.flScore}}</p>
+                        </td>
+                        <td class="comment" [attr.rowspan]="i" *ngIf="x==0 && i==0" >
+                          <p>L0: {{passionData?.l0Comment}}</p>
+                          <p>L1: {{passionData?.l1Comment}}</p>
+                          <p>L2: {{passionData?.l2Comment}}</p>
+                          <p>FL: {{passionData?.flComment}}</p>
+                        </td>
+
+                        <td class="upload"   *ngIf="x == 0 && i == 0" [attr.rowspan]="i">
+
+                          <ul class="list-group mr-3" style="width: 100%;" *ngIf="passionData?.file.length > 0" >
+                            <li class="list-group-item" *ngFor="let item of passionData?.file">
+                              <a [id]='item.path' href="javascript:void(0)" style="cursor: pointer; color: #20a8d8; background-color: transparent;" (click)="downloadFile(item)">{{item.name}}</a>
+                            </li>
+                          </ul>
+                          <!-- <button  type="button" class="btn btn-success"  >
+                            <i class="fa fa-upload" aria-hidden="true"></i>
+                            {{'Upload file' | translate}}
+                          </button> -->
+                        </td>
+
+                      </tr>
+                    </ng-container>
+                  </ng-container>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+
+      <!-- page 2 -->
+      <div>
+        <div class="modal-body">
+          <div class="row mb-3">
+            <div class="col-12">
+              <table style="box-shadow:  -2px 1px 3px black; border-radius: 10px; overflow: hidden;" class="table table-bordered">
+                <tbody>
+                  <tr>
+                    <td>
+                      <h4 class="font-weight-bold score-attitude-detail-title">{{accountbilityData?.headingName | translate}} </h4>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>
+                      <label class="font-weight-bold">{{"DEFINITION_LABEL_MODAL" | translate}}: </label> <span>{{accountbilityData?.definition | translate}}</span>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-12">
+              <table class="table table-bordered " style="box-shadow:  0 0 20px; border-radius: 5px; overflow: hidden;">
+                <thead>
+                  <tr>
+                    <th scope="col" colspan="11" class="text-center" style=" background-color: #f0f3f5;">{{"BEHAVIORS_LABEL_MODAL" | translate}}</th>
+                  </tr>
+                  <tr>
+                    <th scope="col" class="text-center" style=" background-color: #f0f3f5;">{{"CATEGORY_LABEL_MODAL" | translate}}</th>
+                    <th scope="col" class="text-center" style=" background-color: #f0f3f5;">{{"LEVEL_LABEL_MODAL" | translate}} </th>
+                    <th scope="col" class="text-center" style=" background-color: #f0f3f5;">{{"KEY_POINTS_LABEL_MODAL" | translate}}</th>
+
+                    <th scope="col" class="text-center title-tooltip-detail" style=" background-color: #f0f3f5;">L0<span class="title-tooltip-detail-text">{{"TOOLTIP_SELF_APPRAISAL" | translate}}</span></th>
+                    <th scope="col" class="text-center title-tooltip-detail" style=" background-color: #f0f3f5;">FL<span class="title-tooltip-detail-text">{{"TOOLTIP_FUNCTIONAL_TEAM" | translate}}</span></th>
+                    <th scope="col" class="text-center title-tooltip-detail" style=" background-color: #f0f3f5;">L1<span class="title-tooltip-detail-text">{{"TOOLTIP_1ST_ASSESSMENT" | translate}}</span></th>
+                    <th scope="col" class="text-center title-tooltip-detail" style=" background-color: #f0f3f5;">L2<span class="title-tooltip-detail-text">{{"TOOLTIP_2ND_ASSESSMENT" | translate}}</span></th>
+                    <th scope="col" class="text-center" style=" background-color: #f0f3f5;">{{"OBSERVABLE_BEHAVIOR_INDICATORS_LABEL_MODAL" | translate}}</th>
+                    <th scope="col" class="text-center" style=" background-color: #f0f3f5;">{{"SCORE_LABEL_MODAL" | translate}}</th>
+                    <th scope="col" class="text-center" style=" background-color: #f0f3f5;">{{"COMMENT_LABEL_MODAL" | translate}}</th>
+                    <th scope="col" class="text-center" style=" background-color: #f0f3f5;">{{"ATTCHMENTS_LABEL_MODAL" | translate}}</th>
+
+                  </tr>
+                </thead>
+                <tbody>
+                  <ng-container *ngFor="let item of accountbilityData?.data; let i= index;">
+                    <ng-container *ngFor="let items of item.keypoint; let x= index;">
+                      <tr >
+                        <th [attr.rowspan]="item.keypoint.length" *ngIf="x == 0"  class="text-center align-middle">
+                          {{item.name | translate}}
+                        </th>
+                        <td style="vertical-align: middle; text-align: center;" class="border" >
+                          {{items.level}}
+                        </td>
+                        <td style="vertical-align: middle; text-align: center;" >{{items.name | translate}}</td>
+
+                        <td class="border">
+                          <ng-container *ngFor="let itemsss of items.behavior; let i= index;">
+                            <ng-container *ngIf="items.behavior.lastIndex === i; else elseTemplate">
+                              <tr [style.height.px]="itemsss.height" >
+                                <td  style="border: none; vertical-align: middle;" >
+                                  <ejs-checkbox cssClass="e-info" #checkbox [disabled]="true"  [checked]="itemsss.l0"></ejs-checkbox>
+                                </td>
+                              </tr>
+                            </ng-container>
+                            <ng-template #elseTemplate>
+                              <tr [style.height.px]="itemsss.height" >
+                                <td  style="border: none; vertical-align: middle;" >
+                                  <ejs-checkbox cssClass="e-info" #checkbox [disabled]="true" [checked]="itemsss.l0"></ejs-checkbox>
+                                </td>
+                              </tr>
+                              <hr style="margin: 0; background: #c8ced3">
+                            </ng-template>
+                          </ng-container>
+                        </td>
+
+                        <td class="border">
+                          <ng-container *ngFor="let itemsss of items.behavior; let i= index;">
+                            <ng-container *ngIf="items.behavior.lastIndex === i; else elseTemplate">
+                              <tr  [style.height.px]="itemsss.height">
+                                <td  style="border: none; vertical-align: middle;" >
+                                  <ejs-checkbox cssClass="e-info" #checkbox [disabled]="true"  [checked]="itemsss.fl"></ejs-checkbox>
+                                </td>
+                              </tr>
+                            </ng-container>
+                            <ng-template #elseTemplate>
+                              <tr [style.height.px]="itemsss.height" >
+                                <td  style="border: none; vertical-align: middle;" >
+                                  <ejs-checkbox cssClass="e-info" #checkbox [disabled]="true"  [checked]="itemsss.fl"></ejs-checkbox>
+                                </td>
+                              </tr>
+                              <hr style="margin: 0; background: #c8ced3">
+                            </ng-template>
+                          </ng-container>
+                        </td>
+
+                        <td class="border">
+                          <ng-container *ngFor="let itemsss of items.behavior; let i= index;">
+                            <ng-container *ngIf="items.behavior.lastIndex === i; else elseTemplate">
+                              <tr  [style.height.px]="itemsss.height">
+                                <td  style="border: none; vertical-align: middle;" >
+                                  <ejs-checkbox cssClass="e-info" #checkbox [disabled]="true"  [checked]="itemsss.l1"></ejs-checkbox>
+                                </td>
+                              </tr>
+                            </ng-container>
+                            <ng-template #elseTemplate>
+                              <tr  [style.height.px]="itemsss.height">
+                                <td  style="border: none; vertical-align: middle;" >
+                                  <ejs-checkbox cssClass="e-info" #checkbox  [disabled]="true" [checked]="itemsss.l1"></ejs-checkbox>
+                                </td>
+                              </tr>
+                              <hr style="margin: 0; background: #c8ced3">
+                            </ng-template>
+                          </ng-container>
+                        </td>
+
+                        <td class="border">
+                          <ng-container *ngFor="let itemsss of items.behavior; let i= index;">
+                            <ng-container *ngIf="items.behavior.lastIndex === i; else elseTemplate">
+                              <tr  [style.height.px]="itemsss.height">
+                                <td  style="border: none; vertical-align: middle;" >
+                                  <ejs-checkbox cssClass="e-info" #checkbox [disabled]="true"  [checked]="itemsss.l2"></ejs-checkbox>
+                                </td>
+                              </tr>
+                            </ng-container>
+                            <ng-template #elseTemplate>
+                              <tr  [style.height.px]="itemsss.height">
+                                <td  style="border: none; vertical-align: middle;" >
+                                  <ejs-checkbox cssClass="e-info" [disabled]="true" #checkbox  [checked]="itemsss.l2"></ejs-checkbox>
+                                </td>
+                              </tr>
+                              <hr style="margin: 0; background: #c8ced3">
+                            </ng-template>
+                          </ng-container>
+                        </td>
+
+                        <td class="border" >
+                          <ng-container *ngFor="let itemsss of items.behavior; let i= index;">
+                            <ng-container *ngIf="items.behavior.lastIndex === i; else elseTemplate">
+                              <tr  [checkboxHeight]="itemsss">
+                                <td  style="border: none; vertical-align: middle;" >
+                                  {{itemsss.name | translate}}
+                                </td>
+                              </tr>
+                            </ng-container>
+                            <ng-template #elseTemplate>
+                              <tr  [checkboxHeight]="itemsss">
+                                <td  style="border: none; vertical-align: middle;" >
+                                    {{itemsss.name | translate}}
+                                </td>
+                              </tr>
+                              <hr style="margin: 0; background: #c8ced3">
+                            </ng-template>
+                          </ng-container>
+
+                        </td>
+
+                        <td class="score" [attr.rowspan]="i" *ngIf="x==0 && i==0" >
+                          <p>L0: {{accountbilityData?.l0Score}}</p>
+                          <p>L1: {{accountbilityData?.l1Score}}</p>
+                          <p>L2: {{accountbilityData?.l2Score}}</p>
+                          <p>FL: {{accountbilityData?.flScore}}</p>
+
+                        </td>
+
+                        <td class="comment" [attr.rowspan]="i" *ngIf="x==0 && i==0" >
+                          <p>L0: {{accountbilityData?.l0Comment}}</p>
+                          <p>L1: {{accountbilityData?.l1Comment}}</p>
+                          <p>L2: {{accountbilityData?.l2Comment}}</p>
+                          <p>FL: {{accountbilityData?.flComment}}</p>
+
+                        </td>
+
+                        <td class="upload"   *ngIf="x == 0 && i == 0" [attr.rowspan]="i">
+
+                          <ul class="list-group mr-3" style="width: 100%;" *ngIf="accountbilityData?.file.length > 0" >
+                            <li class="list-group-item" *ngFor="let item of accountbilityData?.file">
+                              <a [id]='item.path' href="javascript:void(0)" style="cursor: pointer; color: #20a8d8; background-color: transparent;" (click)="downloadFile(item)">{{item.name}}</a>
+                            </li>
+                          </ul>
+                          <!-- <button  type="button" class="btn btn-success"  >
+                            <i class="fa fa-upload" aria-hidden="true"></i>
+                            {{'Upload file' | translate}}
+                          </button> -->
+                        </td>
+
+                      </tr>
+                    </ng-container>
+                  </ng-container>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+
+      <!-- page 3 -->
+      <div>
+        <div class="modal-body">
+          <div class="row mb-3">
+            <div class="col-12">
+              <table style="box-shadow:  -2px 1px 3px black; border-radius: 10px; overflow: hidden;" class="table table-bordered">
+                <tbody>
+                  <tr>
+                    <td>
+                      <h4 class="font-weight-bold score-attitude-detail-title">{{attentionData?.headingName | translate}} </h4>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>
+                      <label class="font-weight-bold">{{"DEFINITION_LABEL_MODAL" | translate}}: </label> <span>{{attentionData?.definition | translate}}</span>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-12">
+              <table class="table table-bordered " style="box-shadow:  0 0 20px; border-radius: 5px; overflow: hidden;">
+                <thead>
+                  <tr>
+                    <th scope="col" colspan="11" class="text-center" style=" background-color: #f0f3f5;">{{"BEHAVIORS_LABEL_MODAL" | translate}}</th>
+                  </tr>
+                  <tr>
+                    <th scope="col" class="text-center" style=" background-color: #f0f3f5;">{{"CATEGORY_LABEL_MODAL" | translate}}</th>
+                    <th scope="col" class="text-center" style=" background-color: #f0f3f5;">{{"LEVEL_LABEL_MODAL" | translate}} </th>
+                    <th scope="col" class="text-center" style=" background-color: #f0f3f5;">{{"KEY_POINTS_LABEL_MODAL" | translate}}</th>
+                    <th scope="col" class="text-center title-tooltip-detail" style=" background-color: #f0f3f5;">L0<span class="title-tooltip-detail-text">{{"TOOLTIP_SELF_APPRAISAL" | translate}}</span></th>
+                    <th scope="col" class="text-center title-tooltip-detail" style=" background-color: #f0f3f5;">FL<span class="title-tooltip-detail-text">{{"TOOLTIP_FUNCTIONAL_TEAM" | translate}}</span></th>
+                    <th scope="col" class="text-center title-tooltip-detail" style=" background-color: #f0f3f5;">L1<span class="title-tooltip-detail-text">{{"TOOLTIP_1ST_ASSESSMENT" | translate}}</span></th>
+                    <th scope="col" class="text-center title-tooltip-detail" style=" background-color: #f0f3f5;">L2<span class="title-tooltip-detail-text">{{"TOOLTIP_2ND_ASSESSMENT" | translate}}</span></th>
+                    <th scope="col" class="text-center" style=" background-color: #f0f3f5;">{{"OBSERVABLE_BEHAVIOR_INDICATORS_LABEL_MODAL" | translate}}</th>
+                    <th scope="col" class="text-center" style=" background-color: #f0f3f5;">{{"SCORE_LABEL_MODAL" | translate}}</th>
+                    <th scope="col" class="text-center" style=" background-color: #f0f3f5;">{{"COMMENT_LABEL_MODAL" | translate}}</th>
+                    <th scope="col" class="text-center" style=" background-color: #f0f3f5;">{{"ATTCHMENTS_LABEL_MODAL" | translate}}</th>
+
+
+                  </tr>
+                </thead>
+                <tbody>
+                  <ng-container *ngFor="let item of attentionData?.data; let i= index;">
+                    <ng-container *ngFor="let items of item.keypoint; let x= index;">
+                      <tr >
+                        <th [attr.rowspan]="item.keypoint.length" *ngIf="x == 0"  class="text-center align-middle">
+                          {{item.name | translate}}
+                        </th>
+                        <td style="vertical-align: middle; text-align: center;" class="border" >
+                          {{items.level}}
+                        </td>
+                        <td style="vertical-align: middle; text-align: center;" >{{items.name | translate}}</td>
+
+                        <td class="border">
+                          <ng-container *ngFor="let itemsss of items.behavior; let i= index;">
+                            <ng-container *ngIf="items.behavior.lastIndex === i; else elseTemplate">
+                              <tr [style.height.px]="itemsss.height" >
+                                <td  style="border: none; vertical-align: middle;" >
+                                  <ejs-checkbox cssClass="e-info" #checkbox [disabled]="true"  [checked]="itemsss.l0"></ejs-checkbox>
+                                </td>
+                              </tr>
+                            </ng-container>
+                            <ng-template #elseTemplate>
+                              <tr [style.height.px]="itemsss.height" >
+                                <td  style="border: none; vertical-align: middle;" >
+                                  <ejs-checkbox cssClass="e-info" #checkbox [disabled]="true" [checked]="itemsss.l0"></ejs-checkbox>
+                                </td>
+                              </tr>
+                              <hr style="margin: 0; background: #c8ced3">
+                            </ng-template>
+                          </ng-container>
+                        </td>
+
+                        <td class="border">
+                          <ng-container *ngFor="let itemsss of items.behavior; let i= index;">
+                            <ng-container *ngIf="items.behavior.lastIndex === i; else elseTemplate">
+                              <tr  [style.height.px]="itemsss.height">
+                                <td  style="border: none; vertical-align: middle;" >
+                                  <ejs-checkbox cssClass="e-info" #checkbox [disabled]="true"  [checked]="itemsss.fl"></ejs-checkbox>
+                                </td>
+                              </tr>
+                            </ng-container>
+                            <ng-template #elseTemplate>
+                              <tr [style.height.px]="itemsss.height" >
+                                <td  style="border: none; vertical-align: middle;" >
+                                  <ejs-checkbox cssClass="e-info" #checkbox [disabled]="true"  [checked]="itemsss.fl"></ejs-checkbox>
+                                </td>
+                              </tr>
+                              <hr style="margin: 0; background: #c8ced3">
+                            </ng-template>
+                          </ng-container>
+                        </td>
+
+                        <td class="border">
+                          <ng-container *ngFor="let itemsss of items.behavior; let i= index;">
+                            <ng-container *ngIf="items.behavior.lastIndex === i; else elseTemplate">
+                              <tr  [style.height.px]="itemsss.height">
+                                <td  style="border: none; vertical-align: middle;" >
+                                  <ejs-checkbox cssClass="e-info" #checkbox [disabled]="true"  [checked]="itemsss.l1"></ejs-checkbox>
+                                </td>
+                              </tr>
+                            </ng-container>
+                            <ng-template #elseTemplate>
+                              <tr  [style.height.px]="itemsss.height">
+                                <td  style="border: none; vertical-align: middle;" >
+                                  <ejs-checkbox cssClass="e-info" #checkbox  [disabled]="true" [checked]="itemsss.l1"></ejs-checkbox>
+                                </td>
+                              </tr>
+                              <hr style="margin: 0; background: #c8ced3">
+                            </ng-template>
+                          </ng-container>
+                        </td>
+
+                        <td class="border">
+                          <ng-container *ngFor="let itemsss of items.behavior; let i= index;">
+                            <ng-container *ngIf="items.behavior.lastIndex === i; else elseTemplate">
+                              <tr  [style.height.px]="itemsss.height">
+                                <td  style="border: none; vertical-align: middle;" >
+                                  <ejs-checkbox cssClass="e-info" #checkbox [disabled]="true"  [checked]="itemsss.l2"></ejs-checkbox>
+                                </td>
+                              </tr>
+                            </ng-container>
+                            <ng-template #elseTemplate>
+                              <tr  [style.height.px]="itemsss.height">
+                                <td  style="border: none; vertical-align: middle;" >
+                                  <ejs-checkbox cssClass="e-info" [disabled]="true" #checkbox  [checked]="itemsss.l2"></ejs-checkbox>
+                                </td>
+                              </tr>
+                              <hr style="margin: 0; background: #c8ced3">
+                            </ng-template>
+                          </ng-container>
+                        </td>
+
+                        <td class="border" >
+                          <ng-container *ngFor="let itemsss of items.behavior; let i= index;">
+                            <ng-container *ngIf="items.behavior.lastIndex === i; else elseTemplate">
+                              <tr  [checkboxHeight]="itemsss">
+                                <td  style="border: none; vertical-align: middle;" >
+                                  {{itemsss.name | translate}}
+                                </td>
+                              </tr>
+                            </ng-container>
+                            <ng-template #elseTemplate>
+                              <tr  [checkboxHeight]="itemsss">
+                                <td  style="border: none; vertical-align: middle;" >
+                                    {{itemsss.name | translate}}
+                                </td>
+                              </tr>
+                              <hr style="margin: 0; background: #c8ced3">
+                            </ng-template>
+                          </ng-container>
+
+                        </td>
+
+
+                        <td class="score" [attr.rowspan]="i" *ngIf="x==0 && i==0" >
+                          <p>L0: {{attentionData?.l0Score}}</p>
+                          <p>L1: {{attentionData?.l1Score}}</p>
+                          <p>L2: {{attentionData?.l2Score}}</p>
+                          <p>FL: {{attentionData?.flScore}}</p>
+
+                        </td>
+                        <td class="comment" [attr.rowspan]="i" *ngIf="x==0 && i==0" >
+                          <p>L0: {{attentionData?.l0Comment}}</p>
+                          <p>L1: {{attentionData?.l1Comment}}</p>
+                          <p>L2: {{attentionData?.l2Comment}}</p>
+                          <p>FL: {{attentionData?.flComment}}</p>
+
+                        </td>
+
+                        <td class="upload"   *ngIf="x == 0 && i == 0" [attr.rowspan]="i">
+
+                          <ul class="list-group mr-3" style="width: 100%;" *ngIf="attentionData?.file.length > 0" >
+                            <li class="list-group-item" *ngFor="let item of attentionData?.file">
+                              <a [id]='item.path' href="javascript:void(0)" style="cursor: pointer; color: #20a8d8; background-color: transparent;" (click)="downloadFile(item)">{{item.name}}</a>
+                            </li>
+                          </ul>
+                          <!-- <button  type="button" class="btn btn-success"  >
+                            <i class="fa fa-upload" aria-hidden="true"></i>
+                            {{'Upload file' | translate}}
+                          </button> -->
+                        </td>
+
+                      </tr>
+                    </ng-container>
+                  </ng-container>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+
+      <!-- page 4 -->
+      <div>
+        <div class="modal-body">
+          <div class="row mb-3">
+            <div class="col-12">
+              <table style="box-shadow:  -2px 1px 3px black; border-radius: 10px; overflow: hidden;" class="table table-bordered">
+                <tbody>
+                  <tr>
+                    <td>
+                      <h4 class="font-weight-bold score-attitude-detail-title">{{effectiveData?.headingName | translate}} </h4>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>
+                      <label class="font-weight-bold">{{"DEFINITION_LABEL_MODAL" | translate}}: </label> <span>{{effectiveData?.definition | translate}}</span>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-12">
+              <table class="table table-bordered " style="box-shadow:  0 0 20px; border-radius: 5px; overflow: hidden;">
+                <thead>
+                  <tr>
+                    <th scope="col" colspan="11" class="text-center" style=" background-color: #f0f3f5;">{{"BEHAVIORS_LABEL_MODAL" | translate}}</th>
+                  </tr>
+                  <tr>
+                    <th scope="col" class="text-center" style=" background-color: #f0f3f5;">{{"CATEGORY_LABEL_MODAL" | translate}}</th>
+                    <th scope="col" class="text-center" style=" background-color: #f0f3f5;">{{"LEVEL_LABEL_MODAL" | translate}} </th>
+                    <th scope="col" class="text-center" style=" background-color: #f0f3f5;">{{"KEY_POINTS_LABEL_MODAL" | translate}}</th>
+                    <th scope="col" class="text-center title-tooltip-detail" style=" background-color: #f0f3f5;">L0<span class="title-tooltip-detail-text">{{"TOOLTIP_SELF_APPRAISAL" | translate}}</span></th>
+                    <th scope="col" class="text-center title-tooltip-detail" style=" background-color: #f0f3f5;">FL<span class="title-tooltip-detail-text">{{"TOOLTIP_FUNCTIONAL_TEAM" | translate}}</span></th>
+                    <th scope="col" class="text-center title-tooltip-detail" style=" background-color: #f0f3f5;">L1<span class="title-tooltip-detail-text">{{"TOOLTIP_1ST_ASSESSMENT" | translate}}</span></th>
+                    <th scope="col" class="text-center title-tooltip-detail" style=" background-color: #f0f3f5;">L2<span class="title-tooltip-detail-text">{{"TOOLTIP_2ND_ASSESSMENT" | translate}}</span></th>
+                    <th scope="col" class="text-center" style=" background-color: #f0f3f5;">{{"OBSERVABLE_BEHAVIOR_INDICATORS_LABEL_MODAL" | translate}}</th>
+                    <th scope="col" class="text-center" style=" background-color: #f0f3f5;">{{"SCORE_LABEL_MODAL" | translate}}</th>
+                    <th scope="col" class="text-center" style=" background-color: #f0f3f5;">{{"COMMENT_LABEL_MODAL" | translate}}</th>
+                    <th scope="col" class="text-center" style=" background-color: #f0f3f5;">{{"ATTCHMENTS_LABEL_MODAL" | translate}}</th>
+
+
+                  </tr>
+                </thead>
+                <tbody>
+                  <ng-container *ngFor="let item of effectiveData?.data; let i= index;">
+                    <ng-container *ngFor="let items of item.keypoint; let x= index;">
+                      <tr >
+                        <th [attr.rowspan]="item.keypoint.length" *ngIf="x == 0"  class="text-center align-middle">
+                          {{item.name | translate}}
+                        </th>
+                        <td style="vertical-align: middle; text-align: center;" class="border" >
+                          {{items.level}}
+                        </td>
+                        <td style="vertical-align: middle; text-align: center;" >{{items.name | translate}}</td>
+
+                        <td class="border">
+                          <ng-container *ngFor="let itemsss of items.behavior; let i= index;">
+                            <ng-container *ngIf="items.behavior.lastIndex === i; else elseTemplate">
+                              <tr [style.height.px]="itemsss.height" >
+                                <td  style="border: none; vertical-align: middle;" >
+                                  <ejs-checkbox cssClass="e-info" #checkbox [disabled]="true"  [checked]="itemsss.l0"></ejs-checkbox>
+                                </td>
+                              </tr>
+                            </ng-container>
+                            <ng-template #elseTemplate>
+                              <tr [style.height.px]="itemsss.height" >
+                                <td  style="border: none; vertical-align: middle;" >
+                                  <ejs-checkbox cssClass="e-info" #checkbox [disabled]="true" [checked]="itemsss.l0"></ejs-checkbox>
+                                </td>
+                              </tr>
+                              <hr style="margin: 0; background: #c8ced3">
+                            </ng-template>
+                          </ng-container>
+                        </td>
+
+                        <td class="border">
+                          <ng-container *ngFor="let itemsss of items.behavior; let i= index;">
+                            <ng-container *ngIf="items.behavior.lastIndex === i; else elseTemplate">
+                              <tr  [style.height.px]="itemsss.height">
+                                <td  style="border: none; vertical-align: middle;" >
+                                  <ejs-checkbox cssClass="e-info" #checkbox [disabled]="true"  [checked]="itemsss.fl"></ejs-checkbox>
+                                </td>
+                              </tr>
+                            </ng-container>
+                            <ng-template #elseTemplate>
+                              <tr [style.height.px]="itemsss.height" >
+                                <td  style="border: none; vertical-align: middle;" >
+                                  <ejs-checkbox cssClass="e-info" #checkbox [disabled]="true"  [checked]="itemsss.fl"></ejs-checkbox>
+                                </td>
+                              </tr>
+                              <hr style="margin: 0; background: #c8ced3">
+                            </ng-template>
+                          </ng-container>
+                        </td>
+
+                        <td class="border">
+                          <ng-container *ngFor="let itemsss of items.behavior; let i= index;">
+                            <ng-container *ngIf="items.behavior.lastIndex === i; else elseTemplate">
+                              <tr  [style.height.px]="itemsss.height">
+                                <td  style="border: none; vertical-align: middle;" >
+                                  <ejs-checkbox cssClass="e-info" #checkbox [disabled]="true"  [checked]="itemsss.l1"></ejs-checkbox>
+                                </td>
+                              </tr>
+                            </ng-container>
+                            <ng-template #elseTemplate>
+                              <tr  [style.height.px]="itemsss.height">
+                                <td  style="border: none; vertical-align: middle;" >
+                                  <ejs-checkbox cssClass="e-info" #checkbox  [disabled]="true" [checked]="itemsss.l1"></ejs-checkbox>
+                                </td>
+                              </tr>
+                              <hr style="margin: 0; background: #c8ced3">
+                            </ng-template>
+                          </ng-container>
+                        </td>
+
+                        <td class="border">
+                          <ng-container *ngFor="let itemsss of items.behavior; let i= index;">
+                            <ng-container *ngIf="items.behavior.lastIndex === i; else elseTemplate">
+                              <tr  [style.height.px]="itemsss.height">
+                                <td  style="border: none; vertical-align: middle;" >
+                                  <ejs-checkbox cssClass="e-info" #checkbox [disabled]="true"  [checked]="itemsss.l2"></ejs-checkbox>
+                                </td>
+                              </tr>
+                            </ng-container>
+                            <ng-template #elseTemplate>
+                              <tr  [style.height.px]="itemsss.height">
+                                <td  style="border: none; vertical-align: middle;" >
+                                  <ejs-checkbox cssClass="e-info" [disabled]="true" #checkbox  [checked]="itemsss.l2"></ejs-checkbox>
+                                </td>
+                              </tr>
+                              <hr style="margin: 0; background: #c8ced3">
+                            </ng-template>
+                          </ng-container>
+                        </td>
+
+                        <td class="border" >
+                          <ng-container *ngFor="let itemsss of items.behavior; let i= index;">
+                            <ng-container *ngIf="items.behavior.lastIndex === i; else elseTemplate">
+                              <tr  [checkboxHeight]="itemsss">
+                                <td  style="border: none; vertical-align: middle;" >
+                                  {{itemsss.name | translate}}
+                                </td>
+                              </tr>
+                            </ng-container>
+                            <ng-template #elseTemplate>
+                              <tr  [checkboxHeight]="itemsss">
+                                <td  style="border: none; vertical-align: middle;" >
+                                    {{itemsss.name | translate}}
+                                </td>
+                              </tr>
+                              <hr style="margin: 0; background: #c8ced3">
+                            </ng-template>
+                          </ng-container>
+
+                        </td>
+
+                        <td class="score" [attr.rowspan]="i" *ngIf="x==0 && i==0" >
+                          <p>L0: {{effectiveData?.l0Score}}</p>
+                          <p>L1: {{effectiveData?.l1Score}}</p>
+                          <p>L2: {{effectiveData?.l2Score}}</p>
+                          <p>FL: {{effectiveData?.flScore}}</p>
+
+                        </td>
+
+                        <td class="comment" [attr.rowspan]="i" *ngIf="x==0 && i==0" >
+                          <p>L0: {{effectiveData?.l0Comment}}</p>
+                          <p>L1: {{effectiveData?.l1Comment}}</p>
+                          <p>L2: {{effectiveData?.l2Comment}}</p>
+                          <p>FL: {{effectiveData?.flComment}}</p>
+
+                        </td>
+
+                        <td class="upload"   *ngIf="x == 0 && i == 0" [attr.rowspan]="i">
+
+                          <ul class="list-group mr-3" style="width: 100%;" *ngIf="effectiveData?.file.length > 0" >
+                            <li class="list-group-item" *ngFor="let item of effectiveData?.file">
+                              <a [id]='item.path' href="javascript:void(0)" style="cursor: pointer; color: #20a8d8; background-color: transparent;" (click)="downloadFile(item)">{{item.name}}</a>
+                            </li>
+                          </ul>
+                          <!-- <button  type="button" class="btn btn-success"  >
+                            <i class="fa fa-upload" aria-hidden="true"></i>
+                            {{'Upload file' | translate}}
+                          </button> -->
+                        </td>
+
+                      </tr>
+                    </ng-container>
+                  </ng-container>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+
+      <!-- page 5 -->
+      <div>
+        <div class="modal-body">
+          <div class="row mb-3">
+            <div class="col-12">
+              <table style="box-shadow:  -2px 1px 3px black; border-radius: 10px; overflow: hidden;" class="table table-bordered">
+                <tbody>
+                  <tr>
+                    <td>
+                      <h4 class="font-weight-bold score-attitude-detail-title">{{resilienceData?.headingName | translate}} </h4>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>
+                      <label class="font-weight-bold">{{"DEFINITION_LABEL_MODAL" | translate}}: </label> <span>{{resilienceData?.definition | translate}}</span>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-12">
+              <table class="table table-bordered " style="box-shadow:  0 0 20px; border-radius: 5px; overflow: hidden;">
+                <thead>
+                  <tr>
+                    <th scope="col" colspan="11" class="text-center" style=" background-color: #f0f3f5;">{{"BEHAVIORS_LABEL_MODAL" | translate}}</th>
+                  </tr>
+                  <tr>
+                    <th scope="col" class="text-center" style=" background-color: #f0f3f5;">{{"CATEGORY_LABEL_MODAL" | translate}}</th>
+                    <th scope="col" class="text-center" style=" background-color: #f0f3f5;">{{"LEVEL_LABEL_MODAL" | translate}} </th>
+                    <th scope="col" class="text-center" style=" background-color: #f0f3f5;">{{"KEY_POINTS_LABEL_MODAL" | translate}}</th>
+                    <th scope="col" class="text-center title-tooltip-detail" style=" background-color: #f0f3f5;">L0<span class="title-tooltip-detail-text">{{"TOOLTIP_SELF_APPRAISAL" | translate}}</span></th>
+                    <th scope="col" class="text-center title-tooltip-detail" style=" background-color: #f0f3f5;">FL<span class="title-tooltip-detail-text">{{"TOOLTIP_FUNCTIONAL_TEAM" | translate}}</span></th>
+                    <th scope="col" class="text-center title-tooltip-detail" style=" background-color: #f0f3f5;">L1<span class="title-tooltip-detail-text">{{"TOOLTIP_1ST_ASSESSMENT" | translate}}</span></th>
+                    <th scope="col" class="text-center title-tooltip-detail" style=" background-color: #f0f3f5;">L2<span class="title-tooltip-detail-text">{{"TOOLTIP_2ND_ASSESSMENT" | translate}}</span></th>
+                    <th scope="col" class="text-center" style=" background-color: #f0f3f5;">{{"OBSERVABLE_BEHAVIOR_INDICATORS_LABEL_MODAL" | translate}}</th>
+                    <th scope="col" class="text-center" style=" background-color: #f0f3f5;">{{"SCORE_LABEL_MODAL" | translate}}</th>
+                    <th scope="col" class="text-center" style=" background-color: #f0f3f5;">{{"COMMENT_LABEL_MODAL" | translate}}</th>
+                    <th scope="col" class="text-center" style=" background-color: #f0f3f5;">{{"ATTCHMENTS_LABEL_MODAL" | translate}}</th>
+
+                  </tr>
+                </thead>
+                <tbody>
+                  <ng-container *ngFor="let item of resilienceData?.data; let i= index;">
+                    <ng-container *ngFor="let items of item.keypoint; let x= index;">
+                      <tr >
+                        <th [attr.rowspan]="item.keypoint.length" *ngIf="x == 0"  class="text-center align-middle">
+                          {{item.name | translate}}
+                        </th>
+                        <td style="vertical-align: middle; text-align: center;" class="border" >
+                          {{items.level}}
+                        </td>
+                        <td style="vertical-align: middle; text-align: center;" >{{items.name | translate}}</td>
+
+                        <td class="border">
+                          <ng-container *ngFor="let itemsss of items.behavior; let i= index;">
+                            <ng-container *ngIf="items.behavior.lastIndex === i; else elseTemplate">
+                              <tr [style.height.px]="itemsss.height" >
+                                <td  style="border: none; vertical-align: middle;" >
+                                  <ejs-checkbox cssClass="e-info" #checkbox [disabled]="true"  [checked]="itemsss.l0"></ejs-checkbox>
+                                </td>
+                              </tr>
+                            </ng-container>
+                            <ng-template #elseTemplate>
+                              <tr [style.height.px]="itemsss.height" >
+                                <td  style="border: none; vertical-align: middle;" >
+                                  <ejs-checkbox cssClass="e-info" #checkbox [disabled]="true" [checked]="itemsss.l0"></ejs-checkbox>
+                                </td>
+                              </tr>
+                              <hr style="margin: 0; background: #c8ced3">
+                            </ng-template>
+                          </ng-container>
+                        </td>
+
+                        <td class="border">
+                          <ng-container *ngFor="let itemsss of items.behavior; let i= index;">
+                            <ng-container *ngIf="items.behavior.lastIndex === i; else elseTemplate">
+                              <tr  [style.height.px]="itemsss.height">
+                                <td  style="border: none; vertical-align: middle;" >
+                                  <ejs-checkbox cssClass="e-info" #checkbox [disabled]="true"  [checked]="itemsss.fl"></ejs-checkbox>
+                                </td>
+                              </tr>
+                            </ng-container>
+                            <ng-template #elseTemplate>
+                              <tr [style.height.px]="itemsss.height" >
+                                <td  style="border: none; vertical-align: middle;" >
+                                  <ejs-checkbox cssClass="e-info" #checkbox [disabled]="true"  [checked]="itemsss.fl"></ejs-checkbox>
+                                </td>
+                              </tr>
+                              <hr style="margin: 0; background: #c8ced3">
+                            </ng-template>
+                          </ng-container>
+                        </td>
+
+                        <td class="border">
+                          <ng-container *ngFor="let itemsss of items.behavior; let i= index;">
+                            <ng-container *ngIf="items.behavior.lastIndex === i; else elseTemplate">
+                              <tr  [style.height.px]="itemsss.height">
+                                <td  style="border: none; vertical-align: middle;" >
+                                  <ejs-checkbox cssClass="e-info" #checkbox [disabled]="true"  [checked]="itemsss.l1"></ejs-checkbox>
+                                </td>
+                              </tr>
+                            </ng-container>
+                            <ng-template #elseTemplate>
+                              <tr  [style.height.px]="itemsss.height">
+                                <td  style="border: none; vertical-align: middle;" >
+                                  <ejs-checkbox cssClass="e-info" #checkbox  [disabled]="true" [checked]="itemsss.l1"></ejs-checkbox>
+                                </td>
+                              </tr>
+                              <hr style="margin: 0; background: #c8ced3">
+                            </ng-template>
+                          </ng-container>
+                        </td>
+
+                        <td class="border">
+                          <ng-container *ngFor="let itemsss of items.behavior; let i= index;">
+                            <ng-container *ngIf="items.behavior.lastIndex === i; else elseTemplate">
+                              <tr  [style.height.px]="itemsss.height">
+                                <td  style="border: none; vertical-align: middle;" >
+                                  <ejs-checkbox cssClass="e-info" #checkbox [disabled]="true"  [checked]="itemsss.l2"></ejs-checkbox>
+                                </td>
+                              </tr>
+                            </ng-container>
+                            <ng-template #elseTemplate>
+                              <tr  [style.height.px]="itemsss.height">
+                                <td  style="border: none; vertical-align: middle;" >
+                                  <ejs-checkbox cssClass="e-info" [disabled]="true" #checkbox  [checked]="itemsss.l2"></ejs-checkbox>
+                                </td>
+                              </tr>
+                              <hr style="margin: 0; background: #c8ced3">
+                            </ng-template>
+                          </ng-container>
+                        </td>
+
+                        <td class="border" >
+                          <ng-container *ngFor="let itemsss of items.behavior; let i= index;">
+                            <ng-container *ngIf="items.behavior.lastIndex === i; else elseTemplate">
+                              <tr  [checkboxHeight]="itemsss">
+                                <td  style="border: none; vertical-align: middle;" >
+                                  {{itemsss.name | translate}}
+                                </td>
+                              </tr>
+                            </ng-container>
+                            <ng-template #elseTemplate>
+                              <tr  [checkboxHeight]="itemsss">
+                                <td  style="border: none; vertical-align: middle;" >
+                                    {{itemsss.name | translate}}
+                                </td>
+                              </tr>
+                              <hr style="margin: 0; background: #c8ced3">
+                            </ng-template>
+                          </ng-container>
+
+                        </td>
+
+                        <td class="score" [attr.rowspan]="i" *ngIf="x==0 && i==0" >
+                          <p>L0: {{resilienceData?.l0Score}}</p>
+                          <p>L1: {{resilienceData?.l1Score}}</p>
+                          <p>L2: {{resilienceData?.l2Score}}</p>
+                          <p>FL: {{resilienceData?.flScore}}</p>
+
+                        </td>
+                        <td class="comment" [attr.rowspan]="i" *ngIf="x==0 && i==0" >
+                          <p>L0: {{resilienceData?.l0Comment}}</p>
+                          <p>L1: {{resilienceData?.l1Comment}}</p>
+                          <p>L2: {{resilienceData?.l2Comment}}</p>
+                          <p>FL: {{resilienceData?.flComment}}</p>
+
+                        </td>
+
+                        <td class="upload"   *ngIf="x == 0 && i == 0" [attr.rowspan]="i">
+
+                          <ul class="list-group mr-3" style="width: 100%;" *ngIf="resilienceData?.file.length > 0" >
+                            <li class="list-group-item" *ngFor="let item of resilienceData?.file">
+                              <a [id]='item.path' href="javascript:void(0)" style="cursor: pointer; color: #20a8d8; background-color: transparent;" (click)="downloadFile(item)">{{item.name}}</a>
+                            </li>
+                          </ul>
+                          <!-- <button  type="button" class="btn btn-success"  >
+                            <i class="fa fa-upload" aria-hidden="true"></i>
+                            {{'Upload file' | translate}}
+                          </button> -->
+                        </td>
+
+                      </tr>
+                    </ng-container>
+                  </ng-container>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+
+      <!-- page 6 -->
+      <div>
+        <div class="modal-body">
+          <div class="row mb-3">
+            <div class="col-12">
+              <table style="box-shadow:  -2px 1px 3px black; border-radius: 10px; overflow: hidden;" class="table table-bordered">
+                <tbody>
+                  <tr>
+                    <td>
+                      <h4 class="font-weight-bold score-attitude-detail-title">{{continuousData?.headingName | translate}} </h4>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>
+                      <label class="font-weight-bold">{{"DEFINITION_LABEL_MODAL" | translate}}: </label> <span>{{continuousData?.definition | translate}}</span>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-12">
+              <table class="table table-bordered " style="box-shadow:  0 0 20px; border-radius: 5px; overflow: hidden;">
+                <thead>
+                  <tr>
+                    <th scope="col" colspan="11" class="text-center" style=" background-color: #f0f3f5;">{{"BEHAVIORS_LABEL_MODAL" | translate}}</th>
+                  </tr>
+                  <tr>
+                    <th scope="col" class="text-center" style=" background-color: #f0f3f5;">{{"CATEGORY_LABEL_MODAL" | translate}}</th>
+                    <th scope="col" class="text-center" style=" background-color: #f0f3f5;">{{"LEVEL_LABEL_MODAL" | translate}} </th>
+                    <th scope="col" class="text-center" style=" background-color: #f0f3f5;">{{"KEY_POINTS_LABEL_MODAL" | translate}}</th>
+                    <th scope="col" class="text-center title-tooltip-detail" style=" background-color: #f0f3f5;">L0<span class="title-tooltip-detail-text">{{"TOOLTIP_SELF_APPRAISAL" | translate}}</span></th>
+                    <th scope="col" class="text-center title-tooltip-detail" style=" background-color: #f0f3f5;">FL<span class="title-tooltip-detail-text">{{"TOOLTIP_FUNCTIONAL_TEAM" | translate}}</span></th>
+                    <th scope="col" class="text-center title-tooltip-detail" style=" background-color: #f0f3f5;">L1<span class="title-tooltip-detail-text">{{"TOOLTIP_1ST_ASSESSMENT" | translate}}</span></th>
+                    <th scope="col" class="text-center title-tooltip-detail" style=" background-color: #f0f3f5;">L2<span class="title-tooltip-detail-text">{{"TOOLTIP_2ND_ASSESSMENT" | translate}}</span></th>
+                    <th scope="col" class="text-center" style=" background-color: #f0f3f5;">{{"OBSERVABLE_BEHAVIOR_INDICATORS_LABEL_MODAL" | translate}}</th>
+                    <th scope="col" class="text-center" style=" background-color: #f0f3f5;">{{"SCORE_LABEL_MODAL" | translate}}</th>
+                    <th scope="col" class="text-center" style=" background-color: #f0f3f5;">{{"COMMENT_LABEL_MODAL" | translate}}</th>
+                    <th scope="col" class="text-center" style=" background-color: #f0f3f5;">{{"ATTCHMENTS_LABEL_MODAL" | translate}}</th>
+
+                  </tr>
+                </thead>
+                <tbody>
+                  <ng-container *ngFor="let item of continuousData?.data; let i= index;">
+                    <ng-container *ngFor="let items of item.keypoint; let x= index;">
+                      <tr >
+                        <th [attr.rowspan]="item.keypoint.length" *ngIf="x == 0"  class="text-center align-middle">
+                          {{item.name | translate}}
+                        </th>
+                        <td style="vertical-align: middle; text-align: center;" class="border" >
+                          {{items.level}}
+                        </td>
+                        <td style="vertical-align: middle; text-align: center;" >{{items.name | translate}}</td>
+
+                        <td class="border">
+                          <ng-container *ngFor="let itemsss of items.behavior; let i= index;">
+                            <ng-container *ngIf="items.behavior.lastIndex === i; else elseTemplate">
+                              <tr [style.height.px]="itemsss.height" >
+                                <td  style="border: none; vertical-align: middle;" >
+                                  <ejs-checkbox cssClass="e-info" #checkbox [disabled]="true"  [checked]="itemsss.l0"></ejs-checkbox>
+                                </td>
+                              </tr>
+                            </ng-container>
+                            <ng-template #elseTemplate>
+                              <tr [style.height.px]="itemsss.height" >
+                                <td  style="border: none; vertical-align: middle;" >
+                                  <ejs-checkbox cssClass="e-info" #checkbox [disabled]="true" [checked]="itemsss.l0"></ejs-checkbox>
+                                </td>
+                              </tr>
+                              <hr style="margin: 0; background: #c8ced3">
+                            </ng-template>
+                          </ng-container>
+                        </td>
+
+                        <td class="border">
+                          <ng-container *ngFor="let itemsss of items.behavior; let i= index;">
+                            <ng-container *ngIf="items.behavior.lastIndex === i; else elseTemplate">
+                              <tr  [style.height.px]="itemsss.height">
+                                <td  style="border: none; vertical-align: middle;" >
+                                  <ejs-checkbox cssClass="e-info" #checkbox [disabled]="true"  [checked]="itemsss.fl"></ejs-checkbox>
+                                </td>
+                              </tr>
+                            </ng-container>
+                            <ng-template #elseTemplate>
+                              <tr [style.height.px]="itemsss.height" >
+                                <td  style="border: none; vertical-align: middle;" >
+                                  <ejs-checkbox cssClass="e-info" #checkbox [disabled]="true"  [checked]="itemsss.fl"></ejs-checkbox>
+                                </td>
+                              </tr>
+                              <hr style="margin: 0; background: #c8ced3">
+                            </ng-template>
+                          </ng-container>
+                        </td>
+
+                        <td class="border">
+                          <ng-container *ngFor="let itemsss of items.behavior; let i= index;">
+                            <ng-container *ngIf="items.behavior.lastIndex === i; else elseTemplate">
+                              <tr  [style.height.px]="itemsss.height">
+                                <td  style="border: none; vertical-align: middle;" >
+                                  <ejs-checkbox cssClass="e-info" #checkbox [disabled]="true"  [checked]="itemsss.l1"></ejs-checkbox>
+                                </td>
+                              </tr>
+                            </ng-container>
+                            <ng-template #elseTemplate>
+                              <tr  [style.height.px]="itemsss.height">
+                                <td  style="border: none; vertical-align: middle;" >
+                                  <ejs-checkbox cssClass="e-info" #checkbox  [disabled]="true" [checked]="itemsss.l1"></ejs-checkbox>
+                                </td>
+                              </tr>
+                              <hr style="margin: 0; background: #c8ced3">
+                            </ng-template>
+                          </ng-container>
+                        </td>
+
+                        <td class="border">
+                          <ng-container *ngFor="let itemsss of items.behavior; let i= index;">
+                            <ng-container *ngIf="items.behavior.lastIndex === i; else elseTemplate">
+                              <tr  [style.height.px]="itemsss.height">
+                                <td  style="border: none; vertical-align: middle;" >
+                                  <ejs-checkbox cssClass="e-info" #checkbox [disabled]="true"  [checked]="itemsss.l2"></ejs-checkbox>
+                                </td>
+                              </tr>
+                            </ng-container>
+                            <ng-template #elseTemplate>
+                              <tr  [style.height.px]="itemsss.height">
+                                <td  style="border: none; vertical-align: middle;" >
+                                  <ejs-checkbox cssClass="e-info" [disabled]="true" #checkbox  [checked]="itemsss.l2"></ejs-checkbox>
+                                </td>
+                              </tr>
+                              <hr style="margin: 0; background: #c8ced3">
+                            </ng-template>
+                          </ng-container>
+                        </td>
+
+                        <td class="border" >
+                          <ng-container *ngFor="let itemsss of items.behavior; let i= index;">
+                            <ng-container *ngIf="items.behavior.lastIndex === i; else elseTemplate">
+                              <tr  [checkboxHeight]="itemsss">
+                                <td  style="border: none; vertical-align: middle;" >
+                                  {{itemsss.name | translate}}
+                                </td>
+                              </tr>
+                            </ng-container>
+                            <ng-template #elseTemplate>
+                              <tr  [checkboxHeight]="itemsss">
+                                <td  style="border: none; vertical-align: middle;" >
+                                    {{itemsss.name | translate}}
+                                </td>
+                              </tr>
+                              <hr style="margin: 0; background: #c8ced3">
+                            </ng-template>
+                          </ng-container>
+
+                        </td>
+
+                        <td class="score" [attr.rowspan]="i" *ngIf="x==0 && i==0" >
+                          <p>L0: {{continuousData?.l0Score}}</p>
+                          <p>L1: {{continuousData?.l1Score}}</p>
+                          <p>L2: {{continuousData?.l2Score}}</p>
+                          <p>FL: {{continuousData?.flScore}}</p>
+
+                        </td>
+
+                        <td class="comment" [attr.rowspan]="i" *ngIf="x==0 && i==0" >
+                          <p>L0: {{continuousData?.l0Comment}}</p>
+                          <p>L1: {{continuousData?.l1Comment}}</p>
+                          <p>L2: {{continuousData?.l2Comment}}</p>
+                          <p>FL: {{continuousData?.flComment}}</p>
+
+                        </td>
+
+                        <td class="upload"   *ngIf="x == 0 && i == 0" [attr.rowspan]="i">
+
+                          <ul class="list-group mr-3" style="width: 100%;" *ngIf="continuousData?.file.length > 0" >
+                            <li class="list-group-item" *ngFor="let item of continuousData?.file">
+                              <a [id]='item.path' href="javascript:void(0)" style="cursor: pointer; color: #20a8d8; background-color: transparent;" (click)="downloadFile(item)">{{item.name}}</a>
+                            </li>
+                          </ul>
+                          <!-- <button  type="button" class="btn btn-success"  >
+                            <i class="fa fa-upload" aria-hidden="true"></i>
+                            {{'Upload file' | translate}}
+                          </button> -->
+                        </td>
+
+                      </tr>
+                    </ng-container>
+                  </ng-container>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+
+  </div>
+</ejs-tab>
+
+
+
+

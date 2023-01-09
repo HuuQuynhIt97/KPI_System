@@ -1,0 +1,307 @@
+<ngx-spinner [fullScreen]="true" type="square-jelly-box" size="medium">
+  <p class="loading">Loading data...</p>
+</ngx-spinner>
+<div class="card">
+  <div class="control-section e-tbar-section">
+    <div class="e-sample-resize-container">
+      <div class="col-md-12 d-flex justify-content-left align-items-center">
+        <div class="font-weight-bold px-3">{{"KPI_CREATE_YEAL_LABEL" | translate}}:</div>
+        <ejs-dropdownlist 
+          id='ddlelement' #ddlelement 
+          [allowFiltering]='true' 
+          [fields]="typeFields" 
+          [(ngModel)]="yearSelect"
+          placeholder='Select Year'
+          (change)='onChangeYear($event)'
+          [dataSource]='yearData'>
+        </ejs-dropdownlist>
+        
+        <div style="color: transparent;" class="font-weight-bold pr-3">|</div>
+        <button id='btn' #btn class="btn btn-sm btn-secondary" (click)='onClickDefault()'>
+          <i class="fa fa-times"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+  <div class="control-section">
+    <ejs-treegrid
+      #treegrid
+      [dataSource]="data"
+      (contextMenuClick)="contextMenuClick($event)"
+      (toolbarClick)="toolbarClick($event)"
+      [treeColumnIndex]="1"
+      id="treegrid"
+      allowSorting="true"
+      gridLines="Both"
+      [allowResizing]='true'
+      [showColumnMenu]='true'
+      (created)="created()"
+      height='580'
+      [editSettings]="editing"
+      [contextMenuItems]="contextMenuItems"
+      (actionComplete)="actionComplete($event)"
+      [toolbar]="toolbar"
+      childMapping="childNodes"
+      (dataBound)="dataBound()"
+      (rowSelected)="rowSelected($event)"
+      (rowDeselected)="rowDeSelected($event)"
+    >
+      <e-columns>
+        <e-column
+          field="entity.level"
+          width="80"
+          isPrimaryKey="true"
+          headerText="Level"
+        >
+        <ng-template #headerTemplate let-data>
+          {{"LevelKPINew" | translate}}
+        </ng-template>
+        <ng-template #template let-data>
+          {{ data.entity.level - 1}}
+        </ng-template>
+          <ng-template #editTemplate let-data>
+            {{ data.entity.level - 1 }}
+          </ng-template>
+        </e-column>
+
+        <e-column field="entity.name" headerText="KPI Name" headerTextAlign="center" width="250" textAlign='Left'>
+          <ng-template #headerTemplate let-data>
+            {{"KPI Name 2" | translate}}
+          </ng-template>
+          <ng-template #template let-data>
+            <ejs-tooltip >
+              <!-- <span style="text-align: left; font-size: 14px;"></span> -->
+              {{data.entity.name}}
+              <ng-template #content >
+                {{data.entity.name}}
+              </ng-template>
+            </ejs-tooltip>
+          </ng-template>
+          
+        </e-column>
+
+        <!-- <e-column field="entity.sequence" headerText="Sequence" width="100" textAlign='Center'>
+          <ng-template #headerTemplate let-data>
+            {{"KPI2AND3_SEQUENCE_LABEL" | translate}}
+          </ng-template>
+          <ng-template #template let-data>
+            {{data.entity.sequence}}
+          </ng-template>
+
+        </e-column> -->
+
+        <e-column field="typeName" headerText="Type" textAlign='Center'>
+
+          <ng-template #headerTemplate let-data>
+            {{"TypeNew" | translate}}
+          </ng-template>
+
+          <ng-template #template let-data>
+            {{data.entity.typeName}}
+          </ng-template>
+
+          <ng-template #editTemplate let-data>
+            <ejs-dropdownlist [(ngModel)]='typeId' [allowFiltering]='true' [fields]="typeFields" placeholder='Select a Type' [dataSource]='typeData'></ejs-dropdownlist>
+          </ng-template>
+
+        </e-column>
+
+        <e-column field="picName" headerText="PIC" textAlign='Center'>
+          <ng-template #headerTemplate let-data>
+            {{"PICNew" | translate}}
+          </ng-template>
+          <ng-template #template let-data>
+            {{data.entity.picName}}
+          </ng-template>
+          
+          <!-- <ng-template #editTemplate let-data>
+            <ejs-dropdownlist [(ngModel)]='picId' [allowFiltering]='true' [fields]="picFields" placeholder='Select a manager' [dataSource]='accountData'></ejs-dropdownlist>
+          </ng-template> -->
+
+          <ng-template #editTemplate let-data>
+            <ejs-multiselect [(ngModel)]='picItem' [fields]="picFields" [showDropDownIcon]='true' mode='CheckBox' placeholder='Select PIC' [dataSource]='accountData'></ejs-multiselect>
+          </ng-template>
+        </e-column>
+        
+        <e-column field="" headerText="Mgmt. Arrange" textAlign='Center'>
+
+          <ng-template #headerTemplate let-data>
+            {{"MGMT" | translate}}
+          </ng-template>
+          <ng-template #template let-data>
+            <span > {{data.entity.mgmt}}</span>
+          </ng-template>
+
+          <ng-template #editTemplate let-data>
+          </ng-template>
+        </e-column>
+
+        <e-column field="entity.updateName" headerText="The last editor" textAlign='Center'>
+          <ng-template #headerTemplate let-data>
+            {{"editor" | translate}}
+          </ng-template>
+          <ng-template #editTemplate let-data>
+            {{data.entity.updateName}}
+          </ng-template>
+        </e-column>
+        <e-column field="entity.updateDate" headerText="The last edit date" textAlign='Center'>
+          <ng-template #headerTemplate let-data>
+            {{"editdate" | translate}}
+          </ng-template>
+          <ng-template #template let-data>
+            {{data.entity.updateDate }}
+          </ng-template>
+
+          <ng-template #editTemplate let-data>
+            {{data.entity.updateDate }}
+          </ng-template>
+        </e-column>
+
+      </e-columns>
+    </ejs-treegrid>
+
+    <ng-template #content let-modal>
+      <div class="modal-header">
+        <h4 class="modal-title">{{title | translate}}</h4>
+        <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="row">
+          <div class="col-md-6">
+
+            <div class="form-group">
+              <label for="">{{"KPI2AND3_KPI_NAME_LABEL" | translate}}</label> <span style="color: red; font-size: 20px;">*</span>
+              <textarea [(ngModel)]="kpiname"  cols="30" rows="10" class="form-control"></textarea>
+            </div>
+
+
+          </div>
+          <div class="col-md-6">
+            <!-- <div class="form-group">
+              <label for="">Policy</label>
+              <ejs-dropdownlist [(ngModel)]='policyId' [allowFiltering]='true' [fields]="policyFields" placeholder='Select a policy' [dataSource]='policyData'></ejs-dropdownlist>
+            </div> -->
+
+            <div class="form-group">
+              <label for="">{{"KPI_CREATE_YEAL_LABEL" | translate}}</label> <span style="color: red; font-size: 20px;">*</span>
+              <ejs-dropdownlist 
+                [(ngModel)]='yearValueAdd' 
+                [allowFiltering]='true' 
+                [fields]="typeFields" 
+                placeholder='Select Year' 
+                [dataSource]='yearData'>
+              </ejs-dropdownlist>
+            </div>
+            
+            <div class="form-group">
+              <label for="">{{"PICNew" | translate}}</label> <span style="color: red; font-size: 20px;">*</span>
+              <ejs-multiselect [(ngModel)]='picItem' [fields]="picFields" [showDropDownIcon]='true' mode='CheckBox' placeholder='Select PIC' [dataSource]='accountData'></ejs-multiselect>
+              <!-- <ejs-dropdownlist [(ngModel)]='picId' [allowFiltering]='true' [fields]="picFields" placeholder='Select a manager' [dataSource]='accountData'></ejs-dropdownlist> -->
+            </div>
+          </div>
+        </div>
+
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-light" (click)="modal.close('Close click')">{{"Close" | translate}}</button>
+        <button type="submit" (click)='createOC()' class="btn btn-primary">{{"Create" | translate}}</button>
+      </div>
+    </ng-template>
+
+    <ng-template #content2 let-modal>
+      <div class="modal-header">
+        <h4 class="modal-title">{{title | translate}}</h4>
+        <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="row">
+          <div class="col-md-6">
+
+            <div class="form-group">
+              <label for="">{{"KPI2AND3_KPI_NAME_LABEL" | translate}}</label> <span style="color: red; font-size: 20px;">*</span>
+              <textarea [(ngModel)]="kpiname"  cols="30" rows="10" class="form-control"></textarea>
+            </div>
+
+
+          </div>
+          <div class="col-md-6">
+            <!-- <div class="form-group">
+              <label for="">Policy</label>
+              <ejs-dropdownlist [(ngModel)]='policyId' [allowFiltering]='true' [fields]="policyFields" placeholder='Select a policy' [dataSource]='policyData'></ejs-dropdownlist>
+            </div> -->
+            <div class="form-group">
+              <label for="">{{"KPI_CREATE_YEAL_LABEL" | translate}}</label> <span style="color: red; font-size: 20px;">*</span>
+              <ejs-dropdownlist 
+                [(ngModel)]='yearValueAdd' 
+                [allowFiltering]='true' 
+                [fields]="typeFields" 
+                placeholder='Select Year' 
+                [dataSource]='yearData'>
+              </ejs-dropdownlist>
+            </div>
+            <div class="form-group">
+              <label for="">{{"PICNew" | translate}}</label> <span style="color: red;font-size: 20px;">*</span>
+              <ejs-multiselect [(ngModel)]='picItem' [fields]="picFields" [showDropDownIcon]='true' mode='CheckBox' placeholder='Select PIC' [dataSource]='accountData'></ejs-multiselect>
+              <!-- <ejs-dropdownlist [(ngModel)]='picId' [allowFiltering]='true' [fields]="picFields" placeholder='Select a manager' [dataSource]='accountData'></ejs-dropdownlist> -->
+            </div>
+            <div class="row">
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label for="">{{"UPDATE_PDCA_NEED_LABEL" | translate}}</label> <span style="color: red;font-size: 20px;">*</span>
+                  <ejs-dropdownlist (change)="pdcaChange($event)" [(ngModel)]='pdcaId' [allowFiltering]='true' [fields]="typeFields" placeholder='Select' [dataSource]='pdcaData'></ejs-dropdownlist>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label for="">{{"TypeNew" | translate}}</label> <span style="color: red;font-size: 20px;">*</span>
+                  <ejs-dropdownlist [(ngModel)]='typeId' [allowFiltering]='true' [fields]="typeFields" placeholder='Select a Type' [disabled]="isYesPDCA" [dataSource]='typeData'></ejs-dropdownlist>
+                </div>
+              </div>
+            </div>
+            
+
+            <div class="form-group">
+              <label for="">{{"KPI2AND3_START_TIME_LABEL" | translate}}</label> <span style="color: red;font-size: 20px;">*</span>
+              <ejs-datepicker [start]='start'  
+              [(ngModel)]="startTime" 
+              [values]="startTime" 
+              [depth]='depth' 
+              [disabled]="isYesPDCA"
+              style="width: 100%;"
+              [format]='format'></ejs-datepicker>
+              <!-- <kendo-datepicker style="width: 100%;"
+                [(ngModel)]="startTime"
+                >
+              </kendo-datepicker> -->
+            </div>
+
+            <div class="form-group">
+              <label for="">{{"KPI2AND3_END_TIME_LABEL" | translate}}</label> <span style="color: red;font-size: 20px;">*</span>
+              <ejs-datepicker [start]='start'  
+              [(ngModel)]="endTime" 
+              [values]="endTime" 
+              [depth]='depth' 
+              [disabled]="isYesPDCA"
+              style="width: 100%;"
+              [format]='format'></ejs-datepicker>
+              <!-- <kendo-datepicker style="width: 100%;"
+                [(ngModel)]="endTime"
+                >
+              </kendo-datepicker> -->
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-light" (click)="modal.close('Close click')">{{"Close" | translate}}</button>
+        <button type="submit" (click)='createLLKPI()' class="btn btn-primary">{{"Create" | translate}}</button>
+      </div>
+    </ng-template>
+  </div>
+
+</div>
+

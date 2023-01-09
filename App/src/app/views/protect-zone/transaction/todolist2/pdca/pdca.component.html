@@ -1,0 +1,303 @@
+<div class="modal-header">
+  <h4 class="modal-title">{{'TextModal' | translate}} ({{month}}) </h4>
+  <button type="button" class="close" aria-label="Close" (click)="activeModal.dismiss('Cross click')">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+<div class="modal-body">
+    <div class="row mb-3">
+      <div class="col-6">
+        <table style="box-shadow:  -2px 1px 3px black; border-radius: 10px; overflow: hidden;" class="table table-bordered">
+          <tbody>
+            <tr>
+              <td>
+                <label class="font-weight-bold">{{'Policy' | translate}}: </label> <span>{{policy}}</span>
+
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <label class="font-weight-bold">{{"KPI" | translate}}: </label> <span>{{kpi}}</span>
+
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <label class="font-weight-bold">{{'PICPDCA' | translate}}: </label> <span>{{pic}}</span>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+
+        <div class="d-flex align-items-start">
+          <div class="col-md-6">
+
+            <div style="box-shadow: 2px 2px 3px black; border-radius: 4px; overflow: hidden; border-radius: 4px; overflow: hidden;" class="input-group mb-3">
+              <div class="input-group-prepend">
+                <span style=" background-color: #0069d9; opacity: 0.75; color: white;" class="input-group-text">
+                  {{"This month Performance" | translate}}
+                </span>
+              </div>
+              <input  (keypress)="numberOnly($event)" (ngModelChange)="onChangeThisMonthPerformance($event)" [(ngModel)]="performanceValue"  type="text" class="form-control" aria-label="Amount (to the nearest dollar)">
+              <div class="input-group-append" *ngIf="type === 1">
+                <span class="input-group-text">%</span>
+              </div>
+            </div>
+
+            <div style="box-shadow: 2px 2px 3px black; border-radius: 4px; overflow: hidden;" class="input-group mb-3">
+              <div class="input-group-prepend">
+                <span style=" background-color: #605f5f; opacity: 0.75; color: white;" class="input-group-text">
+                  {{"This month Target" | translate}}
+                </span>
+              </div>
+              <input  style="pointer-events: none;" (ngModelChange)="onChangeThisMonthTarget($event)" [(ngModel)]="thisMonthTargetValue" type="text" class="form-control" aria-label="Amount (to the nearest dollar)">
+              <div class="input-group-append" *ngIf="type === 1">
+                <span class="input-group-text">%</span>
+              </div>
+            </div>
+            <div style="box-shadow: 2px 2px 3px black; border-radius: 4px; overflow: hidden;" class="input-group mb-3">
+              <div class="input-group-prepend">
+                <span style=" background-color: #0069d9; opacity: 0.75; color: white;" class="input-group-text">
+                  {{"Next month Target" | translate}}
+                </span>
+              </div>
+              <input  (keypress)="numberOnly($event)" (ngModelChange)="onChangeNextMonthTarget($event)" [(ngModel)]="nextMonthTargetValue"  type="text" class="form-control" aria-label="Amount (to the nearest dollar)">
+              <div class="input-group-append" *ngIf="type === 1">
+                <span class="input-group-text">%</span>
+              </div>
+            </div>
+
+          </div>
+
+          <div class="col-md-6">
+
+            <div style="box-shadow: 2px 2px 3px black; border-radius: 4px; overflow: hidden;" class="input-group mb-3">
+              <div class="input-group-prepend">
+                <span style=" background-color: #0069d9; opacity: 0.75; color: white;" class="input-group-text">
+                  {{"This month YTD" | translate}}
+                </span>
+              </div>
+              <input (keypress)="numberOnly($event)"  (ngModelChange)="onChangeThisMonthYTD($event)" [(ngModel)]="thisMonthYTDValue"  type="text" class="form-control" aria-label="Amount (to the nearest dollar)">
+              <div class="input-group-append" *ngIf="type === 1">
+                <span class="input-group-text">%</span>
+              </div>
+            </div>
+
+            <div style="box-shadow: 2px 2px 3px black; border-radius: 4px; overflow: hidden;" class="input-group mb-3">
+              <div class="input-group-prepend">
+                <span style=" background-color:#605f5f; opacity: 0.75; color: white;" class="input-group-text">
+                  {{"Target YTD" | translate}}
+                </span>
+              </div>
+              <input 
+              (keypress)="numberOnly($event)" 
+              [style]="thisMonthTarget !== null 
+              && thisMonthTargetValue !== 0 
+              ? 'pointer-events: none;' : ''" 
+              (ngModelChange)="onChangeTargetYTD($event)" 
+              [(ngModel)]="ytdValue" 
+              type="text" class="form-control" aria-label="Amount (to the nearest dollar)">
+              <div class="input-group-append" *ngIf="type === 1">
+                <span class="input-group-text">%</span>
+              </div>
+            </div>
+
+          </div>
+
+        </div>
+      </div>
+
+      <div class="col-6">
+        <!-- <button type="button" style="color: floralwhite; box-shadow: 1px 1px 2px black;" class="btn btn-success ml-2" (click)='download()'>
+          <i class="fa fa-download" aria-hidden="true"></i>
+          {{'Download' | translate}}</button> -->
+        <button type="button" style="color: floralwhite; box-shadow: 1px 1px 2px black;" class="btn btn-success" (click)='openUploadModalComponent()' >
+          <i class="fa fa-upload" aria-hidden="true"></i>
+          {{'Upload file' | translate}}</button>
+
+        <div class="mt-3 d-flex justify-content-start">
+          <ul class="list-group mr-3" style="width: 50%;" *ngIf="filesLeft.length > 0" [style.width]='filesRight.length > 0 ? "50%": "100%"'>
+            <li class="list-group-item" *ngFor="let item of filesLeft">
+              <a [id]='item.path' href="javascript:void(0)" style="cursor: pointer; color: #20a8d8; background-color: transparent;" (click)="downloadFile(item)">{{item.name}}</a>
+            </li>
+          </ul>
+          <!-- <ul class="list-group" style="width: 50%;" *ngIf="filesRight.length > 0">
+            <li class="list-group-item" *ngFor="let item of filesRight">
+              <a [id]='item.path' [href]="item.path">{{item.name}}</a>
+            </li>
+          </ul> -->
+      </div>
+    </div>
+    </div>
+
+    <div class="row">
+      <div class="col-12">
+        <table class="table table-bordered " style="box-shadow:  0 0 20px; border-radius: 5px; overflow: hidden;">
+          <thead>
+            <tr>
+              <th scope="col" rowspan="2" class="text-center align-middle" style="width: 5%; background-color: #f0f3f5;">{{"meetingMonth" | translate}}</th>
+              <th scope="col" rowspan="2" class="text-center align-middle" style="width: 5% ; background-color: #f0f3f5;">#</th>
+              <th scope="col" class="text-center" style=" background-color: #f0f3f5;">P</th>
+              <th scope="col" class="text-center" style=" background-color: #f0f3f5;">Target</th>
+              <th scope="col" class="text-center" style="width: 8% ; background-color: #f0f3f5;">Deadline</th>
+              <th scope="col" class="text-center" style="width: 15% ; background-color: #f0f3f5;">D</th>
+              <th scope="col" class="text-center" style="width: 8% ; background-color: #f0f3f5;">Achievement</th>
+              <th scope="col" class="text-center" style="width: 10% ; background-color: #f0f3f5;">Status</th>
+              <th scope="col" class="text-center" style="width: 20% ; background-color: #f0f3f5;">C</th>
+            </tr>
+            <tr>
+              <th scope="col" class="text-center" style=" background-color: #f0f3f5;">本期行動計劃</th>
+              <th scope="col" class="text-center" style=" background-color: #f0f3f5;">目標值 </th>
+              <th scope="col" class="text-center" style=" background-color: #f0f3f5;">完成期限</th>
+              <th scope="col" class="text-center" style=" background-color: #f0f3f5;">執行內容</th>
+              <th scope="col" class="text-center" style=" background-color: #f0f3f5;">實績</th>
+              <th scope="col" class="text-center" style=" background-color: #f0f3f5;">狀態</th>
+              <th scope="col" class="text-center" style=" background-color: #f0f3f5;">執行狀況檢討</th>
+            </tr>
+          </thead>
+          <tbody>
+            <ng-container *ngFor="let item of gridData; let i= index;">
+            <tr>
+              <th scope="row" [attr.rowspan]="gridData.length" *ngIf="i == 0"  class="text-center align-middle">{{month}}</th>
+              <th scope="row">{{i + 1}}</th>
+              <td>{{item.content}}</td>
+              <td>{{item.target}}</td>
+              <td>{{item.deadline}}</td>
+              <td >
+                <textarea autosize type="text" (ngModelChange)="onChangeContent($event, i)" [(ngModel)]='item.doContent'  class="form-control" name="content" style="text-align:left;"></textarea>
+                <!-- <textarea type="text" cols="30" rows="3" class="form-control" (ngModelChange)="onChangeContent($event, i)" [(ngModel)]='item.doContent'></textarea> -->
+              </td>
+              <td>
+                <textarea autosize type="text" (ngModelChange)="onChangeArchivement($event, i)" [(ngModel)]='item.achievement' class="form-control" name="content" style="text-align:left;"></textarea>
+                <!-- <textarea type="text" cols="30" rows="3" class="form-control" (ngModelChange)="onChangeArchivement($event, i)" [(ngModel)]='item.achievement'></textarea> -->
+              </td>
+              <td>
+                <select class="custom-select" [(ngModel)]="item.statusId"  (ngModelChange)="onChangeStatus($event, i, item)">
+                  <option [value]="null">{{"Chose Status" | translate}}</option>
+                  <option *ngFor="let item of status" [value]="item.id">{{item.name | translate}}</option>
+                </select>
+              </td>
+              <td >
+                <textarea autosize type="text" [(ngModel)]="item.resultContent"  (ngModelChange)="onChangeResult($event,i)"  class="form-control" name="content" style="text-align:left;"></textarea>
+                <!-- <textarea [(ngModel)]="item.resultContent"  (ngModelChange)="onChangeResult($event,i)" cols="30" rows="10" class="form-control"></textarea> -->
+              </td>
+            </tr>
+          </ng-container>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-12">
+        <ejs-grid #grid
+        id='gridPDCA'
+        [dataSource]='actions'
+        [allowPaging]='true'
+        [allowResizing]='true'
+        [editSettings]='editSettings'
+        (actionBegin)='actionBegin($event)'
+          gridLines='Both'
+          (dataBound)="dataBound($event)" [toolbar]='toolbarOptions' [pageSettings]='pageSettings' >
+          <e-columns>
+            <e-column field='#' headerText='#' [allowEditing]='false' textAlign='Center' headerTextAlign='Center' width=30 type='number'>
+              <ng-template #template let-data>
+                {{NO(data.index)}}
+              </ng-template>
+            </e-column>
+            <e-column field='content' headerText='A' textAlign='Center'  type='string'>
+              <ng-template #headerTemplate let-data>
+                <span>
+                    <tr>
+                      <th>
+                        A
+                      </th>
+                    </tr>
+                    <hr>
+                    <tr>
+                      <th>
+                        {{"PDCA_A" | translate}}
+                      </th>
+                    </tr>
+                 </span>
+              </ng-template>
+              <ng-template #template let-data>
+                <textarea autosize type="text" class="form-control" readonly [value]="data.content" name="content"  style="text-align:left;" ></textarea>
+              </ng-template>
+              <ng-template #editTemplate let-data>
+                <textarea autosize type="text" [(ngModel)]="data.content" class="form-control" [value]="data.content" name="content" style="text-align:left;min-height: 60px;"></textarea>
+              </ng-template>
+
+            </e-column>
+            <e-column field='target'  headerText='Target'  textAlign='Center' type='string'>
+              <ng-template #headerTemplate let-data>
+                <span>
+                    <tr>
+                      <th>
+                        Target
+                      </th>
+                    </tr>
+                    <hr>
+                    <tr>
+                      <th>
+                        {{"PDCA_TARGET" | translate}}
+                      </th>
+                    </tr>
+                 </span>
+              </ng-template>
+            </e-column>
+            <e-column field='deadline' headerText='Deadline' width=100 type='date' format='MM/dd/yyyy' [edit]='dpParams' editType='datepickeredit' textAlign='Center'   >
+              <ng-template #headerTemplate let-data>
+                <span>
+                    <tr>
+                      <th>
+                        Deadline
+                      </th>
+                    </tr>
+                    <hr>
+                    <tr>
+                      <th>
+                        {{"PDCA_DEADLINE" | translate}}
+                      </th>
+                    </tr>
+                 </span>
+              </ng-template>
+            </e-column>
+          </e-columns>
+        </ejs-grid>
+
+
+      </div>
+
+    </div>
+
+</div>
+
+<div class="modal-footer">
+  <div class="w-100">
+    <span style="color: red;font-size: 18px;">建議 Suggestion : 內容不超過250字 (Type the content within 250 words)</span>
+    <button type="button" *ngIf="text !== 'revise'" (click)="back()" class="btn btn-success float-right">{{'Submit' }}</button>
+    <button type="button" (click)="back()" class="btn btn-secondary mr-2 float-right">{{'Save' }}</button>
+  </div>
+</div>
+<!-- <div class="modal-footer">
+
+
+  <button type="button"
+  class="btn btn-secondary mr-2"
+  (click)="back()">{{'Save' }}
+  </button>
+
+  <button type="button"
+  class="btn btn-success"
+
+  (click)="submit()">{{'Submit' }}</button>
+</div> -->
+<!-- data-toggle="tooltip"
+data-placement="top"
+title="Save data & Submit then close the window. In L0 tab hide this row."
+ data-toggle="tooltip"
+  data-placement="top"
+  title="Save data & close the window."
+
+-->

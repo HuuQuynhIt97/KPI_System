@@ -1,0 +1,168 @@
+<ngx-spinner [fullScreen]="true" type="square-jelly-box" size="medium">
+  <p class="loading">Loading data...</p>
+</ngx-spinner>
+<div class="modal-header">
+  <h4 class="modal-title">{{'HQ_REPORT_MODEL_LABEL' | translate}} </h4>
+  <button type="button" class="close" aria-label="Close" (click)="activeModal.dismiss('Cross click')">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+
+<div class="modal-body">
+  <div class="row">
+    <div class="col-md-12">
+      <div class="card">
+        <div class="card-body table-responsive p-0">
+
+          <!-- <ejs-toolbar #toolbarTodo >
+            <e-items> -->
+              <!-- <e-item >
+                <ng-template #template>
+                  <span class="mr-2" style="font-size: 16px;">{{'FROZEN_CMTEE_LABEL' | translate}}:</span>
+                  <ejs-switch #switch style="width: 80px;" (click)="lockUpdate()" onLabel="{{'LOCK_BTN' | translate}}" offLabel="{{'UNLOCK_BTN' | translate}}" [checked]="frozen" ></ejs-switch>
+                </ng-template>
+              </e-item> -->
+
+              <!-- <e-item align='right'>
+                <ng-template #template>
+                  <div class="e-toolbar-item e-search-wrapper e-toolbar-right" aria-disabled="false" title="Search">
+                    <div class="e-input-group e-search" role="search"> <input id="toolbar_searchbar" style="width:178px" autocomplete="off"
+                        [(ngModel)]="name" (change)='search($event)'  class="e-input"
+                        placeholder="{{ 'SEARCH_PEOPLE_COMMITTEE' | translate }}">
+                      <span id="toolbar_searchbutton" class="e-input-group-icon fa fa-search e-icons" tabindex="-1"
+                        title="Search" aria-label="search"></span>
+                    </div>
+                  </div>
+                </ng-template>
+              </e-item>
+          </e-items>
+          </ejs-toolbar> -->
+
+          <ejs-grid #grid
+            id='grid'
+            [dataSource]="dataHQReport"
+            [allowPaging]='true'
+            [allowResizing]='true'
+            [showColumnMenu]='true'
+            gridLines='Both'
+            [locale]='locale'
+            [toolbar]='toolbarOptions' (toolbarClick)='toolbarClick($event)'
+            [pageSettings]='pageSettings'
+            [allowExcelExport]='true' allowFiltering='true' [filterSettings]='filterSettings'
+            allowTextWrap='true'
+            (dataBound)='dataBound()'
+          >
+            <e-columns>
+              <e-column field="index" textAlign='Center' width="50" isPrimaryKey="true" headerText="#">
+                <ng-template #headerTemplate let-data>
+                  <span class="headercell">
+                    #
+                  </span>
+                </ng-template>
+                <ng-template #template let-data>
+                  {{data.index}}
+                </ng-template>
+              </e-column>
+
+              <e-column field="factory" headerText="{{'FACTORY_HQ_REPORT_LABEL' | translate}}" width='50' textAlign='Center'>
+                <ng-template #headerTemplate let-data>
+                  <span class="headercell">
+                    {{"FACTORY_HQ_REPORT_LABEL" | translate}}
+                  </span>
+                </ng-template>
+              </e-column>
+
+              <e-column field="division" textAlign='Center' width="50" headerText="{{ 'DIVISION_HQ_REPORT_LABEL' | translate}}">
+                <ng-template #headerTemplate let-data>
+                  <span class="headercell">
+                    {{"DIVISION_HQ_REPORT_LABEL" | translate}}
+                  </span>
+                </ng-template>
+              </e-column>
+
+              <e-column field="dept" textAlign='Center' width="100" headerText="{{'DEPT_HQ_REPORT_LABEL' | translate}}">
+                <ng-template #headerTemplate let-data>
+                  <span class="headercell">
+                    {{"DEPT_HQ_REPORT_LABEL" | translate}}
+                  </span>
+                </ng-template>
+              </e-column>
+
+              <e-column field="l2Name" textAlign='Center' width="100" headerText="{{'L2_HQ_REPORT_LABEL' | translate}}">
+                <ng-template #headerTemplate let-data>
+                  <span class="headercell">
+                    {{"L2_HQ_REPORT_LABEL" | translate}}
+                  </span>
+                </ng-template>
+              </e-column>
+
+              <e-column field="userName" textAlign='Center' width="100" headerText="{{'USERNAME_HQ_REPORT_LABEL' | translate}}">
+                <ng-template #headerTemplate let-data>
+                  <span class="headercell">
+                    {{"USERNAME_HQ_REPORT_LABEL" | translate}}
+                  </span>
+                </ng-template>
+              </e-column>
+
+              <e-column field="fullName" textAlign='Center' width="100" headerText="{{'FULLNAME_HQ_REPORT_LABEL' | translate}}">
+                <ng-template #headerTemplate let-data>
+                  <span class="headercell">
+                    {{"FULLNAME_HQ_REPORT_LABEL" | translate}}
+                  </span>
+                </ng-template>
+              </e-column>
+
+              <e-column field="jobTitle" textAlign='Center' width="100" headerText="{{'JOBTITLE_HQ_REPORT_LABEL' | translate}}">
+                <ng-template #headerTemplate let-data>
+                  <span class="headercell">
+                    {{"JOBTITLE_HQ_REPORT_LABEL" | translate}}
+                  </span>
+                </ng-template>
+              </e-column>
+
+              <e-column field="attitudeScore" textAlign='Center' width="100" headerText="{{'ATTSCORE_HQ_REPORT_LABEL' | translate}}">
+                <ng-template #headerTemplate let-data>
+                  <span class="headercell">
+                    {{"ATTSCORE_HQ_REPORT_LABEL" | translate}}
+                  </span>
+                </ng-template>
+              </e-column>
+
+              <e-column field="kpiScore" textAlign='Center' width="100" headerText="{{'KPISOCRE_HQ_REPORT_LABEL' | translate}}">
+                <ng-template #headerTemplate let-data>
+                  <span class="headercell">
+                    {{"KPISOCRE_HQ_REPORT_LABEL" | translate}}
+                  </span>
+                </ng-template>
+              </e-column>
+
+              <e-column field="specialScore" textAlign='Center' width="100" headerText="{{'SPECIALSCORE_HQ_REPORT_LABEL' | translate}}">
+                <ng-template #headerTemplate let-data>
+                  <span class="headercell">
+                    {{"SPECIALSCORE_HQ_REPORT_LABEL" | translate}}
+                  </span>
+                </ng-template>
+              </e-column>
+
+              <e-column field="h1Score" textAlign='Center' width="100" headerText="{{'H1_HQ_REPORT_LABEL' | translate}}">
+                <ng-template #headerTemplate let-data>
+                  <span class="headercell">
+                    {{"H1_HQ_REPORT_LABEL" | translate}}
+                  </span>
+                </ng-template>
+              </e-column>
+            </e-columns>
+          </ejs-grid>
+        </div>
+        <!-- /.card-body -->
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- <div class="modal-footer">
+  <div class="w-100">
+    <button type="button" (click)="activeModal.dismiss('Cross click')" class="btn btn-secondary mr-2 float-right">{{'Close' }}</button>
+  </div>
+</div> -->

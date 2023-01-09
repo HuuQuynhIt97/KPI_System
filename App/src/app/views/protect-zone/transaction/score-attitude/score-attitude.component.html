@@ -1,0 +1,768 @@
+<ngx-spinner [fullScreen]="true" type="square-jelly-box" size="medium">
+  <p class="loading">Loading data...</p>
+</ngx-spinner>
+
+
+<div>
+  <ejs-tab #tab id="element" (selecting)="select($event)" [animation]="animation">
+    <div class="e-tab-header">
+      <div>Page 1 </div>
+      <div>Page 2 </div>
+      <div>Page 3 </div>
+      <div>Page 4 </div>
+      <div>Page 5 </div>
+      <div>Page 6 </div>
+    </div>
+    <div class="e-content">
+
+        <!-- page 1 -->
+        <div>
+          <div class="modal-body">
+            <div class="row mb-3">
+              <div class="col-12">
+                <button type="button" class="btn btn-danger float-right mr-3 mb-2" (click)="onCloseModal(SystemCode_Heading.PASSION)" title="Close">x</button>
+
+                <table style="box-shadow:  -2px 1px 3px black; border-radius: 10px; overflow: hidden;" class="table table-bordered">
+                  <tbody>
+                    <tr>
+                      <td>
+                        <h4 class="font-weight-bold">{{passionData?.headingName | translate}} </h4>
+                      </td>
+
+                      <td>
+                        <button (click)="detailScore()" type="button"  class="btn btn-success mr-2 float-right">{{'Detail' | translate}}</button>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <label class="font-weight-bold">{{"DEFINITION_LABEL_MODAL" | translate}}: </label> <span>{{passionData?.definition | translate}}</span>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-12">
+                <table class="table table-bordered " style="box-shadow:  0 0 20px; border-radius: 5px; overflow: hidden;">
+                  <thead>
+                    <tr>
+                      <th scope="col" colspan="7" class="text-center" style=" background-color: #f0f3f5;">{{"BEHAVIORS_LABEL_MODAL" | translate}}</th>
+                    </tr>
+                    <tr>
+                      <th scope="col" class="text-center" style=" background-color: #f0f3f5;">{{"CATEGORY_LABEL_MODAL" | translate}}</th>
+                      <th scope="col" class="text-center" style=" background-color: #f0f3f5;">{{"LEVEL_LABEL_MODAL" | translate}} </th>
+                      <th scope="col" class="text-center" style=" background-color: #f0f3f5;">{{"KEY_POINTS_LABEL_MODAL" | translate}}</th>
+                      <th scope="col" class="text-center" style=" background-color: #f0f3f5;">{{"OBSERVABLE_BEHAVIOR_INDICATORS_LABEL_MODAL" | translate}}</th>
+                      <th scope="col" class="text-center" style=" background-color: #f0f3f5;">{{"SCORE_LABEL_MODAL" | translate}}</th>
+                      <th scope="col" class="text-center" style=" background-color: #f0f3f5;">{{"COMMENT_LABEL_MODAL" | translate}}</th>
+                      <th scope="col" class="text-center" style=" background-color: #f0f3f5;">{{"ATTCHMENTS_LABEL_MODAL" | translate}}</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <ng-container *ngFor="let item of passionData?.data; let i= index;">
+                      <ng-container *ngFor="let items of item.keypoint; let x= index;">
+                        <tr >
+                          <th [attr.rowspan]="item.keypoint.length" *ngIf="x == 0"  class="text-center align-middle">
+                            {{item.name | translate}}
+                          </th>
+                          <td style="vertical-align: middle; text-align: center;" class="border" >
+                            {{items.level}}
+                          </td>
+                          <td style="vertical-align: middle; text-align: center;" >{{items.name | translate}}</td>
+
+                          <td class="border" >
+                            <ng-container *ngFor="let itemsss of items.behavior; let i= index;">
+                              <ng-container *ngIf="items.behavior.lastIndex === i; else elseTemplate">
+                                <tr  >
+                                  <td  style="border: none; vertical-align: middle;" >
+                                    <ejs-checkbox cssClass="e-info" #checkbox (change)="changeHandler($event,itemsss,items)" [checked]="itemsss.checked"></ejs-checkbox>
+                                    <span style="color: transparent;"> | </span>
+                                    {{itemsss.name | translate}}
+                                  </td>
+                                </tr>
+                              </ng-container>
+                              <ng-template #elseTemplate>
+                                <tr  >
+                                  <td  style="border: none; vertical-align: middle;" >
+                                    <ejs-checkbox cssClass="e-info" #checkbox (change)="changeHandler($event,itemsss,items)" [checked]="itemsss.checked"></ejs-checkbox>
+                                    <span style="color: transparent;"> | </span>
+                                      {{itemsss.name | translate}}
+                                  </td>
+                                </tr>
+                                <hr style="margin: 0; background: #c8ced3">
+                              </ng-template>
+                            </ng-container>
+
+                          </td>
+
+                          <td style="vertical-align: middle;"  class="score" [attr.rowspan]="i" *ngIf="x == 0 && i==0" >
+                            <!-- <textarea (keypress)="numberOnly($event)" (ngModelChange)="onChangeScore($event)" [(ngModel)]="passionData.score" autosize type="number" class="form-control" name="score" style="text-align:center;"></textarea> -->
+                            <ejs-dropdownlist #sample
+                              [(ngModel)]='passionData.score === null ? "3" : passionData.score === "" ? "3" : passionData.score'
+                              [dataSource]='scoreData'
+                              (select)='onChangeScore($event)'
+                              [fields]='fieldsScore'
+                              placeholder='Select score'>
+                            </ejs-dropdownlist>
+                          </td>
+
+                          <td class="comment" [attr.rowspan]="i" *ngIf="x==0 && i==0" >
+                            <textarea [(ngModel)]="passionData.comment"  (ngModelChange)="onChangeComment($event)" autosize type="text" class="form-control" name="comment" style="border-color: darkseagreen;text-align:left;min-height: 400px;"></textarea>
+                          </td>
+
+                          <td class="upload" style="vertical-align: middle;"  *ngIf="x == 0 && i == 0" [attr.rowspan]="i">
+                            <button (click)='openUploadModalComponent(item)' type="button" class="btn btn-success"  >
+                              <i class="fa fa-upload" ></i>
+                              {{'Upload file' | translate}}
+                            </button>
+                          </td>
+                        </tr>
+                      </ng-container>
+                    </ng-container>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <div class="btn-container" style="text-align: center;">
+              <button id='nextPage2' class='e-btn btn-primary' (click)='btnClicked($event)'>{{'CONTINUE_BUTTON' | translate}} <i class="fa fa-fast-forward" id='nextPage2' ></i></button>
+            </div>
+
+          </div>
+
+          <!-- <div class="modal-footer">
+            <div class="w-100">
+              <button type="button" (click)="saveScore(SystemCode_Heading.PASSION)" class="btn btn-success mr-2 float-right">{{'Save' }}</button>
+            </div>
+          </div> -->
+
+        </div>
+
+        <!-- page 2 -->
+        <div>
+          <div class="modal-body">
+            <div class="row mb-3">
+              <div class="col-12">
+                <button type="button" class="btn btn-danger float-right mr-3 mb-2" (click)="onCloseModal(SystemCode_Heading.ACCOUNTABILITY)" title="Close">x</button>
+                <table style="box-shadow:  -2px 1px 3px black; border-radius: 10px; overflow: hidden;" class="table table-bordered">
+                  <tbody>
+                    <tr>
+                      <td>
+                        <h4 class="font-weight-bold">{{accountbilityData?.headingName | translate}} </h4>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <label class="font-weight-bold">{{"DEFINITION_LABEL_MODAL" | translate}}: </label> <span>{{accountbilityData?.definition | translate}}</span>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-12">
+                <table class="table table-bordered " style="box-shadow:  0 0 20px; border-radius: 5px; overflow: hidden;">
+                  <thead>
+                    <tr>
+                      <th scope="col" colspan="7" class="text-center" style=" background-color: #f0f3f5;">{{"BEHAVIORS_LABEL_MODAL" | translate}}</th>
+                    </tr>
+                    <tr>
+                      <th scope="col" class="text-center" style=" background-color: #f0f3f5;">{{"CATEGORY_LABEL_MODAL" | translate}}</th>
+                      <th scope="col" class="text-center" style=" background-color: #f0f3f5;">{{"LEVEL_LABEL_MODAL" | translate}} </th>
+                      <th scope="col" class="text-center" style=" background-color: #f0f3f5;">{{"KEY_POINTS_LABEL_MODAL" | translate}}</th>
+                      <th scope="col" class="text-center" style=" background-color: #f0f3f5;">{{"OBSERVABLE_BEHAVIOR_INDICATORS_LABEL_MODAL" | translate}}</th>
+                      <th scope="col" class="text-center" style=" background-color: #f0f3f5;">{{"SCORE_LABEL_MODAL" | translate}}</th>
+                      <th scope="col" class="text-center" style=" background-color: #f0f3f5;">{{"COMMENT_LABEL_MODAL" | translate}}</th>
+                      <th scope="col" class="text-center" style=" background-color: #f0f3f5;">{{"ATTCHMENTS_LABEL_MODAL" | translate}}</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <ng-container *ngFor="let item of accountbilityData?.data; let i= index;">
+                      <ng-container *ngFor="let items of item.keypoint; let x= index;">
+                        <tr >
+                          <th [attr.rowspan]="item.keypoint.length" *ngIf="x == 0"  class="text-center align-middle">
+                            {{item.name | translate}}
+                          </th>
+                          <td style="vertical-align: middle; text-align: center;" class="border" >
+                            {{items.level}}
+                          </td>
+                          <td style="vertical-align: middle; text-align: center;" >{{items.name | translate}}</td>
+
+                          <td class="border" >
+                            <ng-container *ngFor="let itemsss of items.behavior; let i= index;">
+                              <ng-container *ngIf="items.behavior.lastIndex === i; else elseTemplate">
+                                <tr  >
+                                  <td  style="border: none; vertical-align: middle;" >
+                                    <ejs-checkbox cssClass="e-info" #checkbox (change)="changeHandler($event,itemsss,items)" [checked]="itemsss.checked"></ejs-checkbox>
+                                    <span style="color: transparent;"> | </span>
+                                    {{itemsss.name | translate}}
+                                  </td>
+                                </tr>
+                              </ng-container>
+                              <ng-template #elseTemplate>
+                                <tr  >
+                                  <td  style="border: none; vertical-align: middle;" >
+                                    <ejs-checkbox cssClass="e-info" #checkbox (change)="changeHandler($event,itemsss,items)" [checked]="itemsss.checked"></ejs-checkbox>
+                                    <span style="color: transparent;"> | </span>
+                                      {{itemsss.name | translate}}
+                                  </td>
+                                </tr>
+                                <hr style="margin: 0; background: #c8ced3">
+                              </ng-template>
+                            </ng-container>
+
+                          </td>
+
+                          <td style="vertical-align: middle;"  class="score" *ngIf="x == 0 && i == 0" [attr.rowspan]="i" >
+                            <!-- <textarea (keypress)="numberOnly($event)" (ngModelChange)="onChangeScore($event)" [(ngModel)]="accountbilityData.score" autosize type="text" class="form-control" name="score" style="text-align:center;"></textarea> -->
+                            <ejs-dropdownlist #sample
+                              [(ngModel)]='accountbilityData.score === null ? "3" : accountbilityData.score === "" ? "3" : accountbilityData.score'
+                              [dataSource]='scoreData'
+                              (select)='onChangeScore($event)'
+                              [fields]='fieldsScore'
+                              placeholder='Select score'>
+                            </ejs-dropdownlist>
+                          </td>
+
+                          <td class="comment" *ngIf="x == 0 && i == 0" [attr.rowspan]="i" >
+                            <textarea [(ngModel)]="accountbilityData.comment"  (ngModelChange)="onChangeComment($event)" autosize type="text" class="form-control" name="comment" style="border-color: darkseagreen;text-align:left;min-height: 400px;"></textarea>
+                          </td>
+
+                          <td class="upload" style="vertical-align: middle;"   *ngIf="x == 0 && i == 0" [attr.rowspan]="i">
+                            <button (click)='openUploadModalComponent(item)' type="button" class="btn btn-success"  >
+                              <i class="fa fa-upload" ></i>
+                              {{'Upload file' | translate}}
+                            </button>
+                          </td>
+
+                        </tr>
+                      </ng-container>
+                    </ng-container>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+            <div class="btn-container" style="text-align: center;">
+              <button id="backPage1" class='e-btn' (click)='btnClicked($event)'> <i class="fa fa-backward" id="backPage1" ></i> {{'BACK_BUTTON' | translate}} </button>
+              <span style="color: transparent;"> | </span>
+              <button id="nextPage3" class='e-btn btn-primary' (click)='btnClicked($event)'>{{'CONTINUE_BUTTON' | translate}} <i class="fa fa-fast-forward" id="nextPage3" ></i></button>
+            </div>
+          </div>
+
+          <!-- <div class="modal-footer">
+            <div class="w-100">
+              <button type="button" (click)="saveScore(SystemCode_Heading.ACCOUNTABILITY)" class="btn btn-success mr-2 float-right">{{'Save' }}</button>
+            </div>
+          </div> -->
+
+        </div>
+
+        <!-- page 3 -->
+        <div>
+          <div class="modal-body">
+            <div class="row mb-3">
+              <div class="col-12">
+                <button type="button" class="btn btn-danger float-right mr-3 mb-2" (click)="onCloseModal(SystemCode_Heading.ATTENTION_TO_DETAIL)" title="Close">x</button>
+                <table style="box-shadow:  -2px 1px 3px black; border-radius: 10px; overflow: hidden;" class="table table-bordered">
+                  <tbody>
+                    <tr>
+                      <td>
+                        <h4 class="font-weight-bold">{{attentionData?.headingName | translate}} </h4>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <label class="font-weight-bold">{{"DEFINITION_LABEL_MODAL" | translate}}: </label> <span>{{attentionData?.definition | translate}}</span>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-12">
+                <table class="table table-bordered " style="box-shadow:  0 0 20px; border-radius: 5px; overflow: hidden;">
+                  <thead>
+                    <tr>
+                      <th scope="col" colspan="7" class="text-center" style=" background-color: #f0f3f5;">{{"BEHAVIORS_LABEL_MODAL" | translate}}</th>
+                    </tr>
+                    <tr>
+                      <th scope="col" class="text-center" style=" background-color: #f0f3f5;">{{"CATEGORY_LABEL_MODAL" | translate}}</th>
+                      <th scope="col" class="text-center" style=" background-color: #f0f3f5;">{{"LEVEL_LABEL_MODAL" | translate}} </th>
+                      <th scope="col" class="text-center" style=" background-color: #f0f3f5;">{{"KEY_POINTS_LABEL_MODAL" | translate}}</th>
+                      <th scope="col" class="text-center" style=" background-color: #f0f3f5;">{{"OBSERVABLE_BEHAVIOR_INDICATORS_LABEL_MODAL" | translate}}</th>
+                      <th scope="col" class="text-center" style=" background-color: #f0f3f5;">{{"SCORE_LABEL_MODAL" | translate}}</th>
+                      <th scope="col" class="text-center" style=" background-color: #f0f3f5;">{{"COMMENT_LABEL_MODAL" | translate}}</th>
+                      <th scope="col" class="text-center" style=" background-color: #f0f3f5;">{{"ATTCHMENTS_LABEL_MODAL" | translate}}</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <ng-container *ngFor="let item of attentionData?.data; let i= index;">
+                      <ng-container *ngFor="let items of item.keypoint; let x= index;">
+                        <tr >
+                          <th [attr.rowspan]="item.keypoint.length" *ngIf="x == 0"  class="text-center align-middle">
+                            {{item.name | translate}}
+                          </th>
+                          <td style="vertical-align: middle; text-align: center;" class="border" >
+                            {{items.level}}
+                          </td>
+                          <td style="vertical-align: middle; text-align: center;" >{{items.name | translate}}</td>
+
+                          <td class="border" >
+                            <ng-container *ngFor="let itemsss of items.behavior; let i= index;">
+                              <ng-container *ngIf="items.behavior.lastIndex === i; else elseTemplate">
+                                <tr  >
+                                  <td  style="border: none; vertical-align: middle;" >
+                                    <ejs-checkbox cssClass="e-info" #checkbox (change)="changeHandler($event,itemsss,items)" [checked]="itemsss.checked"></ejs-checkbox>
+                                    <span style="color: transparent;"> | </span>
+                                    {{itemsss.name | translate}}
+                                  </td>
+                                </tr>
+                              </ng-container>
+                              <ng-template #elseTemplate>
+                                <tr  >
+                                  <td  style="border: none; vertical-align: middle;" >
+                                    <ejs-checkbox cssClass="e-info" #checkbox (change)="changeHandler($event,itemsss,items)" [checked]="itemsss.checked"></ejs-checkbox>
+                                    <span style="color: transparent;"> | </span>
+                                      {{itemsss.name | translate}}
+                                  </td>
+                                </tr>
+                                <hr style="margin: 0; background: #c8ced3">
+                              </ng-template>
+                            </ng-container>
+
+                          </td>
+
+                          <td style="vertical-align: middle;"  class="score" *ngIf="x == 0 && i == 0" [attr.rowspan]="i" >
+                            <!-- <textarea (keypress)="numberOnly($event)" (ngModelChange)="onChangeScore($event)" [(ngModel)]="attentionData.score" autosize type="text" class="form-control" name="score" style="text-align:center;"></textarea> -->
+                            <ejs-dropdownlist #sample
+                              [(ngModel)]='attentionData.score === null ? "3" : attentionData.score === "" ? "3" : attentionData.score'
+                              [dataSource]='scoreData'
+                              (select)='onChangeScore($event)'
+                              [fields]='fieldsScore'
+                              placeholder='Select score'>
+                            </ejs-dropdownlist>
+                          </td>
+
+                          <td class="comment" *ngIf="x == 0 && i == 0" [attr.rowspan]="i" >
+                            <textarea [(ngModel)]="attentionData.comment"  (ngModelChange)="onChangeComment($event)" autosize type="text" class="form-control" name="comment" style="border-color: darkseagreen;text-align:left;min-height: 400px;"></textarea>
+                          </td>
+
+                          <td class="upload" style="vertical-align: middle;"   *ngIf="x == 0 && i == 0" [attr.rowspan]="i">
+                            <button (click)='openUploadModalComponent(item)' type="button" class="btn btn-success"  >
+                              <i class="fa fa-upload" ></i>
+                              {{'Upload file' | translate}}
+                            </button>
+                          </td>
+
+                        </tr>
+                      </ng-container>
+                    </ng-container>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <div class="btn-container" style="text-align: center;">
+              <button id="backPage2" class='e-btn' (click)='btnClicked($event)'><i class="fa fa-backward" id="backPage2" ></i> {{'BACK_BUTTON' | translate}}</button>
+              <span style="color: transparent;"> | </span>
+              <button id="nextPage4" class='e-btn btn-primary' (click)='btnClicked($event)'>{{'CONTINUE_BUTTON' | translate}} <i class="fa fa-fast-forward"  id="nextPage4"></i></button>
+            </div>
+          </div>
+
+          <!-- <div class="modal-footer">
+            <div class="w-100">
+              <button type="button" (click)="saveScore(SystemCode_Heading.ATTENTION_TO_DETAIL)" class="btn btn-success mr-2 float-right">{{'Save' }}</button>
+            </div>
+          </div> -->
+
+        </div>
+
+        <!-- page 4 -->
+        <div>
+          <div class="modal-body">
+            <div class="row mb-3">
+              <div class="col-12">
+                <button type="button" class="btn btn-danger float-right mr-3 mb-2" (click)="onCloseModal(SystemCode_Heading.EFFECTIVE_COMUNICATION)" title="Close">x</button>
+                <table style="box-shadow:  -2px 1px 3px black; border-radius: 10px; overflow: hidden;" class="table table-bordered">
+                  <tbody>
+                    <tr>
+                      <td>
+                        <h4 class="font-weight-bold">{{effectiveData?.headingName | translate}} </h4>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <label class="font-weight-bold">{{"DEFINITION_LABEL_MODAL" | translate}}: </label> <span>{{effectiveData?.definition | translate}}</span>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-12">
+                <table class="table table-bordered " style="box-shadow:  0 0 20px; border-radius: 5px; overflow: hidden;">
+                  <thead>
+                    <tr>
+                      <th scope="col" colspan="7" class="text-center" style=" background-color: #f0f3f5;">{{"BEHAVIORS_LABEL_MODAL" | translate}}</th>
+                    </tr>
+                    <tr>
+                      <th scope="col" class="text-center" style=" background-color: #f0f3f5;">{{"CATEGORY_LABEL_MODAL" | translate}}</th>
+                      <th scope="col" class="text-center" style=" background-color: #f0f3f5;">{{"LEVEL_LABEL_MODAL" | translate}} </th>
+                      <th scope="col" class="text-center" style=" background-color: #f0f3f5;">{{"KEY_POINTS_LABEL_MODAL" | translate}}</th>
+                      <th scope="col" class="text-center" style=" background-color: #f0f3f5;">{{"OBSERVABLE_BEHAVIOR_INDICATORS_LABEL_MODAL" | translate}}</th>
+                      <th scope="col" class="text-center" style=" background-color: #f0f3f5;">{{"SCORE_LABEL_MODAL" | translate}}</th>
+                      <th scope="col" class="text-center" style=" background-color: #f0f3f5;">{{"COMMENT_LABEL_MODAL" | translate}}</th>
+                      <th scope="col" class="text-center" style=" background-color: #f0f3f5;">{{"ATTCHMENTS_LABEL_MODAL" | translate}}</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <ng-container *ngFor="let item of effectiveData?.data; let i= index;">
+                      <ng-container *ngFor="let items of item.keypoint; let x= index;">
+                        <tr >
+                          <th [attr.rowspan]="item.keypoint.length" *ngIf="x == 0"  class="text-center align-middle">
+                            {{item.name | translate}}
+                          </th>
+                          <td style="vertical-align: middle; text-align: center;" class="border" >
+                            {{items.level}}
+                          </td>
+                          <td style="vertical-align: middle; text-align: center;" >{{items.name | translate}}</td>
+
+                          <td class="border" >
+                            <ng-container *ngFor="let itemsss of items.behavior; let i= index;">
+                              <ng-container *ngIf="items.behavior.lastIndex === i; else elseTemplate">
+                                <tr  >
+                                  <td  style="border: none; vertical-align: middle;" >
+                                    <ejs-checkbox cssClass="e-info" #checkbox (change)="changeHandler($event,itemsss,items)" [checked]="itemsss.checked"></ejs-checkbox>
+                                    <span style="color: transparent;"> | </span>
+                                    {{itemsss.name | translate}}
+                                  </td>
+                                </tr>
+                              </ng-container>
+                              <ng-template #elseTemplate>
+                                <tr  >
+                                  <td  style="border: none; vertical-align: middle;" >
+                                    <ejs-checkbox cssClass="e-info" #checkbox (change)="changeHandler($event,itemsss,items)" [checked]="itemsss.checked"></ejs-checkbox>
+                                    <span style="color: transparent;"> | </span>
+                                      {{itemsss.name | translate}}
+                                  </td>
+                                </tr>
+                                <hr style="margin: 0; background: #c8ced3">
+                              </ng-template>
+                            </ng-container>
+
+                          </td>
+
+                          <td style="vertical-align: middle;"  class="score" *ngIf="x == 0 && i == 0" [attr.rowspan]="i" >
+                            <!-- <textarea (keypress)="numberOnly($event)" (ngModelChange)="onChangeScore($event)" [(ngModel)]="effectiveData.score" autosize type="text" class="form-control" name="score" style="text-align:center;"></textarea> -->
+                            <ejs-dropdownlist #sample
+                              [(ngModel)]='effectiveData.score === null ? "3" : effectiveData.score === "" ? "3" : effectiveData.score'
+                              [dataSource]='scoreData'
+                              (select)='onChangeScore($event)'
+                              [fields]='fieldsScore'
+                              placeholder='Select score'>
+                            </ejs-dropdownlist>
+                          </td>
+
+                          <td class="comment" *ngIf="x == 0 && i == 0" [attr.rowspan]="i" >
+                            <textarea [(ngModel)]="effectiveData.comment"  (ngModelChange)="onChangeComment($event)" autosize type="text" class="form-control" name="comment" style="border-color: darkseagreen;text-align:left;min-height: 400px;"></textarea>
+                          </td>
+
+                          <td class="upload" style="vertical-align: middle;"   *ngIf="x == 0 && i == 0" [attr.rowspan]="i">
+                            <button (click)='openUploadModalComponent(item)' type="button" class="btn btn-success"  >
+                              <i class="fa fa-upload" ></i>
+                              {{'Upload file' | translate}}
+                            </button>
+                          </td>
+
+                        </tr>
+                      </ng-container>
+                    </ng-container>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <div class="btn-container" style="text-align: center;">
+              <button id="backPage3" class='e-btn' (click)='btnClicked($event)'> <i class="fa fa-backward" id="backPage3" ></i> {{'BACK_BUTTON' | translate}} </button>
+              <span style="color: transparent;"> | </span>
+              <button id="nextPage5" class='e-btn btn-primary' (click)='btnClicked($event)'>{{'CONTINUE_BUTTON' | translate}} <i class="fa fa-fast-forward" id="nextPage5"></i></button>
+            </div>
+
+          </div>
+
+          <!-- <div class="modal-footer">
+            <div class="w-100">
+              <button type="button" (click)="saveScore(SystemCode_Heading.EFFECTIVE_COMUNICATION)" class="btn btn-success mr-2 float-right">{{'Save' }}</button>
+            </div>
+          </div> -->
+
+        </div>
+
+        <!-- page 5 -->
+        <div>
+          <div class="modal-body">
+            <div class="row mb-3">
+              <div class="col-12">
+                <button type="button" class="btn btn-danger float-right mr-3 mb-2" (click)="onCloseModal(SystemCode_Heading.RESILIENCE)" title="Close">x</button>
+                <table style="box-shadow:  -2px 1px 3px black; border-radius: 10px; overflow: hidden;" class="table table-bordered">
+                  <tbody>
+                    <tr>
+                      <td>
+                        <h4 class="font-weight-bold">{{resilienceData?.headingName | translate}} </h4>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <label class="font-weight-bold">{{"DEFINITION_LABEL_MODAL" | translate}}: </label> <span>{{resilienceData?.definition | translate}}</span>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-12">
+                <table class="table table-bordered " style="box-shadow:  0 0 20px; border-radius: 5px; overflow: hidden;">
+                  <thead>
+                    <tr>
+                      <th scope="col" colspan="7" class="text-center" style=" background-color: #f0f3f5;">{{"BEHAVIORS_LABEL_MODAL" | translate}}</th>
+                    </tr>
+                    <tr>
+                      <th scope="col" class="text-center" style=" background-color: #f0f3f5;">{{"CATEGORY_LABEL_MODAL" | translate}}</th>
+                      <th scope="col" class="text-center" style=" background-color: #f0f3f5;">{{"LEVEL_LABEL_MODAL" | translate}} </th>
+                      <th scope="col" class="text-center" style=" background-color: #f0f3f5;">{{"KEY_POINTS_LABEL_MODAL" | translate}}</th>
+                      <th scope="col" class="text-center" style=" background-color: #f0f3f5;">{{"OBSERVABLE_BEHAVIOR_INDICATORS_LABEL_MODAL" | translate}}</th>
+                      <th scope="col" class="text-center" style=" background-color: #f0f3f5;">{{"SCORE_LABEL_MODAL" | translate}}</th>
+                      <th scope="col" class="text-center" style=" background-color: #f0f3f5;">{{"COMMENT_LABEL_MODAL" | translate}}</th>
+                      <th scope="col" class="text-center" style=" background-color: #f0f3f5;">{{"ATTCHMENTS_LABEL_MODAL" | translate}}</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <ng-container *ngFor="let item of resilienceData?.data; let i= index;">
+                      <ng-container *ngFor="let items of item.keypoint; let x= index;">
+                        <tr >
+                          <th [attr.rowspan]="item.keypoint.length" *ngIf="x == 0"  class="text-center align-middle">
+                            {{item.name | translate}}
+                          </th>
+                          <td style="vertical-align: middle; text-align: center;" class="border" >
+                            {{items.level}}
+                          </td>
+                          <td style="vertical-align: middle; text-align: center;" >{{items.name | translate}}</td>
+
+                          <td class="border" >
+                            <ng-container *ngFor="let itemsss of items.behavior; let i= index;">
+                              <ng-container *ngIf="items.behavior.lastIndex === i; else elseTemplate">
+                                <tr  >
+                                  <td  style="border: none; vertical-align: middle;" >
+                                    <ejs-checkbox cssClass="e-info" #checkbox (change)="changeHandler($event,itemsss,items)" [checked]="itemsss.checked"></ejs-checkbox>
+                                    <span style="color: transparent;"> | </span>
+                                    {{itemsss.name | translate}}
+                                  </td>
+                                </tr>
+                              </ng-container>
+                              <ng-template #elseTemplate>
+                                <tr  >
+                                  <td  style="border: none; vertical-align: middle;" >
+                                    <ejs-checkbox cssClass="e-info" #checkbox (change)="changeHandler($event,itemsss,items)" [checked]="itemsss.checked"></ejs-checkbox>
+                                    <span style="color: transparent;"> | </span>
+                                      {{itemsss.name | translate}}
+                                  </td>
+                                </tr>
+                                <hr style="margin: 0; background: #c8ced3">
+                              </ng-template>
+                            </ng-container>
+
+                          </td>
+
+                          <td style="vertical-align: middle;"  class="score" *ngIf="x == 0 && i == 0" [attr.rowspan]="i" >
+                            <!-- <textarea (keypress)="numberOnly($event)" (ngModelChange)="onChangeScore($event)" [(ngModel)]="resilienceData.score" autosize type="text" class="form-control" name="score" style="text-align:center;"></textarea> -->
+                            <ejs-dropdownlist #sample
+                              [(ngModel)]='resilienceData.score === null ? "3" : resilienceData.score === "" ? "3" : resilienceData.score'
+                              [dataSource]='scoreData'
+                              (select)='onChangeScore($event)'
+                              [fields]='fieldsScore'
+                              placeholder='Select score'>
+                            </ejs-dropdownlist>
+                          </td>
+
+                          <td class="comment" *ngIf="x == 0 && i == 0" [attr.rowspan]="i" >
+                            <textarea [(ngModel)]="resilienceData.comment"  (ngModelChange)="onChangeComment($event)" autosize type="text" class="form-control" name="comment" style="border-color: darkseagreen;text-align:left;min-height: 400px;"></textarea>
+                          </td>
+
+                          <td class="upload" style="vertical-align: middle;"   *ngIf="x == 0 && i == 0" [attr.rowspan]="i">
+                            <button (click)='openUploadModalComponent(item)' type="button" class="btn btn-success"  >
+                              <i class="fa fa-upload" ></i>
+                              {{'Upload file' | translate}}
+                            </button>
+                          </td>
+
+                        </tr>
+                      </ng-container>
+                    </ng-container>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <div class="btn-container" style="text-align: center;">
+              <button id="backPage4" class='e-btn ' (click)='btnClicked($event)'> <i class="fa fa-backward" id="backPage4"></i> {{'BACK_BUTTON' | translate}}</button>
+              <span style="color: transparent;"> | </span>
+              <button id="nextPage6" class='e-btn btn-primary' (click)='btnClicked($event)'>{{'CONTINUE_BUTTON' | translate}} <i class="fa fa-fast-forward"  id="nextPage6"></i></button>
+            </div>
+          </div>
+
+          <!-- <div class="modal-footer">
+            <div class="w-100">
+              <button type="button" (click)="saveScore(SystemCode_Heading.RESILIENCE)" class="btn btn-success mr-2 float-right">{{'Save' }}</button>
+            </div>
+          </div> -->
+
+        </div>
+
+        <!-- page 6 -->
+        <div>
+          <div class="modal-body">
+            <div class="row mb-3">
+              <div class="col-12">
+                <button type="button" class="btn btn-danger float-right mr-3 mb-2" (click)="onCloseModal(SystemCode_Heading.CONTINUOUS_LEARNING)" title="Close">x</button>
+                <table style="box-shadow:  -2px 1px 3px black; border-radius: 10px; overflow: hidden;" class="table table-bordered">
+                  <tbody>
+                    <tr>
+                      <td>
+                        <h4 class="font-weight-bold">{{continuousData?.headingName | translate}} </h4>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <label class="font-weight-bold">{{"DEFINITION_LABEL_MODAL" | translate}}: </label> <span>{{continuousData?.definition | translate}}</span>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-12">
+                <table class="table table-bordered " style="box-shadow:  0 0 20px; border-radius: 5px; overflow: hidden;">
+                  <thead>
+                    <tr>
+                      <th scope="col" colspan="7" class="text-center" style=" background-color: #f0f3f5;">{{"BEHAVIORS_LABEL_MODAL" | translate}}</th>
+                    </tr>
+                    <tr>
+                      <th scope="col" class="text-center" style=" background-color: #f0f3f5;">{{"CATEGORY_LABEL_MODAL" | translate}}</th>
+                      <th scope="col" class="text-center" style=" background-color: #f0f3f5;">{{"LEVEL_LABEL_MODAL" | translate}} </th>
+                      <th scope="col" class="text-center" style=" background-color: #f0f3f5;">{{"KEY_POINTS_LABEL_MODAL" | translate}}</th>
+                      <th scope="col" class="text-center" style=" background-color: #f0f3f5;">{{"OBSERVABLE_BEHAVIOR_INDICATORS_LABEL_MODAL" | translate}}</th>
+                      <th scope="col" class="text-center" style=" background-color: #f0f3f5;">{{"SCORE_LABEL_MODAL" | translate}}</th>
+                      <th scope="col" class="text-center" style=" background-color: #f0f3f5;">{{"COMMENT_LABEL_MODAL" | translate}}</th>
+                      <th scope="col" class="text-center" style=" background-color: #f0f3f5;">{{"ATTCHMENTS_LABEL_MODAL" | translate}}</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <ng-container *ngFor="let item of continuousData?.data; let i= index;">
+                      <ng-container *ngFor="let items of item.keypoint; let x= index;">
+                        <tr >
+                          <th [attr.rowspan]="item.keypoint.length" *ngIf="x == 0"  class="text-center align-middle">
+                            {{item.name | translate}}
+                          </th>
+                          <td style="vertical-align: middle; text-align: center;" class="border" >
+                            {{items.level}}
+                          </td>
+                          <td style="vertical-align: middle; text-align: center;" >{{items.name | translate}}</td>
+
+                          <td class="border" >
+                            <ng-container *ngFor="let itemsss of items.behavior; let i= index;">
+                              <ng-container *ngIf="items.behavior.lastIndex === i; else elseTemplate">
+                                <tr  >
+                                  <td  style="border: none; vertical-align: middle;" >
+                                    <ejs-checkbox cssClass="e-info" #checkbox (change)="changeHandler($event,itemsss,items)" [checked]="itemsss.checked"></ejs-checkbox>
+                                    <span style="color: transparent;"> | </span>
+                                    {{itemsss.name | translate}}
+                                  </td>
+                                </tr>
+                              </ng-container>
+                              <ng-template #elseTemplate>
+                                <tr  >
+                                  <td  style="border: none; vertical-align: middle;" >
+                                    <ejs-checkbox cssClass="e-info" #checkbox (change)="changeHandler($event,itemsss,items)" [checked]="itemsss.checked"></ejs-checkbox>
+                                    <span style="color: transparent;"> | </span>
+                                      {{itemsss.name | translate}}
+                                  </td>
+                                </tr>
+                                <hr style="margin: 0; background: #c8ced3">
+                              </ng-template>
+                            </ng-container>
+
+                          </td>
+
+                          <td style="vertical-align: middle;"  class="score" *ngIf="x == 0 && i == 0" [attr.rowspan]="i" >
+                            <!-- <textarea (keypress)="numberOnly($event)" (ngModelChange)="onChangeScore($event)" [(ngModel)]="continuousData.score" autosize type="text" class="form-control" name="score" style="text-align:center;"></textarea> -->
+                            <ejs-dropdownlist #sample
+                              [(ngModel)]='continuousData.score === null ? "3" : continuousData.score === "" ? "3" : continuousData.score'
+                              [dataSource]='scoreData'
+                              (select)='onChangeScore($event)'
+                              [fields]='fieldsScore'
+                              placeholder='Select score'>
+                            </ejs-dropdownlist>
+                          </td>
+
+                          <td class="comment" *ngIf="x == 0 && i == 0" [attr.rowspan]="i" >
+                            <textarea [(ngModel)]="continuousData.comment"  (ngModelChange)="onChangeComment($event)" autosize type="text" class="form-control" name="comment" style="border-color: darkseagreen;text-align:left;min-height: 400px;"></textarea>
+                          </td>
+
+                          <td class="upload" style="vertical-align: middle;"   *ngIf="x == 0 && i == 0" [attr.rowspan]="i">
+                            <button (click)='openUploadModalComponent(item)' type="button" class="btn btn-success"  >
+                              <i class="fa fa-upload" ></i>
+                              {{'Upload file' | translate}}
+                            </button>
+                          </td>
+
+                        </tr>
+                      </ng-container>
+                    </ng-container>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+
+            <div class="btn-container" style="text-align: center;">
+              <button id="backPage5" class='e-btn' (click)='btnClicked($event)'> <i class="fa fa-backward" id="backPage5" ></i> {{'BACK_BUTTON' | translate}}</button>
+              <button type="button" (click)="submit()" class="btn btn-warning float-right mr-3">{{'Submit' }}</button>
+          </div>
+        </div>
+        </div>
+    </div>
+  </ejs-tab>
+
+</div>
+
+<ng-template #message let-modal>
+  <div class="modal-header text-center">
+    <h2 class="modal-title w-100" style="font-size: 40px;">{{'MESSAGE_SUBMIT_PDCA_1'| translate}}</h2>
+  </div>
+  <div class="modal-body" style="max-height: 400px;">
+    <h3>{{'MESSAGE_SUBMIT_PDCA_2'| translate}}</h3>
+    <h3>{{'MESSAGE_SUBMIT_PDCA_3'| translate}}</h3>
+
+    <div class="row justify-content-center">
+      <button type="button" class="btn btn-success btn-lg" (click)="yesConfirm()" >{{'YES_CONFIRM_ALERTIFY'| translate}}</button>
+      <span style="color: transparent;">|</span>
+      <button  type="button" class="btn btn-secondary btn-lg" (click)="modal.close('Close click')" >{{'NO_CONFIRM_ALERTIFY'| translate}}</button>
+    </div>
+  </div>
+
+</ng-template>
+
+
+

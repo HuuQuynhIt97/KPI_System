@@ -1,0 +1,12 @@
+::ng-deep .e-treegrid .e-headercell {
+  background-color: #f0f3f5;;
+}
+.form-control[disabled], .form-control[readonly], fieldset[disabled] .form-control {
+  background-color: white;
+  border: none;
+  color: #000;
+  background-color: transparent;
+  outline: none;
+  resize: none;
+  height: fit-content;
+}

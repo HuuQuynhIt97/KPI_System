@@ -1,0 +1,157 @@
+
+<ngx-spinner [fullScreen]="true" type="square-jelly-box" size="medium">
+  <p class="loading">Loading data...</p>
+</ngx-spinner>
+<div class="card">
+  <div class="control-section e-tbar-section">
+    <div class="e-sample-resize-container">
+      <div class="col-md-12 d-flex justify-content-left align-items-center">
+        <div class="font-weight-bold px-3">{{"KPI_CREATE_YEAL_LABEL" | translate}}:</div>
+        <ejs-dropdownlist
+          id='ddlelement' #ddlelement
+          [allowFiltering]='true'
+          [fields]="typeFields"
+          [(ngModel)]="yearSelect"
+          placeholder='Select Year'
+          (change)='onChangeYear($event)'
+          [dataSource]='yearData'>
+        </ejs-dropdownlist>
+
+        <div style="color: transparent;" class="font-weight-bold pr-3">|</div>
+        <button id='btn' #btn class="btn btn-sm btn-secondary" (click)='onClickDefault()'>
+          <i class="fa fa-times"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div class="control-section">
+    <ejs-treegrid
+      #treegrid
+      [dataSource]="data"
+      [treeColumnIndex]="1"
+      allowSorting="true"
+      gridLines="Both"
+      height='580'
+      [allowResizing]='true'
+      [showColumnMenu]='true'
+      (created)="created()"
+      [toolbar]="toolbar"
+      childMapping="childNodes"
+      [allowExcelExport]='true'
+      (toolbarClick)="toolbarClickExcelExport($event)"
+    >
+      <e-columns>
+        <e-column
+          field="entity.level"
+          width="80"
+          isPrimaryKey="true"
+          headerText="Level"
+        >
+        <ng-template #template let-data>
+          {{ data.entity.level - 1}}
+        </ng-template>
+        <ng-template #headerTemplate let-data>
+          {{"LevelKPINew" | translate}}
+        </ng-template>
+          <ng-template #editTemplate let-data>
+            {{ data.entity.level - 1 }}
+          </ng-template>
+        </e-column>
+
+        <e-column field="entity.name" headerText="KPI Name" headerTextAlign="center" width="250" textAlign='Left'>
+          <ng-template #headerTemplate let-data>
+            {{"KPI Name 2" | translate}}
+          </ng-template>
+          <ng-template #template let-data>
+            <ejs-tooltip >
+              <!-- <span style="text-align: left; font-size: 14px;"></span> -->
+              {{data.entity.name}}
+              <ng-template #content >
+                {{data.entity.name}}
+              </ng-template>
+            </ejs-tooltip>
+          </ng-template>
+
+        </e-column>
+
+
+        <e-column field="typeName" headerText="Type" textAlign='Center'>
+          <ng-template #headerTemplate let-data>
+            {{"TypeNew" | translate}}
+          </ng-template>
+          <ng-template #template let-data>
+            {{data.entity.typeName}}
+          </ng-template>
+          <ng-template #editTemplate let-data>
+            <ejs-dropdownlist [(ngModel)]='typeId' [allowFiltering]='true' [fields]="typeFields" placeholder='Select a Type' [dataSource]='typeData'></ejs-dropdownlist>
+          </ng-template>
+        </e-column>
+        <e-column field="picName" headerText="PIC" textAlign='Center'>
+          <ng-template #headerTemplate let-data>
+            {{"PICNew" | translate}}
+          </ng-template>
+          <ng-template #template let-data>
+            {{data.entity.picName}}
+          </ng-template>
+          <ng-template #editTemplate let-data>
+            <ejs-dropdownlist [(ngModel)]='picId' [allowFiltering]='true' [fields]="picFields" placeholder='Select a manager' [dataSource]='accountData'></ejs-dropdownlist>
+          </ng-template>
+        </e-column>
+        <e-column field="" headerText="Mgmt. Arrange" textAlign='Center'>
+          <ng-template #headerTemplate let-data>
+            {{"MGMT" | translate}}
+          </ng-template>
+          <ng-template #template let-data>
+            <span > {{data.entity.mgmt}}</span>
+          </ng-template>
+
+          <ng-template #editTemplate let-data>
+          </ng-template>
+        </e-column>
+        <e-column field='entity.startDisplayMeetingTime' width=150 editType= 'datepickeredit' headerText='Start Meeting Display Time' type='date' format='MM/dd/yyyy' editType='datepickeredit'>
+          <ng-template #headerTemplate let-data>
+            {{"START_MEETING_DISPLAY_TIME_LABEL" | translate}}
+          </ng-template>
+          <ng-template #template let-data>
+            {{data.entity.startDisplayMeetingTime}}
+
+          </ng-template>
+
+        </e-column>
+
+        <e-column field='entity.endDisplayMeetingTime' width=150  headerText='End Meeting Display Time' type='date' >
+          <ng-template #headerTemplate let-data>
+            {{"END_MEETING_DISPLAY_TIME_LABEL" | translate}}
+          </ng-template>
+          <ng-template #template let-data>
+            {{data.entity.endDisplayMeetingTime}}
+
+          </ng-template>
+
+        </e-column>
+        <e-column field="entity.updateName" headerText="The last editor" textAlign='Center'>
+          <ng-template #headerTemplate let-data>
+            {{"editor" | translate}}
+          </ng-template>
+          <ng-template #editTemplate let-data>
+            {{data.entity.updateName}}
+          </ng-template>
+        </e-column>
+        <e-column field="entity.updateDate" headerText="The last edit date" textAlign='Center'>
+          <ng-template #headerTemplate let-data>
+            {{"editdate" | translate}}
+          </ng-template>
+          <ng-template #template let-data>
+            {{data.entity.updateDate }}
+          </ng-template>
+
+          <ng-template #editTemplate let-data>
+            {{data.entity.updateDate }}
+          </ng-template>
+        </e-column>
+
+      </e-columns>
+    </ejs-treegrid>
+  </div>
+</div>

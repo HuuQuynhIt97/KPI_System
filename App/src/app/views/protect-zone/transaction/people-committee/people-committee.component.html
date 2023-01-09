@@ -1,0 +1,54 @@
+
+
+<ngx-spinner [fullScreen]="true" type="square-jelly-box" size="medium">
+  <p class="loading">Loading data...</p>
+</ngx-spinner>
+
+<div class="row">
+  <div class="col-md-12">
+    <div class="card">
+      <div class="card-body table-responsive p-0">
+        <ejs-grid #grid
+          id='grid'
+          [dataSource]="campaignData"
+          [allowPaging]='true'
+          [allowResizing]='true'
+          [showColumnMenu]='true'
+          gridLines='Both'
+          [locale]='locale'
+          [pageSettings]='pageSettings'
+          [allowExcelExport]='true'
+        >
+          <e-columns>
+
+            <e-column field="#" textAlign='Center' width="80" isPrimaryKey="true" headerText="#">
+              <ng-template #template let-data>
+                {{NO(data.index)}}
+              </ng-template>
+              <ng-template #editTemplate let-data>
+                #
+              </ng-template>
+            </e-column>
+
+            <e-column field="name" textAlign='Center' headerText="Campaign Name"></e-column>
+
+            <e-column field="" width="130" textAlign='Center' headerText="{{ 'Option'}}">
+              <ng-template #template let-data>
+                <button (click)="openDetail(data)"  type="button"  class="btn btn-xs btn-success">
+                  <i  class="fa fa-eye"></i> {{'PEOPLE_COMMITTEE_BUTTON_LABEL' | translate}}
+                </button>
+              </ng-template>
+              <ng-template #editTemplate let-data>
+              </ng-template>
+            </e-column>
+
+          </e-columns>
+
+        </ejs-grid>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+

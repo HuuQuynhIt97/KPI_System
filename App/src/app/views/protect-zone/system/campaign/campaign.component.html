@@ -1,0 +1,40 @@
+<div class="row">
+  <div class="col-md-12">
+    <div class="card">
+      <div class="card-body table-responsive p-0">
+        <ejs-grid #grid id="grid" (actionBegin)="actionBegin($event)" gridLines='Both' (actionComplete)="actionComplete($event)"
+          [toolbar]='toolbarOptions' [dataSource]='data' [allowPaging]='true' [allowSorting]='true' [allowResizing]='true'
+          [showColumnMenu]='true' [allowExcelExport]='true'  [filterSettings]='filterSettings'
+          [pageSettings]='pageSettings' (toolbarClick)='toolbarClick($event)'>
+          <e-columns>
+            <e-column headerText='#' width="50px" headerTextAlign="center"  textAlign="center" isPrimaryKey='true'>
+              <ng-template #template let-data>
+                {{NO(data.index)}}
+              </ng-template>
+              <ng-template #editTemplate let-data>
+
+              </ng-template>
+            </e-column>
+            <e-column field='name' headerTextAlign="center" headerText='Campaign Name' textAlign="center">
+            </e-column>
+            <e-column field="" headerTextAlign="center" isPrimaryKey="true" headerText="Option" textAlign="center">
+              <ng-template #template let-data>
+                <ng-container>
+                  <button type="button" (click)="openSettingCampaignModal(data)"
+                    class="btn btn-info rounded-pill">
+                    <i class="fas fa-plus mr-1"></i>Setting Campaign
+                  </button>
+                </ng-container>
+              </ng-template>
+              <ng-template #editTemplate let-data>
+                N/A
+              </ng-template>
+            </e-column>
+
+          </e-columns>
+        </ejs-grid>
+      </div>
+    </div>
+  </div>
+</div>
+

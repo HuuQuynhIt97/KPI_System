@@ -1,0 +1,488 @@
+<ngx-spinner [fullScreen]="true" type="square-jelly-box" size="medium">
+  <p class="loading">Loading data...</p>
+</ngx-spinner>
+
+<div class="row">
+  <div class="col-md-12">
+    <div class="card">
+      <div class="card-body table-responsive">
+        <div class="row my-3">
+          <div class="col-md-12">
+
+            <div class="row mb-2">
+              <div class="col-md-12 d-flex justify-content-center align-items-center">
+                <div class="font-weight-bold px-3">{{"Factory" | translate}} :</div>
+                <ejs-dropdownlist [dataSource]='dataFact' [fields]='levelFields' [allowFiltering]='true'
+                  (change)='filterFact($event)'
+                  [(ngModel)]='factId'
+                  placeholder="Select a Factory">
+                </ejs-dropdownlist>
+
+                <div class="font-weight-bold pr-3">{{"Center" | translate}}: </div>
+                <ejs-dropdownlist [dataSource]='dataCenter' [fields]='levelFields' [allowFiltering]='true'
+                   (change)='filterCenter($event)'
+                   [(ngModel)]='centerId'
+                  placeholder="Select a Center">
+                </ejs-dropdownlist>
+
+                <div class="font-weight-bold pr-3">{{"Dept" | translate}}: </div>
+                <ejs-dropdownlist [dataSource]='dataDept' [fields]='levelFields' [allowFiltering]='true'
+                   (change)='filterDept($event)'
+                   [(ngModel)]='deptId'
+                  placeholder="Select a Dept.">
+                </ejs-dropdownlist>
+
+
+                <div class="font-weight-bold pr-3">{{"Level" | translate}}: </div>
+                <ejs-dropdownlist [dataSource]='dataLevel' [fields]='levelFields' [allowFiltering]='true'
+                   (change)='filterlevel($event)'
+                   [(ngModel)]='levelId'
+                  placeholder="Select a Level">
+                </ejs-dropdownlist>
+
+
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div *ngIf="roleUser === 'SYSTEMADMIN'" class="col-md-3 d-flex justify-content-center">
+          <div class="form-group">
+            <label for="exampleInputEmail1">Change System Date</label>
+            <kendo-datepicker style="width: 100%;" [(ngModel)]="currentTime" >
+            </kendo-datepicker>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-12">
+            <ejs-grid #grid
+              id='grid'
+              [dataSource]="policyData"
+              [allowPaging]='true'
+              [allowResizing]='true'
+              [showColumnMenu]='true'
+              gridLines='Both'
+              [toolbar]="toolbar"
+              (created)="createdSearch($event)"
+              [locale]='locale'
+              [pageSettings]='pageSettings'
+              [allowExcelExport]='true'
+            >
+              <e-columns>
+                <e-column field="level" textAlign='Center' width="80" isPrimaryKey="true" headerText="Level">
+                  <ng-template #headerTemplate let-data>
+                    {{"Level" | translate}}
+                  </ng-template>
+                  <!-- <ng-template #template let-data>
+                    {{ data.level - 1}}
+                  </ng-template>
+                  <ng-template #editTemplate let-data>
+                    {{ data.level  - 1}}
+                  </ng-template> -->
+
+                </e-column>
+                <e-column field="name" textAlign='Center' headerText="KPI Name">
+                  <ng-template #headerTemplate let-data>
+                    {{"KPI Name" | translate}}
+                  </ng-template>
+                </e-column>
+                <e-column field="centerName" textAlign='Center' headerText="Center">
+                  <ng-template #headerTemplate let-data>
+                    {{"Center" | translate}}
+                  </ng-template>
+                </e-column>
+                <e-column field="deptName" textAlign='Center' headerText="Dept.">
+                  <ng-template #headerTemplate let-data>
+                    {{"Dept" | translate}}
+                  </ng-template>
+                </e-column>
+                <e-column field='picName' headerText="PIC" width='200' textAlign='Center'>
+                  <ng-template #headerTemplate let-data>
+                    {{"PIC" | translate}}
+                  </ng-template>
+                </e-column>
+
+                <e-column field="option" width="100" textAlign='Center' headerText="PDCA">
+                  <ng-template #template let-data>
+                    <div class="btn-group">
+                      <button style="color: floralwhite; box-shadow: 1px 1px 2px black;" type="button" (click)='openModal(data,detailModal)' class="btn btn-xs btn-primary"><i class="fa fa-eye"></i></button>
+                    </div>
+                  </ng-template>
+                  <ng-template #editTemplate let-data>
+                  N/A
+                  </ng-template>
+                </e-column>
+
+              </e-columns>
+            </ejs-grid>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+<ng-template #detailModal let-modal>
+  <a #top></a>
+  <div class="card">
+    <div class="modal-header">
+      <h4 class="modal-title">
+        <!-- <i class="fa fa-star" ></i> Monthly Review Meeting -->
+        <img src="/assets/img/star.jpg" alt="" style="width: 20px; height: 20px;"> Monthly Review Meeting
+      </h4>
+      <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body " style="padding: 5px;">
+
+      <div class="row mb-2">
+        <div class="col-md-6">
+          <table style="box-shadow:  -2px 1px 3px black; border-radius: 10px; overflow: hidden;" class="table table-bordered">
+            <tbody>
+              <tr>
+                <td>
+                  <label class="font-weight-bold">{{"Upper level KPI" | translate}}: </label> <span>{{policyTitle}}</span>
+                </td>
+                <td>
+                  <label class="font-weight-bold">Level: </label> <span>{{levelTitle}}</span>
+
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <label class="font-weight-bold">KPI: </label> <span>{{kpiTitle}}</span>
+                </td>
+                <td>
+                  <label class="font-weight-bold">PIC: </label> <span>{{picTitle}}</span>
+                </td>
+              </tr>
+
+            </tbody>
+          </table>
+
+        
+        </div>
+        <div class="col-md-6">
+        </div>
+      </div>
+      <div *ngIf="typeText !== 'string'" class="row">
+        <div class="col-md-12" style="box-shadow: 0 0 20px; margin-bottom: 25px;">
+          <div class="chart">
+            <canvas  id="planet-chart" ></canvas>
+          </div>
+        </div>
+      </div>
+
+      <div *ngIf="typeText !== 'string'" class="row">
+        <div class="col-md-12">
+          <div class="box-body">
+            <div class="table-responsive">
+              <table class="table table-bordered" style="margin-bottom:20px;" id="tblDataChart">
+                <tbody style="box-shadow:  0 0 7px;">
+
+                  <tr style="background-color: #f0f3f5;">
+                    <th  class="text-center" width="5%">{{"meetingMonth" | translate}}</th>
+                    <th *ngFor="let item of labels; let i=index" class="text-center">
+                      {{item}}
+                    </th>
+                    <!-- <th  class="text-center">YTD</th> -->
+                  </tr>
+
+                  <tr>
+                    <th class="text-center" width="5%">
+                      {{"meetingTarget" | translate}}
+                    </th>
+                    <td *ngFor="let item of targets; let i=index" class="text-center" >
+                      <ng-container *ngIf="typeId === 1; else elseTemplate">
+                        {{item}} %
+
+                      </ng-container>
+                      <ng-template #elseTemplate>
+                        {{item}}
+                      </ng-template>
+
+                    </td>
+                   
+
+                  </tr>
+
+                  <tr>
+                    <th class="text-center" width="5%">
+                      <ng-container>
+                        <span  data-tooltip title="{{'meetingPertooltip' | translate}}">{{"meetingPer" | translate}}</span>
+
+                      </ng-container>
+
+                    </th>
+                    <td *ngFor="let item of perfomance; let i=index" class="text-center" >
+                      <ng-container *ngIf="typeId === 1; else elseTemplate">
+                        {{item}} %
+                      </ng-container>
+                      <ng-template #elseTemplate>
+                        {{item}}
+                      </ng-template>
+                    </td>
+                  </tr>
+
+                  <tr>
+                    <th class="text-center" width="5%">YTD </th>
+                    <td *ngFor="let item of ytds; let i=index" class="text-center" >
+                      <ng-container *ngIf="typeId === 1; else elseTemplate">
+                        {{item}} %
+
+                      </ng-container>
+                      <ng-template #elseTemplate>
+                        {{item}}
+                      </ng-template>
+                    </td>
+                  </tr>
+
+                  <tr>
+                    <th class="text-center" width="8%">
+                      <ng-container>
+                        <span class="d-inline-block" data-tooltip title="{{'LY PCMC tooltip' | translate}}" >{{"LY PCMC" | translate}}  </span>
+                      </ng-container>
+
+
+                    </th>
+                    <td *ngFor="let item of ytds; let i=index" class="text-center" >
+                      <ng-container *ngIf="typeId === 1; else elseTemplate">
+                        
+                      </ng-container>
+                      <ng-template #elseTemplate>
+                      
+                      </ng-template>
+                    </td>
+                  </tr>
+
+                  <tr>
+                    <th class="text-center" width="8%">
+                      <ng-container>
+                        <span class="d-inline-block" data-tooltip  title="{{'LY YTD tooltip' | translate}}" >{{"LY YTD" | translate}} </span>
+                      </ng-container>
+
+
+                    </th>
+                    <td *ngFor="let item of ytds; let i=index" class="text-center" >
+                      <ng-container *ngIf="typeId === 1; else elseTemplate">
+                        <!-- {{item}} % -->
+                        <!-- N/A -->
+                      </ng-container>
+                      <ng-template #elseTemplate>
+                        <!-- {{item}} -->
+                        <!-- N/A -->
+                      </ng-template>
+                    </td>
+                  </tr>
+
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- <div class="row">
+        <div class="col-md-12">
+        </div>
+      </div> -->
+      <div class="tableFixHead">
+        <table class="table table-bordered" id="tblDataMeeting" style="box-shadow:  0 0 6px;">
+          <thead style="background-color: #f0f3f5;">
+            <tr>
+              <th scope="col" rowspan="2" class="text-center align-middle" style="width: 30px">{{"meetingMonth" | translate}}</th>
+              <th scope="col" class="text-center" style="width: 210px;">{{"meetingPlan" | translate}} </th>
+              <th scope="col" class="text-center" style="width: 100px;">{{"meetingTarget" | translate}} </th>
+              <th scope="col" class="text-center" style="width: 50px;">{{"meetingDeadline" | translate}}</th>
+              <th scope="col" class="text-center" style="width: 210px">{{"meetingDo" | translate}}</th>
+              <th scope="col" class="text-center" style="width: 50px">
+                <ng-container>
+                  <span data-tooltip2 title="{{'meetingPertooltip' | translate}}">{{"meetingPcmc" | translate}}</span>
+                </ng-container>
+
+              </th>
+              <th scope="col" class="text-center" style="width: 80px">{{"meetingStatus" | translate}}</th>
+              <th scope="col" class="text-center" style="width: 210px">{{"meetingCheck" | translate}}</th>
+
+              <th scope="col" class="text-center" style="width: 210px">{{"meetingAction" | translate}}</th>
+              <th scope="col" class="text-center" style="width: 100px;"> {{"meetingTarget" | translate}}</th>
+              <th scope="col" class="text-center" style="width: 50px;"> {{"meetingDeadline" | translate}}</th>
+
+              <th scope="col" class="text-center" style="width: 50px;">
+                <ng-container>
+                  <span data-tooltip2  title="{{'meetingAtts' | translate}}">{{"meetingAtt" | translate}}</span>
+                </ng-container>
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            <ng-container *ngFor="let data of dataTable; let i= index;">
+              <tr  *ngFor="let items of data.currentMonthData; let i= index;">
+                <th style="font-size: 18px; " scope="row" [attr.rowspan]="data.currentMonthData.length" *ngIf="i == 0"  class="border text-center align-middle">{{data.month}}</th>
+                <td style="font-size: 18px; " class="border align-top" >
+                  <ng-template #tipContent>
+                    <p style="font-size: 20px;">
+                      {{'CREATED_BY_MEETING_TOOLTIP' | translate}}: <b>{{items.createdBy}}</b>
+                    </p>
+                  </ng-template>
+                  <span [ngbTooltip]="tipContent">
+                    {{items.content}}
+                  </span>
+                </td>
+                <td style="font-size: 18px;" class="border text-center" >
+                  <p style="text-align: left;">
+                    {{items.target}}
+                  </p>
+                  <!-- <textarea autosize type="text" readonly class="form-control" [value]="items.target" name="target" style="text-align:left;font-size: 18px;"></textarea> -->
+                </td>
+                <td style="font-size: 18px; " class="border text-center"  >{{items.deadline}}</td>
+                <td style="font-size: 18px; " class="border align-top"  >
+                  <textarea autosize type="text" readonly class="form-control" [value]="items.doContent" name="doContent" style="text-align:left; font-size: 18px;"></textarea>
+                </td>
+                <td style="font-size: 18px; " class="border text-center">
+                  {{items.achievement}}
+                </td>
+                <td style="font-size: 18px; " class="border text-center">
+                  {{items.statusName | translate}}
+                </td>
+                <td style="font-size: 18px; " class="border align-top"  >
+                  <textarea autosize type="text" readonly class="form-control" [value]="items.resultContent" name="content" style="text-align:left;font-size: 18px;"></textarea>
+                </td>
+
+                <td [tdHeight]='data.month' style="font-size: 18px; vertical-align: top; padding: 0px; "
+                scope="row"
+                [attr.rowspan]="data.currentMonthData.length"
+                *ngIf="i == 0"
+                class="border" >
+                  <div  *ngFor="let itemss of data.nextMonthData; let i= index;">
+                    <ng-container *ngIf="data.nextMonthData.lastIndex === i; else elseTemplate">
+                      <tr  [style.height.px]="itemss.heightA > itemss.heightT ? itemss.heightA : itemss.heightT">
+                        <td style="border: none;" >
+                          {{itemss.content}}
+                        </td>
+                      </tr>
+                    </ng-container>
+                    <ng-template #elseTemplate>
+                      <tr  [style.height.px]="itemss.heightA > itemss.heightT ? itemss.heightA : itemss.heightT">
+                        <td style="border: none;" >
+                          {{itemss.content}}
+                        </td>
+                      </tr>
+                      <hr style="margin: 0;">
+                    </ng-template>
+                  </div>
+                </td>
+                <td [targetHeight]='data.month' style="font-size: 18px; vertical-align: top; padding: 0px;"
+                scope="row"
+                [attr.rowspan]="data.currentMonthData.length"
+                *ngIf="i == 0"
+                class="border"
+                >
+                  <div  *ngFor="let itemss of data.nextMonthData; let i= index;">
+                    <ng-container *ngIf="data.nextMonthData.lastIndex === i; else elseTemplate">
+                      <tr   [style.height.px]="itemss.heightA > itemss.heightT ? itemss.heightA : itemss.heightT"  >
+                        <td style="border: none; vertical-align: middle;" >
+                          {{itemss.target}}
+                        </td>
+                      </tr>
+                    </ng-container>
+                    <ng-template #elseTemplate>
+                      <tr   [style.height.px]="itemss.heightA > itemss.heightT ? itemss.heightA : itemss.heightT"  >
+                        <td style="border: none;vertical-align: middle;">
+                          {{itemss.target}}
+                        </td>
+                      </tr>
+                      <hr style="margin: 0;">
+                    </ng-template>
+                  </div>
+                </td>
+
+                <td style="font-size: 18px; vertical-align: top; padding: 0px;"
+                scope="row"
+                [attr.rowspan]="data.currentMonthData.length"
+                *ngIf="i == 0"
+                class="border ">
+                  <div *ngFor="let itemss of data.nextMonthData; let i= index;">
+                    <ng-container *ngIf="data.nextMonthData.lastIndex === i; else elseTemplate">
+                      <tr  [style.height.px]="itemss.heightA > itemss.heightT ? itemss.heightA : itemss.heightT" >
+                        <td style="border: none;vertical-align: middle;" >
+                          {{itemss.deadline}}
+                        </td>
+                      </tr>
+                    </ng-container>
+                    <ng-template #elseTemplate>
+                      <tr  [style.height.px]="itemss.heightA > itemss.heightT ? itemss.heightA : itemss.heightT" >
+                        <td style="border: none;vertical-align: middle;" >
+                          {{itemss.deadline}}
+                        </td>
+
+                      </tr>
+                      <hr style="margin: 0;">
+                    </ng-template>
+                  </div>
+                </td>
+
+                <td style="font-size: 18px; " scope="row" [attr.rowspan]="data.currentMonthData.length"  *ngIf="i == 0" class="border text-center align-middle">
+                  <div style="text-align: center;">
+                    <button type="button" (click)='download(data.date, fileModal)' class="btn btn-xs btn-primary"><i class="fa fa-download"></i></button>
+                  </div>
+                </td>
+
+              </tr>
+            </ng-container>
+          </tbody>
+        </table>
+      </div>
+
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-danger" (click)="modal.close('Close click')">Close</button>
+      <span style="color: transparent;">| |</span>
+      <a class="btn btn-outline-warning" (click)="scroll(top)" ><i class="fas fa-chevron-up"></i></a>
+    </div>
+  </div>
+
+
+</ng-template>
+
+<ng-template #fileModal let-modal>
+  <a #top></a>
+  <div class="modal-header">
+    <h4 class="modal-title">
+      <i class="fas fa-plus"></i> Download File
+    </h4>
+    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+
+    <div class="mt-3 d-flex justify-content-start">
+      <ng-container *ngIf="files.length > 0; else elseTemplate">
+        <ul class="list-group" style="width: 100%;" >
+          <li class="list-group-item" *ngFor="let item of files">
+            <a [id]='item.path' href="javascript:void(0)" style="cursor: pointer; color: #20a8d8; background-color: transparent;" (click)="downloadFile(item)" >{{item.name}}</a>
+          </li>
+        </ul>
+      </ng-container>
+      <ng-template #elseTemplate>
+        <span>No data</span>
+      </ng-template>
+
+    </div>
+  </div>
+  <div class="modal-footer">
+
+    <button type="button" class="btn btn-danger" (click)="modal.close('Close click')">Close</button>
+    <span style="color: transparent;">| |</span>
+    <a class="btn btn-outline-warning" (click)="scroll(top)" ><i class="fas fa-chevron-up"></i></a>
+  </div>
+
+
+</ng-template>
+
+
+

@@ -1,0 +1,49 @@
+.e-grid .e-headercell {
+  background-color: #f0f3f5;;
+}
+.e-grid .e-altrow {
+  background-color: #f0f3f5;
+}
+.e-pager {
+  font-size: 10px;
+}
+
+.e-switch-wrapper .e-switch-on, .e-css.e-switch-wrapper .e-switch-on {
+  background-color: #dd4a4a;
+  color: #fff;
+}
+
+.e-switch-wrapper:hover .e-switch-inner.e-switch-active .e-switch-on, .e-css.e-switch-wrapper:hover .e-switch-inner.e-switch-active .e-switch-on {
+  background-color: #dd4a4a;
+  color: #fff;
+}
+
+.e-switch-wrapper .e-switch-inner.e-switch-active, .e-css.e-switch-wrapper .e-switch-inner.e-switch-active {
+  background-color: #dd4a4a;
+  border-color: #dd4a4a;
+}
+
+.e-switch-wrapper.e-switch-disabled:hover .e-switch-inner.e-switch-active,
+.e-css.e-switch-wrapper.e-switch-disabled:hover .e-switch-inner.e-switch-active {
+  background-color: #dd4a4a;
+  border-color: #dd4a4a;
+}
+.e-grid * {
+  font-size: 16px;
+}
+
+td {
+  font-size: 20pt !important;
+  padding: 4px 0px !important;
+  line-height: 30px !important;
+}
+
+.headercell {
+  font-size: 20pt !important;
+  padding: 5px 0 !important;
+  line-height: 30px;
+}
+
+.e-grid .e-headercell {
+  padding: 6px 10px 6px;
+}

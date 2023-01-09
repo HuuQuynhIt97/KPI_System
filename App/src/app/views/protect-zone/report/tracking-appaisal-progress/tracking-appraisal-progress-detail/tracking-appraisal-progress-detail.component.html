@@ -1,0 +1,65 @@
+<ngx-spinner [fullScreen]="true" type="square-jelly-box" size="medium">
+  <p class="loading">Loading data...</p>
+</ngx-spinner>
+<div class="modal-header">
+  <h4 class="modal-title">{{'TRACKING_APPRAISAL_DETAIL_MODEL_LABEL' | translate}} </h4>
+  <button type="button" class="close" aria-label="Close" (click)="activeModal.dismiss('Cross click')">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+
+<div class="modal-body">
+  <div class="row">
+    <div class="col-md-12">
+      <ejs-grid #grid id="grid"  gridLines='Both' 
+        [toolbar]='toolbarOptions' (toolbarClick)='toolbarClick($event)' [dataSource]='dataDetail' allowPaging='true' [allowSorting]='true' allowResizing='true'
+        showColumnMenu='true' [allowExcelExport]='true'  allowFiltering='true' [filterSettings]='filterSettings'
+        [pageSettings]='pageSettings'  >
+        <e-columns>
+          
+          <e-column field='pic' headerText='{{"TRACKING_APPRAISAL_PIC" | translate}}' width='150' headerTextAlign="Center" textAlign='Left'>
+            <ng-template #headerTemplate let-data>
+              {{"TRACKING_APPRAISAL_PIC" | translate}}
+            </ng-template>
+            <ng-template #template let-data>
+              <ejs-tooltip  content='{{"Campaign: " + data.campaign}}'>
+                {{data.pic}}
+              </ejs-tooltip>
+            </ng-template>
+          </e-column>
+  
+          <e-column field='index' headerText='#' width='100' headerTextAlign="Center" textAlign='Center'>
+            <ng-template #headerTemplate let-data>
+              {{"TRACKING_APPRAISAL_INDEX" | translate}}
+            </ng-template>
+          </e-column>
+  
+          <e-column field='l0' headerText='{{"TRACKING_APPRAISAL_L0" | translate}}' width='300' headerTextAlign="Center"  textAlign='Left'>
+            <ng-template #headerTemplate let-data>
+              {{"TRACKING_APPRAISAL_L0" | translate}}
+            </ng-template>
+            
+          </e-column>
+          <e-column field='detail' headerText='{{"TRACKING_APPRAISAL_DETAIL" | translate}}' width='300' headerTextAlign="Center"  textAlign='Left'>
+            <ng-template #headerTemplate let-data>
+              {{"TRACKING_APPRAISAL_DETAIL" | translate}}
+            </ng-template>
+            <ng-template #template let-data>
+              <ejs-tooltip  content='{{"Campaign: " + data.campaign}}'>
+                {{data.detail}}
+              </ejs-tooltip>
+            </ng-template>
+          </e-column>
+        </e-columns>
+      </ejs-grid>
+     
+    </div>
+  </div>
+</div>
+
+<div class="modal-footer">
+  <div class="w-100">
+    <button type="button"  (click)="activeModal.dismiss('Cross click')" class="btn btn-secondary mr-2 float-right">{{'Close' }}</button>
+  </div>
+</div>
+

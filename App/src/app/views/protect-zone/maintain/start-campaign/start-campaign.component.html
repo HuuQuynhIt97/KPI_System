@@ -1,0 +1,109 @@
+<div class="card">
+  <div class="control-section e-tbar-section">
+    <div class="e-sample-resize-container">
+      <div class="col-md-12 d-flex justify-content-left align-items-center">
+        <div class="font-weight-bold px-3">{{"KPI_CREATE_YEAL_LABEL" | translate}}:</div>
+        <ejs-dropdownlist
+          id='ddlelement' #ddlelement
+          [allowFiltering]='true'
+          [fields]="typeFields"
+          [(ngModel)]="yearSelect"
+          placeholder='Select Year'
+          (change)='onChangeYear($event)'
+          [dataSource]='yearData'>
+        </ejs-dropdownlist>
+
+        <div style="color: transparent;" class="font-weight-bold pr-3">|</div>
+        <button id='btn' #btn class="btn btn-sm btn-secondary" (click)='onClickDefault()'>
+          <i class="fa fa-times"></i>
+        </button>
+
+        <div style="color: transparent;" class="font-weight-bold pr-3">|</div>
+        <div class="font-weight-bold px-3">{{"CAMPAIGN_MONTH_LABEL" | translate}}:</div>
+        <ejs-dropdownlist
+          id='ddlelement' #ddlelement
+          [allowFiltering]='true'
+          [fields]="typeFieldsMonth"
+          [(ngModel)]="yearSelect"
+          placeholder='Select Month'
+          (change)='onChangeMonth($event)'
+          [dataSource]='monthData'>
+        </ejs-dropdownlist>
+
+      </div>
+    </div>
+  </div>
+<div class="row">
+  <div class="col-md-12">
+    <div class="card">
+      <div class="card-body table-responsive p-0">
+        <ejs-grid #grid
+          id='grid'
+          [dataSource]="campaignData"
+          [allowPaging]='true'
+          [allowResizing]='true'
+          [showColumnMenu]='true'
+          gridLines='Both'
+          [locale]='locale'
+          (actionBegin)="actionBegin($event)"
+          [toolbar]='toolbarCampaign'
+          [pageSettings]='pageSettings'
+          [allowExcelExport]='true'
+          (recordDoubleClick)='onDoubleClick($event)'
+          (toolbarClick)='toolbarClick($event)'
+          [editSettings]='editSettings'
+        >
+          <e-columns>
+
+            <e-column field="ID" textAlign='Center' width="80" isPrimaryKey="true" headerText="ID">
+              <ng-template #template let-data>
+                {{NO(data.index)}}
+              </ng-template>
+              <ng-template #editTemplate let-data>
+                #
+              </ng-template>
+            </e-column>
+
+            <e-column field="name" textAlign='Center' headerText="Campaign Name">
+
+            </e-column>
+
+            <e-column field='creator' headerText="Creator" width='50' textAlign='Center'>
+              <ng-template #editTemplate let-data>
+              </ng-template>
+            </e-column>
+
+            <e-column field="createdTime" width="100" textAlign='Center' headerText="{{ 'Created Time'}}">
+              <ng-template #editTemplate let-data>
+              </ng-template>
+            </e-column>
+
+            <e-column field="year" width="100" textAlign='Center' headerText="{{ 'Year'}}">
+              <ng-template #editTemplate let-data>
+              </ng-template>
+            </e-column>
+
+            <e-column field="monthName" width="100" textAlign='Center' headerText="{{ 'Month'}}">
+              <ng-template #editTemplate let-data>
+              </ng-template>
+            </e-column>
+
+            <e-column field="" width="130" textAlign='Center' headerText="{{ 'Option'}}">
+              <ng-template #template let-data>
+                <button (click)="generateEvaluation(data.id)" type="button" [disabled]="data.isStart ? true : false" class="btn btn-xs btn-info">
+                  <i  class="fa fa-plus"></i> {{'START_CAMPAIGN_BUTTON_LABEL' | translate}}
+                </button>
+              </ng-template>
+              <ng-template #editTemplate let-data>
+              </ng-template>
+            </e-column>
+
+          </e-columns>
+
+        </ejs-grid>
+      </div>
+      <!-- /.card-body -->
+    </div>
+  </div>
+</div>
+
