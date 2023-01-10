@@ -30,6 +30,7 @@ export class HqReportModalComponent implements OnInit {
   locale = localStorage.getItem('lang');
   name: string;
   frozen: boolean;
+  titleH1: string = "H1_HQ_REPORT_LABEL";
 
   constructor(
     private service: PeopleCommitteeService,
@@ -43,6 +44,7 @@ export class HqReportModalComponent implements OnInit {
   ) { }
 
   ngOnInit() {
+    this.loadTitleH1();
     this.spinner.show();
     this.loadFrozenBtn();
     this.loadData();
@@ -52,6 +54,12 @@ export class HqReportModalComponent implements OnInit {
     this.service.getAllHQReport(this.locale, this.data.id).subscribe(res => {
       this.dataHQReport = res;
       this.spinner.hide()
+    });
+  }
+
+  loadTitleH1() {
+    this.service.getTitleH1HQReport(this.data.id).subscribe(res=> {
+      this.titleH1 = res
     });
   }
 

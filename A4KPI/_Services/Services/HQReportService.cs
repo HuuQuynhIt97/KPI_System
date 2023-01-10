@@ -531,6 +531,14 @@ namespace A4KPI._Services.Services
             return model;
         }
 
+        public async Task<string> GetTitleH1HQReport(int campaignID)
+        {
+            var MonthCampaign = (await _repoCampaign.FindByIdAsync(campaignID)).MonthName;
+            string TitleH1 = MonthCampaign == "Jan-June" || MonthCampaign == null ? "H1_HQ_REPORT_LABEL" : "H2_HQ_REPORT_LABEL";
+            
+            return TitleH1;
+        }
+
         public double getKpiSocreCal(int userID, int campaignID, int l1, int l2) {
             var queryL0 = _repoKPIScore.FindAll(x => x.ScoreTo == userID && x.CampaignID == campaignID && x.ScoreFrom == userID).FirstOrDefault();
             var queryL1 = _repoKPIScore.FindAll(x => x.ScoreTo == userID && x.CampaignID == campaignID && x.ScoreFrom == l1).FirstOrDefault();

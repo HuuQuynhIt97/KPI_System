@@ -44,4 +44,30 @@ namespace A4KPI.DTO
 
 
     }
+
+    public class NewAttitudeScorePointDto
+    {
+        public int? OrderNumber { get; set; }
+        public int? AttitudeContenID { get; set; }
+        public int? CampaignID { get; set; }
+        public int? ScoreTo { get; set; }
+        public int? ScoreFrom { get; set; }
+        public int L1 { get; set; }
+        public int L2 { get; set; }
+        public int FL { get; set; }
+        public string Point { get; set; }
+        public bool Submited { get; set; }
+    }
+
+    public class NewAttitudePointEquals2Dto
+    {
+        public int? CampaignID { get; set; }
+        public int? ScoreTo { get; set; }
+        public int? ScoreFrom { get; set; }
+        public int? OrderNumber { get; set; }
+        public string Point { get; set; }
+        public string Type { get; set; }
+        public bool Submited { get; set; }
+
+    }
 }

@@ -57,6 +57,12 @@ namespace A4KPI.Controllers
         {
             return Ok(await _service.GetAllHQReport(lang, campaignID));
         }
+
+        [HttpGet("{campaignID}")]
+        public async Task<string> GetTitleH1HQReport(int campaignID)
+        {
+            return await _service.GetTitleH1HQReport(campaignID);
+        }
         
         // [HttpGet("{appraiseeID}")]
         // public async Task<ActionResult> GetPeopleCommittee(int appraiseeID)

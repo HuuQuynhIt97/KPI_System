@@ -23,6 +23,7 @@ namespace A4KPI._Services.Interface
     {
         Task<List<PeopleCommitteeDto>> GetAll(string lang, int campaignID);
         Task<List<HQReportDto>> GetAllHQReport(string lang, int campaignID);
+        Task<string> GetTitleH1HQReport(int campaignID);
         Task<PeopleCommitteeDto> GetPeopleCommittee(int appraiseeID);
         Task<object> GetKpi(int accountID);
         Task<object> GetAllKpiScore(int scoreTo, int campaignID);

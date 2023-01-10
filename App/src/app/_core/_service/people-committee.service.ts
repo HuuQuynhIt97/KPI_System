@@ -1,5 +1,5 @@
 import { EnvService } from './env.service';
-import { Injectable } from '@angular/core';
+import { EventEmitter, Injectable } from '@angular/core';
 import { PaginatedResult } from '../_model/pagination';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
@@ -29,6 +29,9 @@ constructor(
   }
   getAllHQReport(lang, campaignID): Observable<any[]> {
     return this.http.get<any[]>(`${this.env.apiUrl}HQReport/GetAllHQReport/${lang}/${campaignID}`);
+  }
+  getTitleH1HQReport(campaignID) {
+    return this.http.get(`${this.env.apiUrl}HQReport/GetTitleH1HQReport/${campaignID}`, {responseType:'text'});
   }
   getKpi(appraiseeID): Observable<any[]> {
     return this.http.get<any[]>(`${this.env.apiUrl}PeopleCommittee/GetKpi/${appraiseeID}`);

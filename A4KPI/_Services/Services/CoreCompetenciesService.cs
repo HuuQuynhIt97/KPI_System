@@ -50,6 +50,10 @@ namespace A4KPI._Services.Services
         private readonly IAttitudeKeypointRepository _repoAttKeypoint;
         private readonly IAttitudeBehaviorRepository _repoAttBehavior;
         private readonly IBehaviorCheckRepository _repoBehaviorCheck;
+        private readonly INewAttitudeScoreRepository _repoNewAttitudeScore;
+        private readonly INewAttitudeContentRepository _repoNewAttitudeContent;
+        private readonly INewAttitudeAttchmentRepository _repoNewAttitudeAttchment;
+        private readonly IAccountCampaignRepository _repoAccountCampaign;
         private readonly IMapper _mapper;
         private readonly IMailExtension _mailHelper;
         private readonly MapperConfiguration _configMapper;
@@ -87,6 +91,11 @@ namespace A4KPI._Services.Services
             IAttitudeKeypointRepository repoAttKeypoint,
             IAttitudeBehaviorRepository repoAttBehavior,
             IBehaviorCheckRepository repoBehaviorCheck,
+            INewAttitudeScoreRepository repoNewAttitudeScore,
+            INewAttitudeContentRepository repoNewAttitudeContent,
+            IAccountCampaignRepository repoAccountCampaign,
+            INewAttitudeAttchmentRepository repoNewAttitudeAttchment,
+
             IWebHostEnvironment currentEnvironment,
             IMapper mapper,
             IMailExtension mailExtension,
@@ -120,6 +129,10 @@ namespace A4KPI._Services.Services
             _repoAttKeypoint = repoAttKeypoint;
             _repoAttBehavior = repoAttBehavior;
             _repoBehaviorCheck = repoBehaviorCheck;
+            _repoNewAttitudeScore = repoNewAttitudeScore;
+            _repoNewAttitudeContent = repoNewAttitudeContent;
+            _repoAccountCampaign = repoAccountCampaign;
+            _repoNewAttitudeAttchment = repoNewAttitudeAttchment;
             _currentEnvironment = currentEnvironment;
             _mapper = mapper;
             _mailHelper = mailExtension;
@@ -134,7 +147,28 @@ namespace A4KPI._Services.Services
         /// 
 
 
-    public async Task<List<CoreCompetenciesDto>> GetAllCoreCompetencies(string lang, int campaignID)
+        public int GetPoint(NewAttitudeScore model)
+        {
+            int point = 0;
+            point = model switch
+                {
+                    { Point1: true } => 1,
+                    { Point2: true } => 2,
+                    { Point3: true } => 3,
+                    { Point4: true } => 4,
+                    { Point5: true } => 5,
+                    { Point6: true } => 6,
+                    { Point7: true } => 7,
+                    { Point8: true } => 8,
+                    { Point9: true } => 9,
+                    { Point10: true } => 10,
+                    _ => 0
+                };
+            
+            return point;
+        }
+
+        public async Task<List<CoreCompetenciesDto>> GetAllCoreCompetencies(string lang, int campaignID)
         {
             var index = 1;
             var queryAttitude = await _repoScore.FindAll(x => x.CampaignID == campaignID).ToListAsync();
@@ -186,7 +220,1012 @@ namespace A4KPI._Services.Services
             return result;
         }
 
-    public async Task<List<CoreCompetenciesDto>> GetAllCoreCompetenciesScoreEquals2(string lang, int campaignID)
+        public async Task<List<NewCoreCompetenciesDto>> GetAllNewCoreCompetencies(string lang, int campaignID)
+        {
+            var index = 1;
+            var accountCampaign = await _repoAccountCampaign.FindAll(x => x.CampaignID == campaignID).ToListAsync();
+            var queryNewAttitude = await _repoNewAttitudeScore.FindAll(x => x.CampaignID == campaignID).ToListAsync();
+            
+            var queryAc = await _repo.FindAll().ToListAsync();
+
+            var list = (from a in queryNewAttitude
+                        join b in accountCampaign on a.ScoreTo equals b.AccountID
+                        let attitudeSubmit = _repoAttitudeSubmit.FindAll(x => x.CampaignID == campaignID && x.SubmitTo == a.ScoreTo).FirstOrDefault()
+                        let submited = attitudeSubmit != null ? 
+                        b.AccountID == a.ScoreFrom ? attitudeSubmit.IsSubmitAttitudeL0 : 
+                        b.L1 == a.ScoreFrom ? attitudeSubmit.IsSubmitAttitudeL1: 
+                        b.L2 == a.ScoreFrom ? attitudeSubmit.IsSubmitAttitudeL2 : 
+                        b.FL == a.ScoreFrom ? attitudeSubmit.IsSubmitAttitudeFL : false : false
+                        select new NewAttitudeScorePointDto() {
+                                        OrderNumber = a.OrderNumber,
+                                        AttitudeContenID = a.AttitudeContenID,
+                                        CampaignID = a.CampaignID,
+                                        ScoreFrom = a.ScoreFrom,
+                                        ScoreTo = a.ScoreTo,
+                                        L1 = b.L1,
+                                        L2 = b.L2,
+                                        FL = b.FL,
+                                        Point = GetPoint(a).ToString(),
+                                        Submited = submited
+                                    }).Where(x => x.Submited).ToList();
+            
+            var result = (from a in list
+                        join b in queryAc on a.ScoreTo equals b.Id
+                        let content = _repoNewAttitudeContent.FindById(a.AttitudeContenID)
+                        let attHeading = lang == SystemLang.EN ? _repoSystemLanguage.FindAll(x => x.SLKey == content.Name).FirstOrDefault().SLEN : _repoSystemLanguage.FindAll(x => x.SLKey == content.Name).FirstOrDefault().SLTW
+                        let attBehavior = lang == SystemLang.EN ? _repoSystemLanguage.FindAll(x => x.SLKey == content.Behavior).FirstOrDefault().SLEN : _repoSystemLanguage.FindAll(x => x.SLKey == content.Behavior).FirstOrDefault().SLTW
+                        
+                        let factory = _repoOc.FindById(b.FactId) != null ? _repoOc.FindById(b.FactId).Name : ""
+                        let center = _repoOc.FindById(b.CenterId) != null ? _repoOc.FindById(b.CenterId).Name : ""
+                        let dept = _repoOc.FindById(b.DeptId) != null ? _repoOc.FindById(b.DeptId).Name : ""
+
+                        let l1 = _repo.FindById(a.L1) != null ? _repo.FindById(a.L1).FullName : ""
+                        let l2 = _repo.FindById(a.L2) != null ? _repo.FindById(a.L2).FullName : ""
+                        let fl = _repo.FindById(a.FL) != null ? _repo.FindById(a.FL).FullName : ""
+                        
+                        let l0 = _repo.FindById(a.ScoreTo) != null ? _repo.FindById(a.ScoreTo).FullName : ""
+                        let scoreBy = _repo.FindById(a.ScoreFrom) != null ? _repo.FindById(a.ScoreFrom).FullName : ""
+
+                        select new NewCoreCompetenciesDto()
+                        {
+                            Index = 0,
+                            OrderNumber = a.OrderNumber.ToInt(),
+                            AttHeading = attHeading,
+                            AttBehavior = attBehavior,
+                            Factory = factory,
+                            Center = center,
+                            Dept = dept,
+                            L1 = l1,
+                            L2 = l2,
+                            Fl = fl,
+                            L0 = l0,
+                            Score = a.Point,
+                            ScoreBy = scoreBy
+                        }).OrderBy(x => x.L0).ThenBy(x => x.OrderNumber).ThenBy(x => x.ScoreBy).ToList();
+            
+            result.ForEach(x => {
+                x.Index = index;
+                index++;
+            });
+
+            return result;
+        }
+
+        public async Task<List<NewCoreCompetenciesDto>> GetNewCoreCompetencies(string lang, int campaignID)
+        {
+            var index = 1;
+            var accountCampaign = await _repoAccountCampaign.FindAll(x => x.CampaignID == campaignID).ToListAsync();
+            var queryNewAttitude = await _repoNewAttitudeScore.FindAll(x => x.CampaignID == campaignID).ToListAsync();
+            
+            var queryAc = await _repo.FindAll().ToListAsync();
+            
+            var list = (from a in queryNewAttitude
+                        join b in accountCampaign on a.ScoreTo equals b.AccountID
+                        let attitudeSubmit = _repoAttitudeSubmit.FindAll(x => x.CampaignID == campaignID && x.SubmitTo == a.ScoreTo).FirstOrDefault()
+                        let submited = attitudeSubmit != null ? 
+                        b.AccountID == a.ScoreFrom ? attitudeSubmit.IsSubmitAttitudeL0 : 
+                        b.L1 == a.ScoreFrom ? attitudeSubmit.IsSubmitAttitudeL1: 
+                        b.L2 == a.ScoreFrom ? attitudeSubmit.IsSubmitAttitudeL2 : 
+                        b.FL == a.ScoreFrom ? attitudeSubmit.IsSubmitAttitudeFL : false : false
+                        select new NewAttitudePointEquals2Dto() {
+                                        OrderNumber = a.OrderNumber,
+                                        CampaignID = a.CampaignID,
+                                        ScoreFrom = a.ScoreFrom,
+                                        ScoreTo = a.ScoreTo,
+                                        Point = GetPoint(a).ToString(),
+                                        Submited = submited
+                                    }).Where(x => x.Submited).ToList();
+
+            var listAttitudeScore2 = list.ToList().GroupBy(x => new {   x.OrderNumber,
+                                                                    x.ScoreTo,
+                                                                    x.ScoreFrom,
+                                                                })
+                                    .Select(x => new NewAttitudePointEquals2Dto() {
+                                        OrderNumber = x.First().OrderNumber,
+                                        ScoreTo = x.First().ScoreTo,
+                                        ScoreFrom = x.First().ScoreFrom,
+                                        Point = Math.Round((x.Sum(y => y.Point.ToDouble()))/4, 2).ToString()
+                                    }).ToList();
+
+
+            var listAttitude = (from a in listAttitudeScore2
+                        join c in accountCampaign on a.ScoreTo equals c.AccountID
+                        join b in queryAc on a.ScoreTo equals b.Id
+                        let content = _repoNewAttitudeContent.FindAll(x => x.OrderNumber == a.OrderNumber).FirstOrDefault()
+                        let attHeading = lang == SystemLang.EN ? _repoSystemLanguage.FindAll(x => x.SLKey == content.Name).FirstOrDefault().SLEN : _repoSystemLanguage.FindAll(x => x.SLKey == content.Name).FirstOrDefault().SLTW
+                        
+                        let factory = _repoOc.FindById(b.FactId) != null ? _repoOc.FindById(b.FactId).Name : ""
+                        let center = _repoOc.FindById(b.CenterId) != null ? _repoOc.FindById(b.CenterId).Name : ""
+                        let dept = _repoOc.FindById(b.DeptId) != null ? _repoOc.FindById(b.DeptId).Name : ""
+
+                        let l1 = _repo.FindById(c.L1) != null ? _repo.FindById(c.L1).FullName : ""
+                        let l2 = _repo.FindById(c.L2) != null ? _repo.FindById(c.L2).FullName : ""
+                        let fl = _repo.FindById(c.FL) != null ? _repo.FindById(c.FL).FullName : ""
+                        
+                        let l0 = _repo.FindById(c.AccountID) != null ? _repo.FindById(c.AccountID).FullName : ""
+                        let scoreBy = _repo.FindById(a.ScoreFrom) != null ? _repo.FindById(a.ScoreFrom).FullName : ""
+
+                        let comment = _repoNewAttitudeAttchment.FindAll(x => x.CampaignID == campaignID && x.ScoreTo == a.ScoreTo && x.ScoreFrom == a.ScoreFrom && x.OrderNumber == a.OrderNumber).FirstOrDefault() != null ? 
+                                      _repoNewAttitudeAttchment.FindAll(x => x.CampaignID == campaignID && x.ScoreTo == a.ScoreTo && x.ScoreFrom == a.ScoreFrom && x.OrderNumber == a.OrderNumber).FirstOrDefault().Comment : ""
+                        select new NewCoreCompetenciesDto()
+                        {
+                            Index = 0,
+                            OrderNumber = a.OrderNumber.ToInt(),
+                            AttHeading = attHeading,
+                            Factory = factory,
+                            Center = center,
+                            Dept = dept,
+                            L1 = l1,
+                            L2 = l2,
+                            Fl = fl,
+                            L0 = l0,
+                            Score = a.Point,
+                            Comment = comment,
+                            ScoreBy = scoreBy
+                        }).OrderBy(x => x.L0).ThenBy(x => x.OrderNumber).ThenBy(x => x.ScoreBy).ToList();
+            
+            listAttitude.ForEach(x => {
+                x.Index = index;
+                index++;
+            });
+
+            return listAttitude;
+        }
+
+        public async Task<List<NewCoreCompetenciesDto>> GetNewCoreCompetenciesScoreEquals2(string lang, int campaignID)
+        {
+            var index = 1;
+            var accountCampaign = await _repoAccountCampaign.FindAll(x => x.CampaignID == campaignID).ToListAsync();
+            var queryNewAttitude = await _repoNewAttitudeScore.FindAll(x => x.CampaignID == campaignID).ToListAsync();
+            
+            var queryAc = await _repo.FindAll().ToListAsync();
+            
+            var list = (from a in queryNewAttitude
+                        join b in accountCampaign on a.ScoreTo equals b.AccountID
+                        let attitudeSubmit = _repoAttitudeSubmit.FindAll(x => x.CampaignID == campaignID && x.SubmitTo == a.ScoreTo).FirstOrDefault()
+                        let submited = attitudeSubmit != null ? 
+                        b.AccountID == a.ScoreFrom ? attitudeSubmit.IsSubmitAttitudeL0 : 
+                        b.L1 == a.ScoreFrom ? attitudeSubmit.IsSubmitAttitudeL1: 
+                        b.L2 == a.ScoreFrom ? attitudeSubmit.IsSubmitAttitudeL2 : 
+                        b.FL == a.ScoreFrom ? attitudeSubmit.IsSubmitAttitudeFL : false : false
+                        select new NewAttitudePointEquals2Dto() {
+                                        OrderNumber = a.OrderNumber,
+                                        CampaignID = a.CampaignID,
+                                        ScoreFrom = a.ScoreFrom,
+                                        ScoreTo = a.ScoreTo,
+                                        Point = GetPoint(a).ToString(),
+                                        Submited = submited
+                                    }).Where(x => x.Submited).ToList();
+
+            var listAttitudeScore2 = list.ToList().GroupBy(x => new {   x.OrderNumber,
+                                                                    x.ScoreTo,
+                                                                    x.ScoreFrom,
+                                                                })
+                                    .Select(x => new NewAttitudePointEquals2Dto() {
+                                        OrderNumber = x.First().OrderNumber,
+                                        ScoreTo = x.First().ScoreTo,
+                                        ScoreFrom = x.First().ScoreFrom,
+                                        Point = Math.Round((x.Sum(y => y.Point.ToDouble()))/4, 2).ToString()
+                                    }).Where(x => x.Point.ToDouble() <= 2).ToList();
+
+
+            var result = (from a in listAttitudeScore2
+                        join c in accountCampaign on a.ScoreTo equals c.AccountID
+                        join b in queryAc on a.ScoreTo equals b.Id
+                        let content = _repoNewAttitudeContent.FindAll(x => x.OrderNumber == a.OrderNumber).FirstOrDefault()
+                        let attHeading = lang == SystemLang.EN ? _repoSystemLanguage.FindAll(x => x.SLKey == content.Name).FirstOrDefault().SLEN : _repoSystemLanguage.FindAll(x => x.SLKey == content.Name).FirstOrDefault().SLTW
+                        
+                        let factory = _repoOc.FindById(b.FactId) != null ? _repoOc.FindById(b.FactId).Name : ""
+                        let center = _repoOc.FindById(b.CenterId) != null ? _repoOc.FindById(b.CenterId).Name : ""
+                        let dept = _repoOc.FindById(b.DeptId) != null ? _repoOc.FindById(b.DeptId).Name : ""
+
+                        let l1 = _repo.FindById(c.L1) != null ? _repo.FindById(c.L1).FullName : ""
+                        let l2 = _repo.FindById(c.L2) != null ? _repo.FindById(c.L2).FullName : ""
+                        let fl = _repo.FindById(c.FL) != null ? _repo.FindById(c.FL).FullName : ""
+                        
+                        let l0 = _repo.FindById(c.AccountID) != null ? _repo.FindById(c.AccountID).FullName : ""
+                        let scoreBy = _repo.FindById(a.ScoreFrom) != null ? _repo.FindById(a.ScoreFrom).FullName : ""
+
+                        let comment = _repoNewAttitudeAttchment.FindAll(x => x.CampaignID == campaignID && x.ScoreTo == a.ScoreTo && x.ScoreFrom == a.ScoreFrom && x.OrderNumber == a.OrderNumber).FirstOrDefault() != null ? 
+                                      _repoNewAttitudeAttchment.FindAll(x => x.CampaignID == campaignID && x.ScoreTo == a.ScoreTo && x.ScoreFrom == a.ScoreFrom && x.OrderNumber == a.OrderNumber).FirstOrDefault().Comment : ""
+                        select new NewCoreCompetenciesDto()
+                        {
+                            Index = 0,
+                            OrderNumber = a.OrderNumber.ToInt(),
+                            AttHeading = attHeading,
+                            Factory = factory,
+                            Center = center,
+                            Dept = dept,
+                            L1 = l1,
+                            L2 = l2,
+                            Fl = fl,
+                            L0 = l0,
+                            Score = a.Point,
+                            ScoreBy = scoreBy
+                        }).OrderBy(x => x.L0).ThenBy(x => x.OrderNumber).ThenBy(x => x.ScoreBy).ToList();
+                                    
+            
+            result.ForEach(x => {
+                x.Index = index;
+                index++;
+            });
+
+            return result;
+        }
+
+        public async Task<object> GetNewCoreCompetenciesScoreThan2(string lang, int campaignID)
+        {
+            var index = 1;
+            var accountCampaign = await _repoAccountCampaign.FindAll(x => x.CampaignID == campaignID).ToListAsync();
+            var queryNewAttitude = await _repoNewAttitudeScore.FindAll(x => x.CampaignID == campaignID).ToListAsync();
+            
+            var queryAc = await _repo.FindAll().ToListAsync();
+            
+            var list = (from a in queryNewAttitude
+                        join b in accountCampaign on a.ScoreTo equals b.AccountID
+                        let attitudeSubmit = _repoAttitudeSubmit.FindAll(x => x.CampaignID == campaignID && x.SubmitTo == a.ScoreTo).FirstOrDefault()
+                        let submited = attitudeSubmit != null ? 
+                        b.AccountID == a.ScoreFrom ? attitudeSubmit.IsSubmitAttitudeL0 : 
+                        b.L1 == a.ScoreFrom ? attitudeSubmit.IsSubmitAttitudeL1: 
+                        b.L2 == a.ScoreFrom ? attitudeSubmit.IsSubmitAttitudeL2 : 
+                        b.FL == a.ScoreFrom ? attitudeSubmit.IsSubmitAttitudeFL : false : false
+                        select new NewAttitudePointEquals2Dto() {
+                                        OrderNumber = a.OrderNumber,
+                                        CampaignID = a.CampaignID,
+                                        ScoreFrom = a.ScoreFrom,
+                                        ScoreTo = a.ScoreTo,
+                                        Point = GetPoint(a).ToString(),
+                                        Submited = submited
+                                    }).Where(x => x.Submited).ToList();
+
+            var listAttitudeScore = list.ToList().GroupBy(x => new {   x.OrderNumber,
+                                                                    x.ScoreTo,
+                                                                    x.ScoreFrom,
+                                                                })
+                                    .Select(x => new NewAttitudePointEquals2Dto() {
+                                        OrderNumber = x.First().OrderNumber,
+                                        ScoreTo = x.First().ScoreTo,
+                                        ScoreFrom = x.First().ScoreFrom,
+                                        Point = Math.Round((x.Sum(y => y.Point.ToDouble()))/4, 2).ToString()
+                                    }).ToList();
+            
+            
+            
+            var result = (from a in listAttitudeScore
+                        join c in accountCampaign on a.ScoreTo equals c.AccountID
+                        join b in queryAc on a.ScoreTo equals b.Id
+                        let content = _repoNewAttitudeContent.FindAll(x => x.OrderNumber == a.OrderNumber).FirstOrDefault()
+                        let attHeading = lang == SystemLang.EN ? _repoSystemLanguage.FindAll(x => x.SLKey == content.Name).FirstOrDefault().SLEN : _repoSystemLanguage.FindAll(x => x.SLKey == content.Name).FirstOrDefault().SLTW
+                        let factory = _repoOc.FindById(b.FactId) != null ? _repoOc.FindById(b.FactId).Name : ""
+                        let center = _repoOc.FindById(b.CenterId) != null ? _repoOc.FindById(b.CenterId).Name : ""
+                        let dept = _repoOc.FindById(b.DeptId) != null ? _repoOc.FindById(b.DeptId).Name : ""
+                        
+                        let l1 = _repo.FindById(c.L1) != null ? _repo.FindById(c.L1).FullName : ""
+                        let l2 = _repo.FindById(c.L2) != null ? _repo.FindById(c.L2).FullName : ""
+                        let fl = _repo.FindById(c.FL) != null ? _repo.FindById(c.FL).FullName : ""
+                        
+                        let l0 = _repo.FindById(a.ScoreTo) != null ? _repo.FindById(a.ScoreTo).FullName : ""
+                        let scoreBy = _repo.FindById(a.ScoreFrom) != null ? _repo.FindById(a.ScoreFrom).FullName : ""
+
+                        let score = a.Point
+                        
+                        let selfScore = listAttitudeScore.FirstOrDefault(x => x.OrderNumber == a.OrderNumber && x.ScoreTo == a.ScoreTo && x.ScoreFrom == a.ScoreTo) != null ? 
+                        listAttitudeScore.FirstOrDefault(x => x.OrderNumber == a.OrderNumber && x.ScoreTo == a.ScoreTo && x.ScoreFrom == a.ScoreTo).Point : "0"
+                        
+                        select new NewCoreCompetenciesDto()
+                        {
+                            Index = 0,
+                            OrderNumber = a.OrderNumber.ToInt(),
+                            AttHeading = attHeading,
+                            Factory = factory,
+                            Center = center,
+                            Dept = dept,
+                            L1 = l1,
+                            L2 = l2,
+                            Fl = fl,
+                            L0 = l0,
+                            SelfScore = selfScore,
+                            Score = score,
+                            ScoreBy = scoreBy
+                        }).ToList();
+
+            var resultThan2 = result.Where(x => x.ScoreBy != x.L0 && (
+                            (x.SelfScore.ToDouble() - x.Score.ToDouble() >= 2 && x.SelfScore.ToDouble() - x.Score.ToDouble() < 3) || 
+                            (x.Score.ToDouble() - x.SelfScore.ToDouble() >= 2 && x.Score.ToDouble() - x.SelfScore.ToDouble() < 3)
+                            ))
+                        .OrderBy(x => x.L0).ThenBy(x => x.ScoreBy).ThenBy(x => x.OrderNumber).ToList();
+
+            var resultThan3 = result.Where(x => x.ScoreBy != x.L0 && (
+                            (x.SelfScore.ToDouble() - x.Score.ToDouble() >= 3) || 
+                            (x.Score.ToDouble() - x.SelfScore.ToDouble() >= 3)
+                            ))
+                        .OrderBy(x => x.L0).ThenBy(x => x.ScoreBy).ThenBy(x => x.OrderNumber).ToList();
+
+            resultThan2.ForEach(x => {
+                x.Index = index;
+                index++;
+            });
+
+            resultThan3.ForEach(x => {
+                x.Index = index;
+                index++;
+            });
+            
+            return new { 
+                            resultThan2,
+                            resultThan3
+                        };
+        }
+
+        public async Task<List<CoreCompetenciesAverageDto>> GetNewCoreCompetenciesAverage(string lang, int campaignID)
+        {
+            var index = 1;
+            var queryAttHeading = _repoNewAttitudeContent.FindAll().DistinctBy(x => x.OrderNumber).ToList();
+
+            var accountCampaign = await _repoAccountCampaign.FindAll(x => x.CampaignID == campaignID).ToListAsync();
+            var queryNewAttitude = await _repoNewAttitudeScore.FindAll(x => x.CampaignID == campaignID).ToListAsync();
+            
+            var list = (from a in queryNewAttitude
+                        join b in accountCampaign on a.ScoreTo equals b.AccountID
+                        let type = a.ScoreFrom == a.ScoreTo ? ScoreType.L0 : 
+                        a.ScoreFrom == b.L1 ? ScoreType.L1 : 
+                        a.ScoreFrom == b.L2 ? ScoreType.L2 : ScoreType.FL
+                        let attitudeSubmit = _repoAttitudeSubmit.FindAll(x => x.CampaignID == campaignID && x.SubmitTo == a.ScoreTo).FirstOrDefault()
+                        let submited = attitudeSubmit != null ? 
+                        b.AccountID == a.ScoreFrom ? attitudeSubmit.IsSubmitAttitudeL0 : 
+                        b.L1 == a.ScoreFrom ? attitudeSubmit.IsSubmitAttitudeL1: 
+                        b.L2 == a.ScoreFrom ? attitudeSubmit.IsSubmitAttitudeL2 : 
+                        b.FL == a.ScoreFrom ? attitudeSubmit.IsSubmitAttitudeFL : false : false
+                        select new NewAttitudePointEquals2Dto() {
+                                        OrderNumber = a.OrderNumber,
+                                        CampaignID = a.CampaignID,
+                                        ScoreFrom = a.ScoreFrom,
+                                        ScoreTo = a.ScoreTo,
+                                        Type = type,
+                                        Point = GetPoint(a).ToString(),
+                                        Submited = submited
+                                    }).Where(x => x.Submited).ToList();
+
+            var listAttitudeScore = list.ToList().GroupBy(x => new {x.OrderNumber,
+                                                                    x.ScoreTo,
+                                                                    x.ScoreFrom,
+                                                                    x.Type
+                                                                })
+                                    .Select(x => new NewAttitudePointEquals2Dto() {
+                                        OrderNumber = x.First().OrderNumber,
+                                        ScoreTo = x.First().ScoreTo,
+                                        ScoreFrom = x.First().ScoreFrom,
+                                        Type = x.First().Type,
+                                        Point = Math.Round((x.Sum(y => y.Point.ToDouble()))/4, 2).ToString()
+                                    }).ToList();
+            
+            var data =  (from a in queryAttHeading
+                         let factory = _repoOc.FindById(_repoAc.FindById(accountCampaign.FirstOrDefault().AccountID).FactId).Name
+                         let attHeadingName = lang == SystemLang.EN ? _repoSystemLanguage.FindAll(x => x.SLKey == a.Name).FirstOrDefault().SLEN : _repoSystemLanguage.FindAll(x => x.SLKey == a.Name).FirstOrDefault().SLTW
+
+                         select new CoreCompetenciesAverageDto () {
+                            Index = a.OrderNumber.ToString(),
+                            Factory = factory,
+                            AttHeading = attHeadingName,
+                            L0Average = NewAverage(a.OrderNumber.Value, listAttitudeScore.Where(x => x.Type == ScoreType.L0).ToList()).Item3,
+                            L1Average = NewAverage(a.OrderNumber.Value, listAttitudeScore.Where(x => x.Type == ScoreType.L1).ToList()).Item3,
+                            L2Average = NewAverage(a.OrderNumber.Value, listAttitudeScore.Where(x => x.Type == ScoreType.L2).ToList()).Item3,
+                            FLAverage = NewAverage(a.OrderNumber.Value, listAttitudeScore.Where(x => x.Type == ScoreType.FL).ToList()).Item3,
+                            FtyAverage = String.Format("{0:0.00}", Math.Round(((NewAverage(a.OrderNumber.Value, listAttitudeScore.Where(x => x.Type == ScoreType.L0).ToList()).Item1 + 
+                                                                                NewAverage(a.OrderNumber.Value, listAttitudeScore.Where(x => x.Type == ScoreType.L1).ToList()).Item1 + 
+                                                                                NewAverage(a.OrderNumber.Value, listAttitudeScore.Where(x => x.Type == ScoreType.L2).ToList()).Item1 + 
+                                                                                NewAverage(a.OrderNumber.Value, listAttitudeScore.Where(x => x.Type == ScoreType.FL).ToList()).Item1)/
+                                                                                (NewAverage(a.OrderNumber.Value, listAttitudeScore.Where(x => x.Type == ScoreType.L0).ToList()).Item2 + 
+                                                                                NewAverage(a.OrderNumber.Value, listAttitudeScore.Where(x => x.Type == ScoreType.L1).ToList()).Item2 + 
+                                                                                NewAverage(a.OrderNumber.Value, listAttitudeScore.Where(x => x.Type == ScoreType.L2).ToList()).Item2 + 
+                                                                                NewAverage(a.OrderNumber.Value, listAttitudeScore.Where(x => x.Type == ScoreType.FL).ToList()).Item2)), 1))
+                         }).ToList();
+
+            data.ForEach(x => {
+                x.Index = index.ToString();
+                index++;
+            });
+            
+            var item = new CoreCompetenciesAverageDto() {
+                            Index = null,
+                            Factory = data.FirstOrDefault().Factory,
+                            AttHeading = lang == SystemLang.EN ? "Total score" : "總分",
+                            L0Average = String.Format("{0:0.00}",data.Sum(x => x.L0Average.ToDouble())),
+                            L1Average = String.Format("{0:0.00}",data.Sum(x => x.L1Average.ToDouble())),
+                            L2Average = String.Format("{0:0.00}",data.Sum(x => x.L2Average.ToDouble())),
+                            FLAverage = String.Format("{0:0.00}",data.Sum(x => x.FLAverage.ToDouble())),
+                            FtyAverage = String.Format("{0:0.00}",data.Sum(x => x.FtyAverage.ToDouble()))
+            };
+            data.Add(item);
+
+            return data;
+        }
+
+        private Tuple<double, double, string> NewAverage(int attHeading, List<NewAttitudePointEquals2Dto> data ) {
+            var listScore = (from a in data.FindAll(x => x.OrderNumber == attHeading )
+                                select new {
+                                    Score = a.Point,
+                                }).ToList();
+            double total = listScore.Count();
+            double totalScore = listScore.Sum(x => x.Score.ToDouble());
+            double average = totalScore / total;
+            // average = Math.Round(average, 2);
+            return Tuple.Create(totalScore, total, String.Format("{0:0.00}", average)); 
+            // return Tuple.Create(totalScore, total, average.ToString()); 
+        }
+
+        public async Task<List<CoreCompetenciesPercentileDto>> GetNewCoreCompetenciesPercentile(string lang, int campaignID)
+        {
+            var index = 1;
+            var queryAttHeading = _repoNewAttitudeContent.FindAll().DistinctBy(x => x.OrderNumber).ToList();
+
+            var accountCampaign = await _repoAccountCampaign.FindAll(x => x.CampaignID == campaignID).ToListAsync();
+            var queryNewAttitude = await _repoNewAttitudeScore.FindAll(x => x.CampaignID == campaignID && x.ScoreFrom == x.ScoreTo).ToListAsync();
+            
+            var list = (from a in queryNewAttitude
+                        join b in accountCampaign on a.ScoreTo equals b.AccountID
+                        let attitudeSubmit = _repoAttitudeSubmit.FindAll(x => x.CampaignID == campaignID && x.SubmitTo == a.ScoreTo).FirstOrDefault()
+                        let submited = attitudeSubmit != null ? 
+                        b.AccountID == a.ScoreFrom ? attitudeSubmit.IsSubmitAttitudeL0 : false : false
+                        select new NewAttitudePointEquals2Dto() {
+                                        OrderNumber = a.OrderNumber,
+                                        CampaignID = a.CampaignID,
+                                        ScoreFrom = a.ScoreFrom,
+                                        ScoreTo = a.ScoreTo,
+                                        Point = GetPoint(a).ToString(),
+                                        Submited = submited
+                                    }).Where(x => x.Submited).ToList();
+
+            var listAttitudeScore = list.ToList().GroupBy(x => new {x.OrderNumber,
+                                                                    x.ScoreTo,
+                                                                    x.ScoreFrom,
+                                                                })
+                                    .Select(x => new NewAttitudePointEquals2Dto() {
+                                        OrderNumber = x.First().OrderNumber,
+                                        ScoreTo = x.First().ScoreTo,
+                                        ScoreFrom = x.First().ScoreFrom,
+                                        Point = Math.Round((x.Sum(y => y.Point.ToDouble()))/4, 2).ToString()
+                                    }).ToList();
+
+            var data =  (from a in queryAttHeading
+                         let factory = _repoOc.FindById(_repoAc.FindById(accountCampaign.FirstOrDefault().AccountID).FactId).Name
+                         let attHeadingName = lang == SystemLang.EN ? _repoSystemLanguage.FindAll(x => x.SLKey == a.Name).FirstOrDefault().SLEN : _repoSystemLanguage.FindAll(x => x.SLKey == a.Name).FirstOrDefault().SLTW
+                         let countL0 = listAttitudeScore.Where(x => x.OrderNumber == a.OrderNumber).Count().ToDouble()
+                         let p10 = Math.Ceiling((countL0 * 10/100).ToDouble()) - 1
+                         let p25 = Math.Ceiling((countL0 * 25/100).ToDouble()) - 1
+                         let p50 = Math.Ceiling((countL0 * 50/100).ToDouble()) - 1
+                         let p75 = Math.Ceiling((countL0 * 75/100).ToDouble()) - 1
+                         let p90 = Math.Ceiling((countL0 * 90/100).ToDouble()) - 1
+
+                         let p10Score = listAttitudeScore.Where(x => x.OrderNumber == a.OrderNumber).OrderBy(x => x.Point.ToDouble()).ThenBy(x => x.ScoreTo).ToList()[p10.ToInt()].Point
+                         let p25Score = listAttitudeScore.Where(x => x.OrderNumber == a.OrderNumber).OrderBy(x => x.Point.ToDouble()).ThenBy(x => x.ScoreTo).ToList()[p25.ToInt()].Point
+                         let p50Score = listAttitudeScore.Where(x => x.OrderNumber == a.OrderNumber).OrderBy(x => x.Point.ToDouble()).ThenBy(x => x.ScoreTo).ToList()[p50.ToInt()].Point
+                         let p75Score = listAttitudeScore.Where(x => x.OrderNumber == a.OrderNumber).OrderBy(x => x.Point.ToDouble()).ThenBy(x => x.ScoreTo).ToList()[p75.ToInt()].Point
+                         let p90Score = listAttitudeScore.Where(x => x.OrderNumber == a.OrderNumber).OrderBy(x => x.Point.ToDouble()).ThenBy(x => x.ScoreTo).ToList()[p90.ToInt()].Point
+                         
+                         select new CoreCompetenciesPercentileDto () {
+                            Index = a.OrderNumber.ToString(),
+                            Factory = factory,
+                            AttHeading = attHeadingName,
+                            P10 = String.Format("{0:0.00}", p10Score.ToDouble()),
+                            P25 = String.Format("{0:0.00}", p25Score.ToDouble()),
+                            P50 = String.Format("{0:0.00}", p50Score.ToDouble()),
+                            P75 = String.Format("{0:0.00}", p75Score.ToDouble()),
+                            P90 = String.Format("{0:0.00}", p90Score.ToDouble())
+                         }).ToList();
+
+            data.ForEach(x => {
+                x.Index = index.ToString();
+                index++;
+            });
+            
+            var item = new CoreCompetenciesPercentileDto() {
+                            Index = null,
+                            Factory = data.FirstOrDefault().Factory,
+                            AttHeading = lang == SystemLang.EN ? "Total score" : "總分",
+                            P10 = String.Format("{0:0.00}",data.Sum(x => x.P10.ToDouble())),
+                            P25 = String.Format("{0:0.00}",data.Sum(x => x.P25.ToDouble())),
+                            P50 = String.Format("{0:0.00}",data.Sum(x => x.P50.ToDouble())),
+                            P75 = String.Format("{0:0.00}",data.Sum(x => x.P75.ToDouble())),
+                            P90 = String.Format("{0:0.00}",data.Sum(x => x.P90.ToDouble()))
+            };
+            data.Add(item);
+
+            return data;
+        }
+
+        public async Task<byte[]> ExportExcelNewCoreCompetencies(string lang, int campaignID)
+        {
+            return await ExportExcelConsumptionCase2(lang, campaignID);
+            //throw new NotImplementedException();
+        }
+        
+        private async Task<Byte[]> ExportExcelConsumptionCase2(string lang, int campaignID)
+        {
+            try
+            {
+                ExcelPackage.LicenseContext = LicenseContext.Commercial;
+                ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
+                var memoryStream = new MemoryStream();
+                using (ExcelPackage p = new ExcelPackage(memoryStream))
+                {
+                    // đặt tên người tạo file
+                    p.Workbook.Properties.Author = "Huu Quynh";
+
+                    // đặt tiêu đề cho file
+                    p.Workbook.Properties.Title = "CoreCompetencies";
+
+                    var listAllCoreCompetencies = new List<NewCoreCompetenciesDto>();
+                    listAllCoreCompetencies = await GetAllNewCoreCompetencies(lang, campaignID);
+
+                    var listCoreCompetenciesScore = new List<NewCoreCompetenciesDto>();
+                    listCoreCompetenciesScore = await GetNewCoreCompetencies(lang, campaignID);
+
+                    var listCoreCompetenciesScoreEquals2 = new List<NewCoreCompetenciesDto>();
+                    listCoreCompetenciesScoreEquals2 = await GetNewCoreCompetenciesScoreEquals2(lang, campaignID);
+
+                    dynamic listScoreThan2andThan3 = await GetNewCoreCompetenciesScoreThan2(lang, campaignID);
+                    var listCoreCompetenciesScoreThan2 = new List<NewCoreCompetenciesDto>();
+                    var listCoreCompetenciesScoreThan3 = new List<NewCoreCompetenciesDto>();
+                    
+                    listCoreCompetenciesScoreThan2 = listScoreThan2andThan3.resultThan2;
+                    listCoreCompetenciesScoreThan3 = listScoreThan2andThan3.resultThan3;
+                    
+                    var listCoreCompetenciesAverage = new List<CoreCompetenciesAverageDto>();
+                    listCoreCompetenciesAverage = await GetNewCoreCompetenciesAverage(lang, campaignID);
+                    
+                    var listCoreCompetenciesPercentile = new List<CoreCompetenciesPercentileDto>();
+                    listCoreCompetenciesPercentile = await GetNewCoreCompetenciesPercentile(lang, campaignID);
+                    
+                    //Tạo một sheet để làm việc trên đó
+                    p.Workbook.Worksheets.Add("AllCoreCompetencies");
+                    p.Workbook.Worksheets.Add("CoreCompetencies");
+                    p.Workbook.Worksheets.Add("CoreCompetenciesScoreEquals2");
+                    p.Workbook.Worksheets.Add("CoreCompetenciesScoreThan2");
+                    p.Workbook.Worksheets.Add("CoreCompetenciesScoreThan3");
+                    p.Workbook.Worksheets.Add("CoreCompetenciesAverage");
+
+                    // lấy sheet vừa add ra để thao tác
+                    ExcelWorksheet wsAll = p.Workbook.Worksheets["AllCoreCompetencies"];
+                    ExcelWorksheet ws = p.Workbook.Worksheets["CoreCompetencies"];
+                    ExcelWorksheet wsScoreEquals2 = p.Workbook.Worksheets["CoreCompetenciesScoreEquals2"];
+                    ExcelWorksheet wsScoreThan2 = p.Workbook.Worksheets["CoreCompetenciesScoreThan2"];
+                    ExcelWorksheet wsScoreThan3 = p.Workbook.Worksheets["CoreCompetenciesScoreThan3"];
+                    ExcelWorksheet wsAverage = p.Workbook.Worksheets["CoreCompetenciesAverage"];
+
+                    // đặt tên cho sheet
+                    wsAll.Name = "行為指標分數";
+                    ws.Name = "核心職能資料分析";
+                    wsScoreEquals2.Name = "核心職能評2分項目";
+                    wsScoreThan2.Name = "Gap 差距2分";
+                    wsScoreThan3.Name = "Gap 差距3分";
+                    wsAverage.Name = "廠區核心職能分佈狀態";
+                    
+                    // fontsize mặc định cho cả sheet
+                    wsAll.Cells.Style.Font.Size = 12;
+                    ws.Cells.Style.Font.Size = 12;
+                    wsScoreEquals2.Cells.Style.Font.Size = 12;
+                    wsScoreThan2.Cells.Style.Font.Size = 12;
+                    wsScoreThan3.Cells.Style.Font.Size = 12;
+                    wsAverage.Cells.Style.Font.Size = 12;
+                    
+                    // font family mặc định cho cả sheet
+                    wsAll.Cells.Style.Font.Name = "Calibri";
+                    ws.Cells.Style.Font.Name = "Calibri";
+                    wsScoreEquals2.Cells.Style.Font.Name = "Calibri";
+                    wsScoreThan2.Cells.Style.Font.Name = "Calibri";
+                    wsScoreThan3.Cells.Style.Font.Name = "Calibri";
+                    wsAverage.Cells.Style.Font.Name = "Calibri";
+
+                    //////////// Sheet 1 //////////
+
+                    var headersAll = new string[]{
+                        "#", "Core Competencies", "Behavior indicator",
+                        "Factory", "Center", "Dept",
+                        "L1 manager", "L2 manager",  "FL", "Appraisee", "Appraiser",
+                        "Score"
+                    };
+
+                    int headerRowIndexAll = 1;
+                    int headerColIndexAll = 1;
+                    foreach (var header in headersAll)
+                    {
+                        int col = headerColIndexAll++;
+                        wsAll.Cells[headerRowIndexAll, col].Value = header;
+                        wsAll.Cells[headerRowIndexAll, col].Style.Font.Bold = true;
+                        wsAll.Cells[headerRowIndexAll, col].Style.Font.Size = 12;
+                    }
+                    // end Style
+                    int colIndexAll = 1;
+                    int rowIndexAll = 1;
+                    // với mỗi item trong danh sách sẽ ghi trên 1 dòng
+                    foreach (var body in listAllCoreCompetencies)
+                    {
+                        // bắt đầu ghi từ cột 1. Excel bắt đầu từ 1 không phải từ 0 #c0514d
+                        colIndexAll = 1;
+
+                        // rowIndex tương ứng từng dòng dữ liệu
+                        rowIndexAll++;
+
+                        //gán giá trị cho từng cell   
+                                        
+                        wsAll.Cells[rowIndexAll, colIndexAll++].Value = body.Index;
+                        wsAll.Cells[rowIndexAll, colIndexAll++].Value = body.AttHeading;
+                        wsAll.Cells[rowIndexAll, colIndexAll++].Value = body.AttBehavior;
+                        wsAll.Cells[rowIndexAll, colIndexAll++].Value = body.Factory;
+                        wsAll.Cells[rowIndexAll, colIndexAll++].Value = body.Center;
+                        wsAll.Cells[rowIndexAll, colIndexAll++].Value = body.Dept;
+                        wsAll.Cells[rowIndexAll, colIndexAll++].Value = body.L1;
+                        wsAll.Cells[rowIndexAll, colIndexAll++].Value = body.L2;
+                        wsAll.Cells[rowIndexAll, colIndexAll++].Value = body.Fl;
+                        wsAll.Cells[rowIndexAll, colIndexAll++].Value = body.L0;
+                        wsAll.Cells[rowIndexAll, colIndexAll++].Value = body.ScoreBy;
+                        wsAll.Cells[rowIndexAll, colIndexAll++].Value = body.Score;
+                        
+                    }
+
+                    wsAll.Cells[wsAll.Dimension.Address].Style.Border.Top.Style = ExcelBorderStyle.Thin;
+                    wsAll.Cells[wsAll.Dimension.Address].Style.Border.Right.Style = ExcelBorderStyle.Thin;
+                    wsAll.Cells[wsAll.Dimension.Address].Style.Border.Bottom.Style = ExcelBorderStyle.Thin;
+                    wsAll.Cells[wsAll.Dimension.Address].Style.Border.Left.Style = ExcelBorderStyle.Thin;
+                    foreach (var item in headersAll.Select((x, i) => new { Value = x, Index = i }))
+                    {
+                        var col = item.Index + 1;
+                        wsAll.Column(col).Style.VerticalAlignment = ExcelVerticalAlignment.Center;
+                        wsAll.Column(col).Style.HorizontalAlignment = ExcelHorizontalAlignment.Left;
+                        wsAll.Column(col).AutoFit();
+                    }    
+
+                    ///////////// Sheet 2 //////////////
+
+                    var headersScoreEquals2 = new string[]{
+                        "#", "Core Competencies",
+                        "Factory", "Center", "Dept",
+                        "L1 manager", "L2 manager",  "FL", "Appraisee", "Appraiser",
+                        "Score", "Comment"
+                    };
+
+                    int headerRowIndexScoreEquals2 = 1;
+                    int headerColIndexScoreEquals2 = 1;
+                    foreach (var header in headersScoreEquals2)
+                    {
+                        int col = headerColIndexScoreEquals2++;
+                        wsScoreEquals2.Cells[headerRowIndexScoreEquals2, col].Value = header;
+                        wsScoreEquals2.Cells[headerRowIndexScoreEquals2, col].Style.Font.Bold = true;
+                        wsScoreEquals2.Cells[headerRowIndexScoreEquals2, col].Style.Font.Size = 12;
+                    }
+                    // end Style
+                    int colIndexScoreEquals2 = 1;
+                    int rowIndexScoreEquals2 = 1;
+                    // với mỗi item trong danh sách sẽ ghi trên 1 dòng
+                    foreach (var body in listCoreCompetenciesScoreEquals2)
+                    {
+                        // bắt đầu ghi từ cột 1. Excel bắt đầu từ 1 không phải từ 0 #c0514d
+                        colIndexScoreEquals2 = 1;
+
+                        // rowIndex tương ứng từng dòng dữ liệu
+                        rowIndexScoreEquals2++;
+
+                        //gán giá trị cho từng cell   
+                                       
+                        wsScoreEquals2.Cells[rowIndexScoreEquals2, colIndexScoreEquals2++].Value = body.Index;
+                        wsScoreEquals2.Cells[rowIndexScoreEquals2, colIndexScoreEquals2++].Value = body.AttHeading;
+                        wsScoreEquals2.Cells[rowIndexScoreEquals2, colIndexScoreEquals2++].Value = body.Factory;
+                        wsScoreEquals2.Cells[rowIndexScoreEquals2, colIndexScoreEquals2++].Value = body.Center;
+                        wsScoreEquals2.Cells[rowIndexScoreEquals2, colIndexScoreEquals2++].Value = body.Dept;
+                        wsScoreEquals2.Cells[rowIndexScoreEquals2, colIndexScoreEquals2++].Value = body.L1;
+                        wsScoreEquals2.Cells[rowIndexScoreEquals2, colIndexScoreEquals2++].Value = body.L2;
+                        wsScoreEquals2.Cells[rowIndexScoreEquals2, colIndexScoreEquals2++].Value = body.Fl;
+                        wsScoreEquals2.Cells[rowIndexScoreEquals2, colIndexScoreEquals2++].Value = body.L0;
+                        wsScoreEquals2.Cells[rowIndexScoreEquals2, colIndexScoreEquals2++].Value = body.ScoreBy;
+                        wsScoreEquals2.Cells[rowIndexScoreEquals2, colIndexScoreEquals2++].Value = body.Score;
+                        wsScoreEquals2.Cells[rowIndexScoreEquals2, colIndexScoreEquals2++].Value = body.Comment;
+                        
+                    }
+
+                    wsScoreEquals2.Cells[wsScoreEquals2.Dimension.Address].Style.Border.Top.Style = ExcelBorderStyle.Thin;
+                    wsScoreEquals2.Cells[wsScoreEquals2.Dimension.Address].Style.Border.Right.Style = ExcelBorderStyle.Thin;
+                    wsScoreEquals2.Cells[wsScoreEquals2.Dimension.Address].Style.Border.Bottom.Style = ExcelBorderStyle.Thin;
+                    wsScoreEquals2.Cells[wsScoreEquals2.Dimension.Address].Style.Border.Left.Style = ExcelBorderStyle.Thin;
+                    foreach (var item in headersScoreEquals2.Select((x, i) => new { Value = x, Index = i }))
+                    {
+                        var col = item.Index + 1;
+                        wsScoreEquals2.Column(col).Style.VerticalAlignment = ExcelVerticalAlignment.Center;
+                        wsScoreEquals2.Column(col).Style.HorizontalAlignment = ExcelHorizontalAlignment.Left;
+                        wsScoreEquals2.Column(col).AutoFit();
+                    }
+
+                    //////////// Sheet 3 //////////
+
+                    var headers = new string[]{
+                        "#", "Core Competencies", "Behavior indicator",
+                        "Factory", "Center", "Dept",
+                        "L1 manager", "L2 manager",  "FL", "Appraisee", "Appraiser",
+                        "Score"
+                    };
+
+                    int headerRowIndex = 1;
+                    int headerColIndex = 1;
+                    foreach (var header in headers)
+                    {
+                        int col = headerColIndex++;
+                        ws.Cells[headerRowIndex, col].Value = header;
+                        ws.Cells[headerRowIndex, col].Style.Font.Bold = true;
+                        ws.Cells[headerRowIndex, col].Style.Font.Size = 12;
+                    }
+                    // end Style
+                    int colIndex = 1;
+                    int rowIndex = 1;
+                    // với mỗi item trong danh sách sẽ ghi trên 1 dòng
+                    foreach (var body in listCoreCompetenciesScore)
+                    {
+                        // bắt đầu ghi từ cột 1. Excel bắt đầu từ 1 không phải từ 0 #c0514d
+                        colIndex = 1;
+
+                        // rowIndex tương ứng từng dòng dữ liệu
+                        rowIndex++;
+
+                        //gán giá trị cho từng cell   
+                                        
+                        ws.Cells[rowIndex, colIndex++].Value = body.Index;
+                        ws.Cells[rowIndex, colIndex++].Value = body.AttHeading;
+                        ws.Cells[rowIndex, colIndex++].Value = body.AttBehavior;
+                        ws.Cells[rowIndex, colIndex++].Value = body.Factory;
+                        ws.Cells[rowIndex, colIndex++].Value = body.Center;
+                        ws.Cells[rowIndex, colIndex++].Value = body.Dept;
+                        ws.Cells[rowIndex, colIndex++].Value = body.L1;
+                        ws.Cells[rowIndex, colIndex++].Value = body.L2;
+                        ws.Cells[rowIndex, colIndex++].Value = body.Fl;
+                        ws.Cells[rowIndex, colIndex++].Value = body.L0;
+                        ws.Cells[rowIndex, colIndex++].Value = body.ScoreBy;
+                        ws.Cells[rowIndex, colIndex++].Value = body.Score;
+                        
+                    }
+
+                    ws.Cells[ws.Dimension.Address].Style.Border.Top.Style = ExcelBorderStyle.Thin;
+                    ws.Cells[ws.Dimension.Address].Style.Border.Right.Style = ExcelBorderStyle.Thin;
+                    ws.Cells[ws.Dimension.Address].Style.Border.Bottom.Style = ExcelBorderStyle.Thin;
+                    ws.Cells[ws.Dimension.Address].Style.Border.Left.Style = ExcelBorderStyle.Thin;
+                    foreach (var item in headersAll.Select((x, i) => new { Value = x, Index = i }))
+                    {
+                        var col = item.Index + 1;
+                        ws.Column(col).Style.VerticalAlignment = ExcelVerticalAlignment.Center;
+                        ws.Column(col).Style.HorizontalAlignment = ExcelHorizontalAlignment.Left;
+                        ws.Column(col).AutoFit();
+                    }
+
+                    /////////// Sheet 4 ///////////
+
+                    var headersScoreThan2 = new string[]{
+                        "#", "Core Competencies",
+                        "Factory", "Center", "Dept",
+                        "L1 manager", "L2 manager",  "FL", "Appraisee", "Self-score", "Appraiser",
+                        "Score"
+                    };
+
+                    int headerRowIndexScoreThan2 = 1;
+                    int headerColIndexScoreThan2 = 1;
+                    foreach (var header in headersScoreThan2)
+                    {
+                        int col = headerColIndexScoreThan2++;
+                        wsScoreThan2.Cells[headerRowIndexScoreThan2, col].Value = header;
+                        wsScoreThan2.Cells[headerRowIndexScoreThan2, col].Style.Font.Bold = true;
+                        wsScoreThan2.Cells[headerRowIndexScoreThan2, col].Style.Font.Size = 12;
+                    }
+                    // end Style
+                    int colIndexScoreThan2 = 1;
+                    int rowIndexScoreThan2 = 1;
+                    // với mỗi item trong danh sách sẽ ghi trên 1 dòng
+                    foreach (var body in listCoreCompetenciesScoreThan2)
+                    {
+                        // bắt đầu ghi từ cột 1. Excel bắt đầu từ 1 không phải từ 0 #c0514d
+                        colIndexScoreThan2 = 1;
+
+                        // rowIndex tương ứng từng dòng dữ liệu
+                        rowIndexScoreThan2++;
+
+                        //gán giá trị cho từng cell   
+                                        
+                        wsScoreThan2.Cells[rowIndexScoreThan2, colIndexScoreThan2++].Value = body.Index;
+                        wsScoreThan2.Cells[rowIndexScoreThan2, colIndexScoreThan2++].Value = body.AttHeading;
+                        wsScoreThan2.Cells[rowIndexScoreThan2, colIndexScoreThan2++].Value = body.Factory;
+                        wsScoreThan2.Cells[rowIndexScoreThan2, colIndexScoreThan2++].Value = body.Center;
+                        wsScoreThan2.Cells[rowIndexScoreThan2, colIndexScoreThan2++].Value = body.Dept;
+                        wsScoreThan2.Cells[rowIndexScoreThan2, colIndexScoreThan2++].Value = body.L1;
+                        wsScoreThan2.Cells[rowIndexScoreThan2, colIndexScoreThan2++].Value = body.L2;
+                        wsScoreThan2.Cells[rowIndexScoreThan2, colIndexScoreThan2++].Value = body.Fl;
+                        wsScoreThan2.Cells[rowIndexScoreThan2, colIndexScoreThan2++].Value = body.L0;
+                        wsScoreThan2.Cells[rowIndexScoreThan2, colIndexScoreThan2++].Value = body.SelfScore;
+                        wsScoreThan2.Cells[rowIndexScoreThan2, colIndexScoreThan2++].Value = body.ScoreBy;
+                        wsScoreThan2.Cells[rowIndexScoreThan2, colIndexScoreThan2++].Value = body.Score;
+                        
+                    }
+
+                    wsScoreThan2.Cells[wsScoreThan2.Dimension.Address].Style.Border.Top.Style = ExcelBorderStyle.Thin;
+                    wsScoreThan2.Cells[wsScoreThan2.Dimension.Address].Style.Border.Right.Style = ExcelBorderStyle.Thin;
+                    wsScoreThan2.Cells[wsScoreThan2.Dimension.Address].Style.Border.Bottom.Style = ExcelBorderStyle.Thin;
+                    wsScoreThan2.Cells[wsScoreThan2.Dimension.Address].Style.Border.Left.Style = ExcelBorderStyle.Thin;
+                    foreach (var item in headersScoreThan2.Select((x, i) => new { Value = x, Index = i }))
+                    {
+                        var col = item.Index + 1;
+                        wsScoreThan2.Column(col).Style.VerticalAlignment = ExcelVerticalAlignment.Center;
+                        wsScoreThan2.Column(col).Style.HorizontalAlignment = ExcelHorizontalAlignment.Left;
+                        wsScoreThan2.Column(col).AutoFit();
+                    }    
+                    
+                    /////////// Sheet 5 ///////////
+                    
+                    var headersScoreThan3 = new string[]{
+                        "#", "Core Competencies",
+                        "Factory", "Center", "Dept",
+                        "L1 manager", "L2 manager",  "FL", "Appraisee", "Self-score", "Appraiser",
+                        "Score"
+                    };
+
+                    int headerRowIndexScoreThan3 = 1;
+                    int headerColIndexScoreThan3 = 1;
+                    foreach (var header in headersScoreThan3)
+                    {
+                        int col = headerColIndexScoreThan3++;
+                        wsScoreThan3.Cells[headerRowIndexScoreThan3, col].Value = header;
+                        wsScoreThan3.Cells[headerRowIndexScoreThan3, col].Style.Font.Bold = true;
+                        wsScoreThan3.Cells[headerRowIndexScoreThan3, col].Style.Font.Size = 12;
+                    }
+                    // end Style
+                    int colIndexScoreThan3 = 1;
+                    int rowIndexScoreThan3 = 1;
+                    // với mỗi item trong danh sách sẽ ghi trên 1 dòng
+                    foreach (var body in listCoreCompetenciesScoreThan3)
+                    {
+                        // bắt đầu ghi từ cột 1. Excel bắt đầu từ 1 không phải từ 0 #c0514d
+                        colIndexScoreThan3 = 1;
+
+                        // rowIndex tương ứng từng dòng dữ liệu
+                        rowIndexScoreThan3++;
+
+                        //gán giá trị cho từng cell   
+                                        
+                        wsScoreThan3.Cells[rowIndexScoreThan3, colIndexScoreThan3++].Value = body.Index;
+                        wsScoreThan3.Cells[rowIndexScoreThan3, colIndexScoreThan3++].Value = body.AttHeading;
+                        wsScoreThan3.Cells[rowIndexScoreThan3, colIndexScoreThan3++].Value = body.Factory;
+                        wsScoreThan3.Cells[rowIndexScoreThan3, colIndexScoreThan3++].Value = body.Center;
+                        wsScoreThan3.Cells[rowIndexScoreThan3, colIndexScoreThan3++].Value = body.Dept;
+                        wsScoreThan3.Cells[rowIndexScoreThan3, colIndexScoreThan3++].Value = body.L1;
+                        wsScoreThan3.Cells[rowIndexScoreThan3, colIndexScoreThan3++].Value = body.L2;
+                        wsScoreThan3.Cells[rowIndexScoreThan3, colIndexScoreThan3++].Value = body.Fl;
+                        wsScoreThan3.Cells[rowIndexScoreThan3, colIndexScoreThan3++].Value = body.L0;
+                        wsScoreThan3.Cells[rowIndexScoreThan3, colIndexScoreThan3++].Value = body.SelfScore;
+                        wsScoreThan3.Cells[rowIndexScoreThan3, colIndexScoreThan3++].Value = body.ScoreBy;
+                        wsScoreThan3.Cells[rowIndexScoreThan3, colIndexScoreThan3++].Value = body.Score;
+                        
+                    }
+
+                    wsScoreThan3.Cells[wsScoreThan3.Dimension.Address].Style.Border.Top.Style = ExcelBorderStyle.Thin;
+                    wsScoreThan3.Cells[wsScoreThan3.Dimension.Address].Style.Border.Right.Style = ExcelBorderStyle.Thin;
+                    wsScoreThan3.Cells[wsScoreThan3.Dimension.Address].Style.Border.Bottom.Style = ExcelBorderStyle.Thin;
+                    wsScoreThan3.Cells[wsScoreThan3.Dimension.Address].Style.Border.Left.Style = ExcelBorderStyle.Thin;
+                    foreach (var item in headersScoreThan3.Select((x, i) => new { Value = x, Index = i }))
+                    {
+                        var col = item.Index + 1;
+                        wsScoreThan3.Column(col).Style.VerticalAlignment = ExcelVerticalAlignment.Center;
+                        wsScoreThan3.Column(col).Style.HorizontalAlignment = ExcelHorizontalAlignment.Left;
+                        wsScoreThan3.Column(col).AutoFit();
+                    }
+
+                    ///////// Sheet 6 ////////////
+                    
+                    var headersAverage = new string[]{
+                        "#", "Factory",
+                        "Core Competencies", "Self score Avg", "L1 Avg",
+                        "L2 Avg", "FL Avg",  "Fty Average"
+                    };
+
+                    int headerRowIndexAverage = 1;
+                    int headerColIndexAverage = 1;
+                    foreach (var header in headersAverage)
+                    {
+                        int col = headerColIndexAverage++;
+                        wsAverage.Cells[headerRowIndexAverage, col].Value = header;
+                        wsAverage.Cells[headerRowIndexAverage, col].Style.Font.Bold = true;
+                        wsAverage.Cells[headerRowIndexAverage, col].Style.Font.Size = 12;
+                    }
+                    // end Style
+                    int colIndexAverage = 1;
+                    int rowIndexAverage = 1;
+                    // với mỗi item trong danh sách sẽ ghi trên 1 dòng
+                    foreach (var body in listCoreCompetenciesAverage)
+                    {
+                        // bắt đầu ghi từ cột 1. Excel bắt đầu từ 1 không phải từ 0 #c0514d
+                        colIndexAverage = 1;
+
+                        // rowIndex tương ứng từng dòng dữ liệu
+                        rowIndexAverage++;
+
+                        //gán giá trị cho từng cell                      
+                        wsAverage.Cells[rowIndexAverage, colIndexAverage++].Value = body.Index;
+                        wsAverage.Cells[rowIndexAverage, colIndexAverage++].Value = body.Factory;
+                        wsAverage.Cells[rowIndexAverage, colIndexAverage++].Value = body.AttHeading;
+                        wsAverage.Cells[rowIndexAverage, colIndexAverage++].Value = body.L0Average;
+                        wsAverage.Cells[rowIndexAverage, colIndexAverage++].Value = body.L1Average;
+                        wsAverage.Cells[rowIndexAverage, colIndexAverage++].Value = body.L2Average;
+                        wsAverage.Cells[rowIndexAverage, colIndexAverage++].Value = body.FLAverage;
+                        wsAverage.Cells[rowIndexAverage, colIndexAverage++].Value = body.FtyAverage;
+                        
+                    }
+
+                    headerColIndexAverage = 1;
+                    rowIndexAverage += 2;
+
+                    var headersPercentile = new string[]{
+                        "#", "Factory",
+                        "Core Competencies", "10th percentile", "25th percentile",
+                        "50th percentile", "75th percentile",  "90th percentile"
+                    };
+                    
+                    foreach (var header2 in headersPercentile)
+                    {
+                        int col = headerColIndexAverage++;
+                        wsAverage.Cells[rowIndexAverage, col].Value = header2;
+                        wsAverage.Cells[rowIndexAverage, col].Style.Font.Bold = true;
+                        wsAverage.Cells[rowIndexAverage, col].Style.Font.Size = 12;
+                    }
+                    // end Style
+                    
+                    // với mỗi item trong danh sách sẽ ghi trên 1 dòng
+                    foreach (var body in listCoreCompetenciesPercentile)
+                    {
+                        // bắt đầu ghi từ cột 1. Excel bắt đầu từ 1 không phải từ 0 #c0514d
+                        colIndexAverage = 1;
+
+                        // rowIndex tương ứng từng dòng dữ liệu
+                        rowIndexAverage++;
+
+                        //gán giá trị cho từng cell                      
+                        wsAverage.Cells[rowIndexAverage, colIndexAverage++].Value = body.Index;
+                        wsAverage.Cells[rowIndexAverage, colIndexAverage++].Value = body.Factory;
+                        wsAverage.Cells[rowIndexAverage, colIndexAverage++].Value = body.AttHeading;
+                        wsAverage.Cells[rowIndexAverage, colIndexAverage++].Value = body.P10;
+                        wsAverage.Cells[rowIndexAverage, colIndexAverage++].Value = body.P25;
+                        wsAverage.Cells[rowIndexAverage, colIndexAverage++].Value = body.P50;
+                        wsAverage.Cells[rowIndexAverage, colIndexAverage++].Value = body.P75;
+                        wsAverage.Cells[rowIndexAverage, colIndexAverage++].Value = body.P90;
+                        
+                    }
+
+                    var indexRowSpace = listCoreCompetenciesAverage.Count() + 2;
+                    
+                    wsAverage.Cells[wsAverage.Dimension.Address].Style.Border.Top.Style = ExcelBorderStyle.Thin;
+                    wsAverage.Cells[wsAverage.Dimension.Address].Style.Border.Right.Style = ExcelBorderStyle.Thin;
+                    wsAverage.Cells[wsAverage.Dimension.Address].Style.Border.Bottom.Style = ExcelBorderStyle.Thin;
+                    wsAverage.Cells[wsAverage.Dimension.Address].Style.Border.Left.Style = ExcelBorderStyle.Thin;
+                    foreach (var item in headersAverage.Select((x, i) => new { Value = x, Index = i }))
+                    {
+                        var col = item.Index + 1;
+                        wsAverage.Column(col).Style.VerticalAlignment = ExcelVerticalAlignment.Center;
+                        wsAverage.Column(col).Style.HorizontalAlignment = ExcelHorizontalAlignment.Left;
+                        wsAverage.Column(col).AutoFit();
+
+                        wsAverage.Cells[indexRowSpace, col].Style.Border.Top.Style = ExcelBorderStyle.None;
+                        wsAverage.Cells[indexRowSpace, col].Style.Border.Right.Style = ExcelBorderStyle.None;
+                        wsAverage.Cells[indexRowSpace, col].Style.Border.Bottom.Style = ExcelBorderStyle.None;
+                        wsAverage.Cells[indexRowSpace, col].Style.Border.Left.Style = ExcelBorderStyle.None;
+                    }
+
+ 
+                    //Lưu file lại
+                    Byte[] bin = p.GetAsByteArray();
+                    return bin;
+                }
+            }
+            catch (Exception ex)
+            {
+                var mes = ex.Message;
+                Console.Write(mes);
+                return new Byte[] { };
+            }
+        }
+        
+        public async Task<List<CoreCompetenciesDto>> GetAllCoreCompetenciesScoreEquals2(string lang, int campaignID)
         {
             var index = 1;
             var queryAttitude = await _repoScore.FindAll(x => x.CampaignID == campaignID).ToListAsync();
@@ -401,7 +1440,7 @@ namespace A4KPI._Services.Services
             // average = Math.Ceiling(average);
             average = Math.Round(average, 1);
             return Tuple.Create(totalScoreL0, totalL0, String.Format("{0:0.0}", average)); 
-            }
+        }
 
         private Tuple<double, double, string> AverageL1(int attHeading, int campaignID) { 
             var listScoreL1 = (from a in _repoScore.FindAll(x => x.CampaignID == campaignID && x.AttitudeHeadingID == attHeading && (x.L1Score != null && x.L1Score != "")).ToList()
@@ -419,7 +1458,7 @@ namespace A4KPI._Services.Services
             // average = Math.Ceiling(average);
             average = Math.Round(average, 1);
             return Tuple.Create(totalScoreL1, totalL1, String.Format("{0:0.0}", average)); 
-            }
+        }
 
         private Tuple<double, double, string> AverageL2(int attHeading, int campaignID) { 
             var listScoreL2 = (from a in _repoScore.FindAll(x => x.CampaignID == campaignID && x.AttitudeHeadingID == attHeading && (x.L2Score != null && x.L2Score != "")).ToList()
@@ -437,7 +1476,7 @@ namespace A4KPI._Services.Services
             // average = Math.Ceiling(average);
             average = Math.Round(average, 1);
             return Tuple.Create(totalScoreL2, totalL2, String.Format("{0:0.0}", average)); 
-            }
+        }
 
         private Tuple<double, double, string> AverageFL(int attHeading, int campaignID) { 
             var listScoreFL = (from a in _repoScore.FindAll(x => x.CampaignID == campaignID && x.AttitudeHeadingID == attHeading && (x.FLScore != null && x.FLScore != "")).ToList()
@@ -455,7 +1494,7 @@ namespace A4KPI._Services.Services
             // average = Math.Ceiling(average);
             average = Math.Round(average, 1);
             return Tuple.Create(totalScoreFL, totalFL, String.Format("{0:0.0}", average)); 
-            }
+        }
 
         
         public async Task<List<CoreCompetenciesPercentileDto>> GetAllCoreCompetenciesPercentile(string lang, int campaignID)

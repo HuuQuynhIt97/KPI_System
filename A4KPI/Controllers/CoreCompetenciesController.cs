@@ -23,6 +23,47 @@ namespace A4KPI.Controllers
             _service = service;
         }
 
+        //New-Attitude
+
+        [HttpGet("{lang}/{campaignID}")]
+        public async Task<IActionResult> GetAllNewCoreCompetencies(string lang, int campaignID)
+        {
+            return Ok(await _service.GetAllNewCoreCompetencies(lang, campaignID));
+        }
+        [HttpGet("{lang}/{campaignID}")]
+        public async Task<IActionResult> GetNewCoreCompetencies(string lang, int campaignID)
+        {
+            return Ok(await _service.GetNewCoreCompetencies(lang, campaignID));
+        }
+        [HttpGet("{lang}/{campaignID}")]
+        public async Task<IActionResult> GetNewCoreCompetenciesScoreEquals2(string lang, int campaignID)
+        {
+            return Ok(await _service.GetNewCoreCompetenciesScoreEquals2(lang, campaignID));
+        }
+        [HttpGet("{lang}/{campaignID}")]
+        public async Task<IActionResult> GetNewCoreCompetenciesScoreThan2(string lang, int campaignID)
+        {
+            return Ok(await _service.GetNewCoreCompetenciesScoreThan2(lang, campaignID));
+        }
+        [HttpGet("{lang}/{campaignID}")]
+        public async Task<IActionResult> GetNewCoreCompetenciesAverage(string lang, int campaignID)
+        {
+            return Ok(await _service.GetNewCoreCompetenciesAverage(lang, campaignID));
+        }
+        [HttpGet("{lang}/{campaignID}")]
+        public async Task<IActionResult> GetNewCoreCompetenciesPercentile(string lang, int campaignID)
+        {
+            return Ok(await _service.GetNewCoreCompetenciesPercentile(lang, campaignID));
+        }
+        [HttpPost("{lang}/{campaignID}")]
+        public async Task<IActionResult> ExportExcelNewCoreCompetencies(string lang, int campaignID)
+        {
+            var bin = await _service.ExportExcelNewCoreCompetencies(lang, campaignID);
+            return File(bin, "application/octet-stream", "CoreCompetencies.xlsx");
+        }
+        ///
+        
+
         [HttpGet("{lang}/{campaignID}")]
         public async Task<IActionResult> GetAllCoreCompetencies(string lang, int campaignID)
         {

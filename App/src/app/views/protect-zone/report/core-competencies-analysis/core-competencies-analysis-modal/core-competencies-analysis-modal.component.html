@@ -13,11 +13,12 @@
   <ejs-tab id="element" (selecting)="select($event)" [animation]="animation">
     <div class="e-tab-header">
         <div>{{'CORE_COMPE_SHEET_ALL_LABEL' | translate}}</div>
+        <div>{{'CORE_COMPE_SHEET_SUM_LABEL' | translate}}</div>
         <div>{{'CORE_COMPE_SHEET_SCORE_2_LABEL' | translate}}</div>
         <div>{{'CORE_COMPE_SHEET_SCORE_THAN_2_LABEL' | translate}}</div>
         <div>{{'CORE_COMPE_SHEET_SCORE_THAN_3_LABEL' | translate}}</div>
         <div>{{'CORE_COMPE_SHEET_AVERAGE_LABEL' | translate}}</div>
-        <div>{{'CORE_COMPE_SHEET_BEHAVIOR_LABEL' | translate}}</div>
+        <!-- <div>{{'CORE_COMPE_SHEET_BEHAVIOR_LABEL' | translate}}</div> -->
     </div>
     <div class="e-content">
 
@@ -62,6 +63,17 @@
                         </ng-template>
                         <ng-template #template let-data>
                           {{data.attHeading | translate}}
+                        </ng-template>
+                      </e-column>
+
+                      <e-column field="attBehavior" headerText="{{'ATTBEHAVIOR_CORE_COMPE_LABEL' | translate}}" width='400' textAlign='Left'>
+                        <ng-template #headerTemplate let-data>
+                          <span class="headercell">
+                            {{"ATTBEHAVIOR_CORE_COMPE_LABEL" | translate}}
+                          </span>
+                        </ng-template>
+                        <ng-template #template let-data>
+                          {{data.attBehavior | translate}}
                         </ng-template>
                       </e-column>
 
@@ -137,7 +149,7 @@
                         </ng-template>
                       </e-column>
 
-                      <e-column field="comment" textAlign='Center' width="600" maxWidth="600" minWidth="600" headerText="{{ 'COMMENT_CORE_COMPE_LABEL' | translate}}">
+                      <!-- <e-column field="comment" textAlign='Center' width="600" maxWidth="600" minWidth="600" headerText="{{ 'COMMENT_CORE_COMPE_LABEL' | translate}}">
                         <ng-template #headerTemplate let-data>
                           <span class="headercell">
                             {{"COMMENT_CORE_COMPE_LABEL" | translate}}
@@ -151,7 +163,7 @@
                             <textarea readonly type="text" [value]="data.comment" class="e-field e-input e-defaultcell textarea-disabled" name="comment" cols="5" rows="1"></textarea>
                           </ng-template>
                         </ng-template>
-                      </e-column>
+                      </e-column> -->
 
                     </e-columns>
                   </ejs-grid>
@@ -161,6 +173,147 @@
             </div>
           </div>
         </div>
+
+      <!-- page show all sum -->
+      <div>
+        <div class="row">
+          <div class="col-md-12">
+            <div class="card">
+              <div class="card-body table-responsive p-0">
+
+                <ejs-grid #gridShowAllSum
+                  id='gridShowAllSum'
+                  [dataSource]="dataCoreSum"
+                  [allowPaging]='true'
+                  [allowResizing]='true'
+                  [showColumnMenu]='true'
+                  gridLines='Both'
+                  [locale]='locale'
+                  [toolbar]='toolbarOptions' (toolbarClick)='toolbarClickExcelExport($event)'
+                  [pageSettings]='pageSettings'
+                  [allowExcelExport]='true'
+                  allowTextWrap='true'
+                  (dataBound)='dataBoundShowAllSum()'
+                >
+                  <e-columns>
+                    <e-column field="index" textAlign='Center' headerTextAlign='center' width="50" isPrimaryKey="true" headerText="#">
+                      <ng-template #headerTemplate let-data>
+                        <span class="headercell">
+                          #
+                        </span>
+                      </ng-template>
+                      <ng-template #template let-data>
+                        {{data.index}}
+                      </ng-template>
+                    </e-column>
+
+                    <e-column field="attHeading" headerText="{{'ATTHEADING_CORE_COMPE_LABEL' | translate}}" width='400' textAlign='Left'>
+                      <ng-template #headerTemplate let-data>
+                        <span class="headercell">
+                          {{"ATTHEADING_CORE_COMPE_LABEL" | translate}}
+                        </span>
+                      </ng-template>
+                      <ng-template #template let-data>
+                        {{data.attHeading | translate}}
+                      </ng-template>
+                    </e-column>
+
+                    <e-column field="factory" textAlign='Center' headerText="{{ 'FACTORY_CORE_COMPE_LABEL' | translate}}">
+                      <ng-template #headerTemplate let-data>
+                        <span class="headercell">
+                          {{"FACTORY_CORE_COMPE_LABEL" | translate}}
+                        </span>
+                      </ng-template>
+                    </e-column>
+
+                    <e-column field="center" textAlign='Center' headerText="{{ 'CENTER_CORE_COMPE_LABEL' | translate}}">
+                      <ng-template #headerTemplate let-data>
+                        <span class="headercell">
+                          {{"CENTER_CORE_COMPE_LABEL" | translate}}
+                        </span>
+                      </ng-template>
+                    </e-column>
+
+                    <e-column field="dept" textAlign='Center' headerText="{{ 'DEPT_CORE_COMPE_LABEL' | translate}}">
+                      <ng-template #headerTemplate let-data>
+                        <span class="headercell">
+                          {{"DEPT_CORE_COMPE_LABEL" | translate}}
+                        </span>
+                      </ng-template>
+                    </e-column>
+
+                    <e-column field="l1" textAlign='Center' width="100" headerText="{{ 'L1_CORE_COMPE_LABEL' | translate}}">
+                      <ng-template #headerTemplate let-data>
+                        <span class="headercell">
+                          {{"L1_CORE_COMPE_LABEL" | translate}}
+                        </span>
+                      </ng-template>
+                    </e-column>
+
+                    <e-column field="l2" textAlign='Center' width="100" headerText="{{ 'L2_CORE_COMPE_LABEL' | translate}}">
+                      <ng-template #headerTemplate let-data>
+                        <span class="headercell">
+                          {{"L2_CORE_COMPE_LABEL" | translate}}
+                        </span>
+                      </ng-template>
+                    </e-column>
+
+                    <e-column field="fl" textAlign='Center' width="100" headerText="{{ 'FL_CORE_COMPE_LABEL' | translate}}">
+                      <ng-template #headerTemplate let-data>
+                        <span class="headercell">
+                          {{"FL_CORE_COMPE_LABEL" | translate}}
+                        </span>
+                      </ng-template>
+                    </e-column>
+
+                    <e-column field="l0" textAlign='Center' width="100" headerText="{{ 'L0_CORE_COMPE_LABEL' | translate}}">
+                      <ng-template #headerTemplate let-data>
+                        <span class="headercell">
+                          {{"L0_CORE_COMPE_LABEL" | translate}}
+                        </span>
+                      </ng-template>
+                    </e-column>
+
+                    <e-column field="scoreBy" textAlign='Center' width="100" headerText="{{ 'SCOREBY_CORE_COMPE_LABEL' | translate}}">
+                      <ng-template #headerTemplate let-data>
+                        <span class="headercell">
+                          {{"SCOREBY_CORE_COMPE_LABEL" | translate}}
+                        </span>
+                      </ng-template>
+                    </e-column>
+
+                    <e-column field="score" textAlign='Center' width="50" headerText="{{ 'SCORE_CORE_COMPE_LABEL' | translate}}">
+                      <ng-template #headerTemplate let-data>
+                        <span class="headercell">
+                          {{"SCORE_CORE_COMPE_LABEL" | translate}}
+                        </span>
+                      </ng-template>
+                    </e-column>
+
+                    <e-column field="comment" textAlign='Center' width="600" maxWidth="600" minWidth="600" headerText="{{ 'COMMENT_CORE_COMPE_LABEL' | translate}}">
+                      <ng-template #headerTemplate let-data>
+                        <span class="headercell">
+                          {{"COMMENT_CORE_COMPE_LABEL" | translate}}
+                        </span>
+                      </ng-template>
+                      <ng-template #template let-data>
+                        <ng-container *ngIf="data.comment !== null && data.comment !== ''; else elseEditTemplate">
+                          <textarea readonly type="text" [value]="data.comment" class="e-field e-input e-defaultcell textarea-disabled" name="comment" cols="5" rows="3"></textarea>
+                        </ng-container>
+                        <ng-template #elseEditTemplate>
+                          <textarea readonly type="text" [value]="data.comment" class="e-field e-input e-defaultcell textarea-disabled" name="comment" cols="5" rows="1"></textarea>
+                        </ng-template>
+                      </ng-template>
+                    </e-column>
+
+                  </e-columns>
+                </ejs-grid>
+              </div>
+              <!-- /.card-body -->
+            </div>
+          </div>
+        </div>
+      </div>
 
       <!-- page show score equals 2 -->
       <div>
@@ -799,7 +952,7 @@
       </div>
 
       <!-- page show all attitude behavior checked -->
-      <div>
+      <!-- <div>
         <div class="row">
           <div class="col-md-12">
             <div class="card">
@@ -946,11 +1099,11 @@
                   </e-columns>
                 </ejs-grid>
               </div>
-              <!-- /.card-body -->
+
             </div>
           </div>
         </div>
-      </div>
+      </div> -->
 
     </div>
 </ejs-tab>

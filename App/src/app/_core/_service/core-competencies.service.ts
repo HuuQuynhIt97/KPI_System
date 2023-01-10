@@ -26,6 +26,38 @@ constructor(
   //   return this.http.get<any[]>(`${this.env.apiUrl}PeopleCommittee/GetAll/${lang}/${campaignID}`);
   // }
 
+  //New-Attitude
+
+  getAllNewCoreCompetencies(lang, campaignID) {
+    return this.http.get(`${this.env.apiUrl}CoreCompetencies/GetAllNewCoreCompetencies/${lang}/${campaignID}`);
+  }
+
+  getNewCoreCompetencies(lang, campaignID) {
+    return this.http.get(`${this.env.apiUrl}CoreCompetencies/GetNewCoreCompetencies/${lang}/${campaignID}`);
+  }
+
+  getNewCoreCompetenciesScoreEquals2(lang, campaignID) {
+    return this.http.get(`${this.env.apiUrl}CoreCompetencies/GetNewCoreCompetenciesScoreEquals2/${lang}/${campaignID}`);
+  }
+
+  getNewCoreCompetenciesScoreThan2(lang, campaignID) {
+    return this.http.get(`${this.env.apiUrl}CoreCompetencies/GetNewCoreCompetenciesScoreThan2/${lang}/${campaignID}`);
+  }
+
+  getNewCoreCompetenciesAverage(lang, campaignID) {
+    return this.http.get(`${this.env.apiUrl}CoreCompetencies/GetNewCoreCompetenciesAverage/${lang}/${campaignID}`);
+  }
+
+  getNewCoreCompetenciesPercentile(lang, campaignID) {
+    return this.http.get(`${this.env.apiUrl}CoreCompetencies/GetNewCoreCompetenciesPercentile/${lang}/${campaignID}`);
+  }
+
+  exportExcelNewCoreCompetencies(lang, campaignID) {
+    return this.http.post(this.baseUrl + `CoreCompetencies/ExportExcelNewCoreCompetencies/${lang}/${campaignID}`,{}, { responseType: 'blob' });
+  }
+
+  //
+
   getAllCoreCompetencies(lang, campaignID) {
     return this.http.get(`${this.env.apiUrl}CoreCompetencies/GetAllCoreCompetencies/${lang}/${campaignID}`);
   }

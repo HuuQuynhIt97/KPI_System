@@ -21,6 +21,15 @@ namespace A4KPI._Services.Interface
 {
     public interface ICoreCompetenciesService
     {
+        Task<List<NewCoreCompetenciesDto>> GetAllNewCoreCompetencies(string lang, int campaignID);
+        Task<List<NewCoreCompetenciesDto>> GetNewCoreCompetencies(string lang, int campaignID);
+        Task<List<NewCoreCompetenciesDto>> GetNewCoreCompetenciesScoreEquals2(string lang, int campaignID);
+        // Task<List<NewCoreCompetenciesDto>> GetNewCoreCompetenciesScoreThan2(string lang, int campaignID);
+        Task<object> GetNewCoreCompetenciesScoreThan2(string lang, int campaignID);
+        Task<List<CoreCompetenciesAverageDto>> GetNewCoreCompetenciesAverage(string lang, int campaignID);
+        Task<List<CoreCompetenciesPercentileDto>> GetNewCoreCompetenciesPercentile(string lang, int campaignID);
+        Task<byte[]> ExportExcelNewCoreCompetencies(string lang, int campaignID);
+        
         Task<List<CoreCompetenciesDto>> GetAllCoreCompetencies(string lang, int campaignID);
         Task<List<CoreCompetenciesDto>> GetAllCoreCompetenciesScoreEquals2(string lang, int campaignID);
         Task<List<CoreCompetenciesDto>> GetAllCoreCompetenciesScoreThan2(string lang, int campaignID);

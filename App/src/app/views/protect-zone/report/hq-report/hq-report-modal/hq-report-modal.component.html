@@ -144,10 +144,10 @@
                 </ng-template>
               </e-column>
 
-              <e-column field="h1Score" textAlign='Center' width="100" headerText="{{'H1_HQ_REPORT_LABEL' | translate}}">
+              <e-column field="h1Score" textAlign='Center' width="100" headerText="{{titleH1 | translate}}">
                 <ng-template #headerTemplate let-data>
                   <span class="headercell">
-                    {{"H1_HQ_REPORT_LABEL" | translate}}
+                    {{titleH1 | translate}}
                   </span>
                 </ng-template>
               </e-column>

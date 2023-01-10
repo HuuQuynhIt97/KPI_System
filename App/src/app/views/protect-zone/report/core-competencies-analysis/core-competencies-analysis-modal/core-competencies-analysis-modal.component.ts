@@ -26,6 +26,7 @@ export class CoreCompetenciesAnalysisModalComponent implements OnInit {
   toolbarOptions = ['Search', 'ExcelExport'];
   @Input() data: any;
   dataCore: any = [];
+  dataCoreSum: any = [];
   dataCoreScore2: any = [];
   dataCoreScoreThan2: any = [];
   dataCoreScoreThan3: any = [];
@@ -34,6 +35,7 @@ export class CoreCompetenciesAnalysisModalComponent implements OnInit {
   dataCoreBehaviorChecked: any = [];
   pageSettings = { pageCount: 20, pageSizes: true, pageSize: 10 };
   @ViewChild('gridShowAll') public gridShowAll: GridComponent;
+  @ViewChild('gridShowAllSum') public gridShowAllSum: GridComponent;
   @ViewChild('gridShowScore2') public gridShowScore2: GridComponent;
   @ViewChild('gridShowScoreThan2') public gridShowScoreThan2: GridComponent;
   @ViewChild('gridShowScoreThan3') public gridShowScoreThan3: GridComponent;
@@ -69,47 +71,86 @@ export class CoreCompetenciesAnalysisModalComponent implements OnInit {
   ngOnInit() {
     this.spinner.show();
     this.loadData();
+    this.loadDataSum();
     this.loadDataScore2();
     this.loadDataScoreThan2();
-    this.loadDataScoreThan3();
+    // this.loadDataScoreThan3();
     this.loadDataScoreAverage();
     this.loadDataScorePercentile();
-    this.loadDataBehaviorChecked();
+    // this.loadDataBehaviorChecked();
   }
 
+  // loadData() {
+  //   this.service.getAllCoreCompetencies(this.locale, this.data.id).subscribe(res => {
+  //     this.dataCore = res;
+  //     this.spinner.hide()
+  //   });
+  // }
+
   loadData() {
-    this.service.getAllCoreCompetencies(this.locale, this.data.id).subscribe(res => {
+    this.service.getAllNewCoreCompetencies(this.locale, this.data.id).subscribe(res => {
       this.dataCore = res;
       this.spinner.hide()
     });
   }
 
+  loadDataSum() {
+    this.service.getNewCoreCompetencies(this.locale, this.data.id).subscribe(res => {
+      this.dataCoreSum = res;
+    });
+  }
+
+  // loadDataScore2() {
+  //   this.service.getAllCoreCompetenciesScoreEquals2(this.locale, this.data.id).subscribe(res => {
+  //     this.dataCoreScore2 = res;
+  //   });
+  // }
+
   loadDataScore2() {
-    this.service.getAllCoreCompetenciesScoreEquals2(this.locale, this.data.id).subscribe(res => {
+    this.service.getNewCoreCompetenciesScoreEquals2(this.locale, this.data.id).subscribe(res => {
       this.dataCoreScore2 = res;
     });
   }
 
+  // loadDataScoreThan2() {
+  //   this.service.getAllCoreCompetenciesScoreThan2(this.locale, this.data.id).subscribe(res => {
+  //     this.dataCoreScoreThan2 = res;
+  //   });
+  // }
+
+  // loadDataScoreThan3() {
+  //   this.service.getAllCoreCompetenciesScoreThan3(this.locale, this.data.id).subscribe(res => {
+  //     this.dataCoreScoreThan3 = res;
+  //   });
+  // }
+
   loadDataScoreThan2() {
-    this.service.getAllCoreCompetenciesScoreThan2(this.locale, this.data.id).subscribe(res => {
-      this.dataCoreScoreThan2 = res;
+    this.service.getNewCoreCompetenciesScoreThan2(this.locale, this.data.id).subscribe((res: any) => {
+      this.dataCoreScoreThan2 = res.resultThan2;
+      this.dataCoreScoreThan3 = res.resultThan3;
     });
   }
 
-  loadDataScoreThan3() {
-    this.service.getAllCoreCompetenciesScoreThan3(this.locale, this.data.id).subscribe(res => {
-      this.dataCoreScoreThan3 = res;
-    });
-  }
+  // loadDataScoreAverage() {
+  //   this.service.getAllCoreCompetenciesAverage(this.locale, this.data.id).subscribe(res => {
+  //     this.dataCoreScoreAverage = res;
+  //   });
+  // }
+
+  // loadDataScorePercentile() {
+  //   this.service.getAllCoreCompetenciesPercentile(this.locale, this.data.id).subscribe(res => {
+  //     this.dataCoreScorePercentile = res;
+  //   });
+  // }
 
   loadDataScoreAverage() {
-    this.service.getAllCoreCompetenciesAverage(this.locale, this.data.id).subscribe(res => {
+    this.service.getNewCoreCompetenciesAverage(this.locale, this.data.id).subscribe(res => {
       this.dataCoreScoreAverage = res;
     });
   }
 
   loadDataScorePercentile() {
-    this.service.getAllCoreCompetenciesPercentile(this.locale, this.data.id).subscribe(res => {
+    this.service.getNewCoreCompetenciesPercentile(this.locale, this.data.id).subscribe(res => {
       this.dataCoreScorePercentile = res;
     });
   }
@@ -122,6 +163,7 @@ export class CoreCompetenciesAnalysisModalComponent implements OnInit {
 
   toolbarClickExcelExport(args: ClickEventArgs): void {
     if (args.item.id == 'gridShowAll_excelexport' ||
+        args.item.id == 'gridShowAllSum_excelexport' ||
         args.item.id == 'gridShowScore2_excelexport' ||
         args.item.id == 'gridShowScoreThan2_excelexport' ||
         args.item.id == 'gridShowScoreThan3_excelexport' ||
@@ -135,7 +177,7 @@ export class CoreCompetenciesAnalysisModalComponent implements OnInit {
   exportExcelCoreComp() {
     const lang = localStorage.getItem('lang');
     this.spinner.show();
-    this.service.exportExcelCoreComp(this.locale, this.data.id).subscribe((data: any) => {
+    this.service.exportExcelNewCoreCompetencies(this.locale, this.data.id).subscribe((data: any) => {
       const blob = new Blob([data],
         { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
       const downloadURL = window.URL.createObjectURL(data);
@@ -357,6 +399,9 @@ export class CoreCompetenciesAnalysisModalComponent implements OnInit {
     return (this.gridShowAll.pageSettings.currentPage - 1) * this.pageSettings.pageSize + Number(index) + 1;
   }
 
+  dataBoundShowAllSum() {
+    this.gridShowAllSum.autoFitColumns();
+  }
 
   dataBoundShowScore2() {
     this.gridShowScore2.autoFitColumns();
